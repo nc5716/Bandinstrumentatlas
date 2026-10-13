@@ -173,6 +173,12 @@ main{min-width:0}
 .dg .mpc{fill:var(--tube-line)}
 .dg .slide{fill:var(--tube); stroke:var(--tube-line)}
 .dg .slide-end{fill:none; stroke:var(--tube-line); stroke-width:12}
+.dg .neck{fill:none; stroke:var(--tube-line); stroke-width:14; stroke-linecap:round}
+.dg .neck-in{fill:none; stroke:var(--tube); stroke-width:11; stroke-linecap:round}
+.dg .deco{fill:var(--surface-2); stroke:var(--tube-line); stroke-width:1}
+.dg .rotor{fill:none; stroke:var(--tube-line); stroke-width:1.4}
+.dg .bellpipe{fill:none; stroke:var(--tube-line); stroke-width:5; stroke-linecap:round}
+.dg .bell{fill:var(--tube); stroke:var(--tube-line)}
 .dg .tick{stroke:var(--muted)}
 .dg .tnum{font:600 10px var(--f-mono); fill:var(--muted)}
 @keyframes flick{0%,45%{opacity:1} 55%,100%{opacity:.25}}
@@ -942,8 +948,17 @@ clarinet:{vb:[180,404], tube:[], joints:[],
   {id:'RE',t:'k',x:126,y:337,w:17,h:13,lab:'E',name:'E/B key (right pinky)'},
   {id:'RF',t:'k',x:145,y:337,w:17,h:13,lab:'F',name:'F/C key (right pinky)'},
 ]},
-sax:{vb:[170,350], tube:[[68,14,24,300]], joints:[],
-  labels:[[18,48,'THUMB'],[18,56,'(BACK)'],[46,24,'PALM'],[130,172,'RH SIDE'],[46,150,'LH PINKY'],[110,288,'RH PINKY']],
+sax:{vb:[180,350], tube:[], joints:[],
+  body:[
+    '<path class="neck" d="M80 20 C80 8 72 4 60 4"/><path class="neck-in" d="M80 20 C80 8 72 4 60 4"/>',
+    '<path class="tube" d="M44 0.5 L60 1.5 L60 6.5 L44 7.5 Z"/>',
+    '<rect class="tube ring" x="69" y="16" width="22" height="5" rx="2"/>',
+    '<path class="neck" d="M80 292 Q80 334 114 334 Q148 334 148 296 L148 262"/><path class="neck-in" d="M80 292 Q80 334 114 334 Q148 334 148 296 L148 262"/>',
+    '<path class="tube" d="M70 20 L90 20 L98 296 L62 296 Z"/>',
+    '<path class="tube" d="M136 266 L160 266 L176 242 L120 242 Z"/>',
+    '<circle class="deco" cx="148" cy="282" r="6"/><circle class="deco" cx="148" cy="300" r="6"/>'
+  ],
+  labels:[[18,48,'THUMB'],[18,56,'(BACK)'],[46,24,'PALM'],[130,172,'RH SIDE'],[46,150,'LH PINKY'],[114,268,'RH PINKY']],
   keys:[
   {id:'T',t:'b',x:18,y:72,w:20,h:10,lab:'8va',name:'Octave key (left thumb)'},
   {id:'A',t:'b',x:18,y:90,w:16,h:9,lab:'A',name:'Low A key (left thumb, baritone only)'},
@@ -951,10 +966,10 @@ sax:{vb:[170,350], tube:[[68,14,24,300]], joints:[],
   {id:'pEb',t:'k',x:46,y:60,w:10,h:18,lab:'E♭',name:'Palm key E♭'},
   {id:'pF',t:'k',x:54,y:82,w:10,h:16,lab:'F',name:'Palm key F'},
   {id:'fF',t:'k',x:80,y:52,w:16,h:7,lab:'',name:'Front F key (LH index)'},
-  {id:'L1',t:'h',x:80,y:74,r:10,name:'LH 1 (index)'},
+  {id:'L1',t:'h',x:80,y:74,r:7.5,ring:true,name:'LH 1 (index)'},
   {id:'bis',t:'k',x:80,y:90,w:7,h:7,lab:'',name:'Bis B♭ key'},
-  {id:'L2',t:'h',x:80,y:106,r:10,name:'LH 2 (middle)'},
-  {id:'L3',t:'h',x:80,y:136,r:10,name:'LH 3 (ring)'},
+  {id:'L2',t:'h',x:80,y:106,r:7.5,ring:true,name:'LH 2 (middle)'},
+  {id:'L3',t:'h',x:80,y:136,r:7.5,ring:true,name:'LH 3 (ring)'},
   {id:'Gs',t:'k',x:50,y:162,w:22,h:10,lab:'G♯',name:'G♯ key (left pinky)'},
   {id:'Cs',t:'k',x:38,y:177,w:18,h:10,lab:'C♯',name:'Low C♯ key (left pinky)'},
   {id:'B',t:'k',x:60,y:180,w:18,h:10,lab:'B',name:'Low B key (left pinky)'},
@@ -963,14 +978,23 @@ sax:{vb:[170,350], tube:[[68,14,24,300]], joints:[],
   {id:'sC',t:'k',x:130,y:200,w:20,h:10,lab:'C',name:'Side C key (RH)'},
   {id:'sBb',t:'k',x:130,y:214,w:20,h:10,lab:'B♭',name:'Side B♭ key (RH)'},
   {id:'sFs',t:'k',x:130,y:232,w:20,h:10,lab:'F♯',name:'High F♯ key (RH)'},
-  {id:'R1',t:'h',x:80,y:206,r:10,name:'RH 1 (index)'},
-  {id:'R2',t:'h',x:80,y:236,r:10,name:'RH 2 (middle)'},
-  {id:'tFs',t:'k',x:98,y:252,w:6,h:10,lab:'',name:'Alternate F♯ key (RH)'},
-  {id:'R3',t:'h',x:80,y:266,r:10,name:'RH 3 (ring)'},
-  {id:'Eb',t:'k',x:110,y:300,w:22,h:10,lab:'E♭',name:'Low E♭ key (right pinky)'},
-  {id:'C',t:'k',x:110,y:315,w:22,h:10,lab:'C',name:'Low C key (right pinky)'},
+  {id:'R1',t:'h',x:82,y:206,r:7.5,ring:true,name:'RH 1 (index)'},
+  {id:'R2',t:'h',x:82,y:236,r:7.5,ring:true,name:'RH 2 (middle)'},
+  {id:'tFs',t:'k',x:97,y:250,w:6,h:10,lab:'',name:'Alternate F♯ key (RH)'},
+  {id:'R3',t:'h',x:83,y:264,r:7.5,ring:true,name:'RH 3 (ring)'},
+  {id:'Eb',t:'k',x:112,y:276,w:22,h:10,lab:'E♭',name:'Low E♭ key (right pinky)'},
+  {id:'C',t:'k',x:112,y:291,w:22,h:12,lab:'C',name:'Low C key (right pinky)'},
 ]},
-oboe:{vb:[170,350], tube:[[70,10,20,330]], joints:[196],
+oboe:{vb:[170,350], tube:[], joints:[],
+  body:[
+    '<path class="tube" d="M77 1 L83 1 L82 12 L78 12 Z"/>',
+    '<rect class="tube" x="76" y="12" width="8" height="6" rx="1"/>',
+    '<path class="tube" d="M72 18 L88 18 L89 194 L71 194 Z"/>',
+    '<rect class="tube ring" x="69" y="192" width="22" height="7" rx="2"/>',
+    '<path class="tube" d="M71 199 L89 199 L90 300 L70 300 Z"/>',
+    '<rect class="tube ring" x="68" y="298" width="24" height="6" rx="2"/>',
+    '<path class="tube" d="M70 304 L90 304 C92 322 98 336 102 346 L58 346 C62 336 68 322 70 304 Z"/>'
+  ],
   labels:[[24,40,'THUMB'],[24,48,'(BACK)'],[130,172,'RH SIDE'],[44,144,'LH PINKY'],[136,294,'RH PINKY']],
   keys:[
   {id:'O1',t:'b',x:24,y:64,w:20,h:10,lab:'8va',name:'First octave key (left thumb)'},
@@ -998,7 +1022,16 @@ oboe:{vb:[170,350], tube:[[70,10,20,330]], joints:[196],
   {id:'rCs',t:'k',x:104,y:315,w:20,h:10,lab:'C♯',name:'Low C♯ key (right pinky)'},
   {id:'rEb',t:'k',x:126,y:328,w:20,h:10,lab:'E♭',name:'E♭ key (right pinky)'},
 ]},
-bassoon:{vb:[190,350], tube:[[80,40,20,152],[80,198,20,140]], joints:[], bocal:true,
+bassoon:{vb:[190,352], tube:[], joints:[],
+  body:[
+    '<path class="bocal" d="M90 40 C90 26 98 16 122 10"/>',
+    '<rect class="tube" x="3" y="2" width="16" height="12" rx="3"/>',
+    '<rect class="tube" x="5" y="12" width="12" height="326" rx="4"/>',
+    '<rect class="tube ring" x="3" y="120" width="16" height="6" rx="2"/>',
+    '<path class="tube" d="M80 40 L100 40 L100 192 L80 192 Z"/>',
+    '<path class="tube" d="M78 196 L102 196 L102 334 L78 334 Z"/>',
+    '<rect class="tube" x="2" y="332" width="102" height="18" rx="9"/>'
+  ],
   labels:[[42,22,'LH THUMB'],[30,128,'LOW KEYS'],[52,198,'RH THUMB'],[126,140,'LH PINKY'],[132,290,'RH PINKY']],
   keys:[
   {id:'fA',t:'b',x:24,y:42,w:15,h:9,lab:'A',name:'High A flick key (LH thumb)'},
@@ -1295,26 +1328,41 @@ function svgValves(o, ins){
 }
 function svgHorn(o){
   const on = new Set(o.c==='0' ? [] : o.c.split('-')), th = o.side==='B♭';
-  let s = `<svg class="dg dg-b" viewBox="0 0 270 112" role="img" aria-label="${esc((th?'Thumb trigger down (B♭ side), ':'F side, ')+(o.c==='0'?'open':'levers '+o.c))}">`;
-  s += `<g class="key ${th?'on':''}"><title>Thumb trigger — ${th?'pressed (B♭ side)':'up (F side)'}</title><rect class="kshape" x="34" y="44" width="40" height="22" rx="11"/><text class="vnum" x="54" y="60" text-anchor="middle">T</text></g>`;
+  let s = `<svg class="dg dg-b" viewBox="0 0 270 136" role="img" aria-label="${esc((th?'Thumb trigger down (B♭ side), ':'F side, ')+(o.c==='0'?'open':'levers '+o.c))}">`;
+  // rotor valves (seen from the player's side) with their linkages
+  s += `<path class="lead" d="M30 18 H230"/>`;
+  [54,112,158,204].forEach((x,i)=>{ s += `<circle class="cap" cx="${x}" cy="18" r="11"/><circle class="rotor" cx="${x}" cy="18" r="5"/>`; s += `<line class="rod" x1="${x}" x2="${x}" y1="29" y2="44"/>`; });
+  s += `<text class="grp" x="250" y="22" text-anchor="middle">ROTORS</text>`;
+  s += `<g class="key ${th?'on':''}"><title>Thumb trigger — ${th?'pressed (B♭ side)':'up (F side)'}</title><rect class="kshape" x="34" y="62" width="40" height="22" rx="11"/><text class="vnum" x="54" y="78" text-anchor="middle">T</text></g>`;
+  s += `<path class="rod" d="M54 44 V62"/>`;
   [1,2,3].forEach((v,i)=>{
     const x = 112 + i*46, p = on.has(String(v));
-    s += `<g class="key ${p?'on':''}"><title>Lever ${v}${p?' — pressed':' — up'}</title><rect class="kshape" x="${x-15}" y="24" width="30" height="60" rx="15"/><text class="vnum" x="${x}" y="60" text-anchor="middle">${v}</text></g>`;
+    s += `<g class="key ${p?'on':''}"><title>Lever ${v}${p?' — pressed':' — up'}</title><path class="kshape" d="M${x-9} 44 H${x+9} L${x+15} 66 Q${x+15} 104 ${x} 104 Q${x-15} 104 ${x-15} 66 Z"/><text class="vnum" x="${x}" y="84" text-anchor="middle">${v}</text></g>`;
   });
-  s += `<text class="grp" x="54" y="36" text-anchor="middle">THUMB</text><text class="grp" x="158" y="102" text-anchor="middle">INDEX · MIDDLE · RING</text>`;
+  s += `<text class="grp" x="54" y="56" text-anchor="middle">THUMB</text><text class="grp" x="158" y="124" text-anchor="middle">INDEX · MIDDLE · RING</text>`;
   return s + `</svg>`;
 }
 const eqPos = (k, att) => att ? 1 + 12*Math.log2(1 + Math.pow(2, att/12)*(Math.pow(2,(k-1)/12)-1)) : k;
 function svgSlide(o, mini){
-  const X = p => 50 + (p-1)*27, ep = eqPos(o.pos, o.att), x = X(ep), L = 84;
-  let s = `<svg class="dg dg-b ${mini?'dg-slide-mini':''}" viewBox="0 ${mini?18:0} 320 ${mini?94:112}" role="img" aria-label="${esc((o.att?o.attName+', ':'')+'position '+o.pos)}">`;
-  s += `<text class="grp" x="16" y="24" text-anchor="middle">YOU</text><circle class="mpc" cx="16" cy="40" r="5"/>`;
-  s += `<rect class="tube" x="20" y="37" width="${X(7.6)+L-20}" height="5" rx="2.5" opacity=".55"/><rect class="tube" x="20" y="64" width="${X(7.6)+L-20}" height="5" rx="2.5" opacity=".55"/>`;
-  s += `<rect class="slide" x="${x-4}" y="33" width="${L}" height="12" rx="6"/><rect class="slide" x="${x-4}" y="61" width="${L}" height="12" rx="6"/>`;
-  s += `<path class="slide-end" d="M${x+L-4} 39 a14 14 0 0 1 0 28"/>`;
-  for(let p=1;p<=7;p++) s += `<line class="tick" x1="${X(p)}" x2="${X(p)}" y1="80" y2="86"/><text class="tnum ${Math.round(ep)===p&&!o.att?'tnum-on':''}" x="${X(p)}" y="${mini?104:98}" text-anchor="middle">${p}</text>`;
-  s += `<g class="key on"><title>Slide brace at position ${o.pos}${o.att?' with '+esc(o.attName):''}</title><rect class="kshape" x="${x-4}" y="28" width="8" height="50" rx="4"/></g>`;
-  if(o.att) s += `<g class="key tr-solid"><title>${esc(o.attName)} pressed</title><rect class="kshape" x="2" y="80" width="34" height="18" rx="9"/><text class="vnum sm" x="19" y="93" text-anchor="middle">${esc(o.attTag==='T'?'F':o.attTag)}</text></g>`;
+  const X = p => 46 + (p-1)*27, ep = eqPos(o.pos, o.att), x = X(ep), L = 96;
+  const yA = 70, yB = 96, top = mini ? 0 : 0, H = mini ? 150 : 150;
+  let s = `<svg class="dg dg-b ${mini?'dg-slide-mini':''}" viewBox="0 ${top} 330 ${H}" role="img" aria-label="${esc((o.att?o.attName+', ':'')+'position '+o.pos)}">`;
+  // bell section: tuning-slide bow behind the player, tube running forward, bell flaring between 3rd and 4th position
+  const rim = X(3.55);
+  s += `<path class="bellpipe" d="M28 ${yA-6} V44 C28 34 32 30 42 30 H${rim-46}"/>`;
+  s += `<path class="tube bell" d="M${rim-48} 26 L${rim-48} 34 C${rim-24} 34 ${rim-8} 40 ${rim} 58 L${rim} 2 C${rim-8} 20 ${rim-24} 26 ${rim-48} 26 Z"/>`;
+  s += `<path class="tube" d="M${rim-48} 50 C${rim-24} 50 ${rim-10} 54 ${rim-4} 58 L${rim-38} 58 Z" opacity=".0"/>`;
+  s += `<text class="grp" x="${rim+14}" y="20">BELL</text>`;
+  // mouthpiece and the fixed inner slide: visible only from the player end up to the outer slide
+  s += `<circle class="mpc" cx="14" cy="${yA}" r="5"/><text class="grp" x="16" y="${yA-10}" text-anchor="middle">YOU</text>`;
+  s += `<rect class="tube" x="20" y="${yA-2.5}" width="${x-18}" height="5" rx="2.5"/><rect class="tube" x="20" y="${yB-2.5}" width="${x-18}" height="5" rx="2.5"/>`;
+  s += `<rect class="tube" x="20" y="${yA-5}" width="12" height="${yB-yA+10}" rx="3"/>`;
+  // outer slide with its end bow
+  s += `<rect class="slide" x="${x-4}" y="${yA-6}" width="${L}" height="12" rx="6"/><rect class="slide" x="${x-4}" y="${yB-6}" width="${L}" height="12" rx="6"/>`;
+  s += `<path class="slide-end" d="M${x+L-8} ${yA} a${(yB-yA)/2} ${(yB-yA)/2} 0 0 1 0 ${yB-yA}"/>`;
+  for(let p=1;p<=7;p++) s += `<line class="tick" x1="${X(p)}" x2="${X(p)}" y1="${yB+12}" y2="${yB+18}"/><text class="tnum ${Math.round(ep)===p&&!o.att?'tnum-on':''}" x="${X(p)}" y="${yB+32}" text-anchor="middle">${p}</text>`;
+  s += `<g class="key on"><title>Slide brace at position ${o.pos}${o.att?' with '+esc(o.attName):''}</title><rect class="kshape" x="${x-4}" y="${yA-10}" width="8" height="${yB-yA+20}" rx="4"/></g>`;
+  if(o.att) s += `<g class="key tr-solid"><title>${esc(o.attName)} pressed</title><rect class="kshape" x="40" y="${yA+3}" width="30" height="16" rx="8"/><text class="vnum sm" x="55" y="${yA+15}" text-anchor="middle">${esc(o.attTag==='T'?'F':o.attTag)}</text></g>`;
   return s + `</svg>`;
 }
 /* ===== Staff ===== */
