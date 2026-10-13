@@ -1165,7 +1165,7 @@ const PERSPECTIVE = {
   piccolo:'Drawn looking down at the piccolo as you hold it: headjoint on your left, thumb keys underneath (dashed), trill keys on the far side.',
   valves:'Drawn from above, the way you look down at your valves: valve 1 is nearest your mouthpiece.',
   valvesSide:'Drawn the way the valves sit in playing position: valves 1, 2 and 3 side by side under your index, middle and ring fingers, with the 4th valve (if your instrument has one) set off to the side.',
-  horn:'Drawn as your left hand sees the levers: thumb trigger first, then levers 1–3 under your index, middle and ring fingers.',
+  horn:'Drawn as you look down at your left hand on the levers: ring, middle and index fingers on levers 3, 2 and 1, with the thumb trigger at the right.',
   slide:'Drawn from the player\'s side: you are at the left, the slide extends away to the right.'
 };
 
@@ -1392,19 +1392,19 @@ function svgValves(o, ins){
   return s + `</svg>`;
 }
 function svgHorn(o){
-  const on = new Set(o.c==='0' ? [] : o.c.split('-')), th = o.side==='B♭';
+  // mirrored for the left hand as you look down at it: ring, middle, index levers left to right, thumb trigger at the right
+  const on = new Set(o.c==='0' ? [] : o.c.split('-')), th = o.side==='B♭', W = 270, X = x => W - x;
   let s = `<svg class="dg dg-b" viewBox="0 0 270 136" role="img" aria-label="${esc((th?'Thumb trigger down (B♭ side), ':'F side, ')+(o.c==='0'?'open':'levers '+o.c))}">`;
-  // rotor valves (seen from the player's side) with their linkages
-  s += `<path class="lead" d="M30 18 H230"/>`;
-  [54,112,158,204].forEach((x,i)=>{ s += `<circle class="cap" cx="${x}" cy="18" r="11"/><circle class="rotor" cx="${x}" cy="18" r="5"/>`; s += `<line class="rod" x1="${x}" x2="${x}" y1="29" y2="44"/>`; });
-  s += `<text class="grp" x="250" y="22" text-anchor="middle">ROTORS</text>`;
-  s += `<g class="key ${th?'on':''}" data-k="T"><title>Thumb trigger — ${th?'pressed (B♭ side)':'up (F side)'}</title><rect class="kshape" x="34" y="62" width="40" height="22" rx="11"/><text class="vnum" x="54" y="78" text-anchor="middle">T</text></g>`;
-  s += `<path class="rod" d="M54 44 V62"/>`;
+  s += `<path class="lead" d="M${X(230)} 18 H${X(30)}"/>`;
+  [54,112,158,204].forEach(x0=>{ const x = X(x0); s += `<circle class="cap" cx="${x}" cy="18" r="11"/><circle class="rotor" cx="${x}" cy="18" r="5"/><line class="rod" x1="${x}" x2="${x}" y1="29" y2="44"/>`; });
+  s += `<text class="grp" x="${X(250)}" y="22" text-anchor="middle">ROTORS</text>`;
+  s += `<g class="key ${th?'on':''}" data-k="T"><title>Thumb trigger — ${th?'pressed (B♭ side)':'up (F side)'}</title><rect class="kshape" x="${X(74)}" y="62" width="40" height="22" rx="11"/><text class="vnum" x="${X(54)}" y="78" text-anchor="middle">T</text></g>`;
+  s += `<path class="rod" d="M${X(54)} 44 V62"/>`;
   [1,2,3].forEach((v,i)=>{
-    const x = 112 + i*46, p = on.has(String(v));
+    const x = X(112 + i*46), p = on.has(String(v));
     s += `<g class="key ${p?'on':''}" data-k="${v}"><title>Lever ${v}${p?' — pressed':' — up'}</title><path class="kshape" d="M${x-9} 44 H${x+9} L${x+15} 66 Q${x+15} 104 ${x} 104 Q${x-15} 104 ${x-15} 66 Z"/><text class="vnum" x="${x}" y="84" text-anchor="middle">${v}</text></g>`;
   });
-  s += `<text class="grp" x="54" y="56" text-anchor="middle">THUMB</text><text class="grp" x="158" y="124" text-anchor="middle">INDEX · MIDDLE · RING</text>`;
+  s += `<text class="grp" x="${X(54)}" y="56" text-anchor="middle">THUMB</text><text class="grp" x="${X(158)}" y="124" text-anchor="middle">RING · MIDDLE · INDEX</text>`;
   return s + `</svg>`;
 }
 const eqPos = (k, att) => att ? 1 + 12*Math.log2(1 + Math.pow(2, att/12)*(Math.pow(2,(k-1)/12)-1)) : k;
