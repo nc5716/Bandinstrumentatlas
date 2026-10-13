@@ -1382,7 +1382,8 @@ function svgStaff(m, clef){
   const sp = 8, bottom = 70, nameP = PCN[m%12], letter = nameP[0], acc = nameP[1]||'';
   const d = 'CDEFGAB'.indexOf(letter) + 7*oct(m);
   const bd = clef==='treble' ? 30 : 18, y = dd => bottom - (dd-bd)*sp/2, ny = y(d);
-  let s = `<svg class="staff" viewBox="0 8 150 112" role="img" aria-label="${esc(nameP+oct(m)+' on the '+clef+' clef staff')}">`;
+  const vTop = Math.min(8, ny - 14), vBot = Math.max(120, ny + 14);
+  let s = `<svg class="staff" viewBox="0 ${vTop} 150 ${vBot - vTop}" role="img" aria-label="${esc(nameP+oct(m)+' on the '+clef+' clef staff')}">`;
   for(let i=0;i<5;i++) s += `<line class="sl" x1="4" x2="146" y1="${bottom-i*sp}" y2="${bottom-i*sp}"/>`;
   const sc = sp/159;
   if(clef==='treble') s += `<path class="glyph" d="${GLYPH.treble}" transform="translate(6 ${y(32)+0.85*sp}) scale(${sc} ${-sc})"/>`;
