@@ -1,0 +1,1527 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Searchable, interactive fingering charts for band instruments, drawn from the player's view, with alternates and woodwind trills.">
+<title>Band Instrument Atlas</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%224%22%20r%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%2316202F%22%20stroke-width%3D%222%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2226%22%20r%3D%2220%22%20fill%3D%22none%22%20stroke%3D%22%2316202F%22%20stroke-width%3D%223%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2226%22%20r%3D%2216.5%22%20fill%3D%22none%22%20stroke%3D%22%2316202F%22%20stroke-width%3D%221%22/%3E%3Cg%20transform%3D%22translate%280%202%29%22%3E%3Cpath%20d%3D%22M24%207.800000000000001%20l-2.6%204.6%20h5.2%20Z%22%20fill%3D%22%239A6A12%22%20transform%3D%22rotate%280%2024%2024%29%22/%3E%3Cpath%20d%3D%22M24%207.800000000000001%20l-2.6%204.6%20h5.2%20Z%22%20fill%3D%22%2316202F%22%20transform%3D%22rotate%2890%2024%2024%29%22/%3E%3Cpath%20d%3D%22M24%207.800000000000001%20l-2.6%204.6%20h5.2%20Z%22%20fill%3D%22%2316202F%22%20transform%3D%22rotate%28180%2024%2024%29%22/%3E%3Cpath%20d%3D%22M24%207.800000000000001%20l-2.6%204.6%20h5.2%20Z%22%20fill%3D%22%2316202F%22%20transform%3D%22rotate%28270%2024%2024%29%22/%3E%3Cpath%20d%3D%22M34.96%2013.04%20L33.76%2014.24%20M34.96%2034.96%20L33.76%2033.76%20M13.04%2034.96%20L14.24%2033.76%20M13.04%2013.04%20L14.24%2014.24%20%22%20stroke%3D%22%2316202F%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22/%3E%3Cg%20transform%3D%22translate%2824%2024%29%20scale%28.82%29%20translate%28-24%20-24%29%22%3E%3Cg%20transform%3D%22rotate%2835%2024%2024%29%22%3E%3Cpath%20d%3D%22M22.4%208%20L25.6%208%20L25.9%2013%20H22.1%20Z%22%20fill%3D%22%239A6A12%22/%3E%3Crect%20x%3D%2221.3%22%20y%3D%2213%22%20width%3D%225.4%22%20height%3D%2219.5%22%20rx%3D%221.4%22%20fill%3D%22%2316202F%22/%3E%3Cpath%20d%3D%22M21.3%2031.5%20H26.7%20L29%2038.5%20H19%20Z%22%20fill%3D%22%2316202F%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2217.5%22%20r%3D%221.3%22%20fill%3D%22%23fff%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2222%22%20r%3D%221.3%22%20fill%3D%22%23fff%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2226.5%22%20r%3D%221.3%22%20fill%3D%22%23fff%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: band-room reference tool — instrument rail at left, chromatic "keyboard" strip, then the note sheet with the player's-view diagrams. */
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --surface-2:#E3E8EE; --ink:#16202F; --muted:#5A6577; --line:#CDD4DE;
+  --brass:#9A6A12; --brass-soft:#F3E7CC; --trill:#C8372A; --trill-soft:#FBE3DF;
+  --k-on:#16202F; --k-off:#FFFFFF; --k-line:#7D889A; --tube:#D7DDE5; --tube-line:#A9B3C1;
+  --f-display:"Big Shoulders Display", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
+  --f-body:"Public Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --r:12px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0E131C; --surface:#161D29; --surface-2:#1F2836; --ink:#E7EBF1; --muted:#9AA5B6; --line:#2B3546;
+  --brass:#E3B04F; --brass-soft:#3A2E14; --trill:#FF6A55; --trill-soft:#3D1D19;
+  --k-on:#EEF2F7; --k-off:#161D29; --k-line:#8592A6; --tube:#273142; --tube-line:#3C4859; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#0E131C; --surface:#161D29; --surface-2:#1F2836; --ink:#E7EBF1; --muted:#9AA5B6; --line:#2B3546;
+  --brass:#E3B04F; --brass-soft:#3A2E14; --trill:#FF6A55; --trill-soft:#3D1D19;
+  --k-on:#EEF2F7; --k-off:#161D29; --k-line:#8592A6; --tube:#273142; --tube-line:#3C4859; color-scheme:dark; }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg); color:var(--ink); font:15px/1.5 var(--f-body); margin:0}
+button{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--brass); outline-offset:2px; border-radius:6px}
+.wrap{max-width:1320px; margin:0 auto; padding-inline:20px}
+.mono{font-family:var(--f-mono)}
+.eyebrow{font:700 11px/1 var(--f-body); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:0 0 8px}
+
+/* header */
+header.top{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.top-in{display:flex; gap:20px; align-items:center; padding-block:12px; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:10px; min-width:0}
+.brand svg{flex:none}
+.brand h1{font:800 26px/1 var(--f-display); letter-spacing:.02em; text-transform:uppercase; margin:0; white-space:nowrap}
+.brand h1 span{color:var(--brass)}
+.search{position:relative; flex:1 1 360px; min-width:0}
+.search input{width:100%; height:44px; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px; padding:0 18px 0 42px; font:500 15px var(--f-body)}
+.search input::placeholder{color:var(--muted)}
+.search .mag{position:absolute; left:15px; top:13px; color:var(--muted); pointer-events:none}
+#results{position:absolute; left:0; right:0; top:50px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r); box-shadow:0 18px 40px -18px rgba(10,20,40,.35); max-height:min(420px,70vh); overflow:auto; padding:6px}
+.res{display:flex; justify-content:space-between; gap:12px; width:100%; text-align:left; background:none; border:0; padding:9px 12px; border-radius:8px; cursor:pointer; flex-wrap:wrap}
+.res:hover,.res.is-sel{background:var(--surface-2)}
+.r-main{font-weight:700}
+.r-sub{color:var(--muted); font-size:13px}
+.r-tag{font:700 10px var(--f-body); letter-spacing:.08em; text-transform:uppercase; padding:2px 6px; border-radius:4px; margin-left:6px; vertical-align:2px}
+.r-tag.tr{background:var(--trill-soft); color:var(--trill)}
+.opts{display:flex; gap:14px; flex-wrap:wrap; font-size:13px; color:var(--muted)}
+.opts label{display:flex; gap:6px; align-items:center; cursor:pointer; white-space:nowrap}
+.opts input{accent-color:var(--brass)}
+
+/* shell */
+.shell{display:grid; grid-template-columns:220px minmax(0,1fr); gap:28px; padding-block:24px 40px}
+#side{position:sticky; top:96px; align-self:start; display:flex; flex-direction:column; gap:20px}
+#side ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px}
+.inst-btn{display:flex; justify-content:space-between; align-items:center; width:100%; background:none; border:0; padding:7px 10px; border-radius:8px; cursor:pointer; text-align:left; font-weight:500}
+.inst-btn:hover{background:var(--surface-2)}
+.inst-btn.is-on{background:var(--ink); color:var(--bg)}
+.inst-btn .tag{font:700 11px var(--f-mono); color:var(--brass); min-width:2.2em; text-align:right}
+.inst-btn.is-on .tag{color:var(--brass-soft)}
+
+main{min-width:0}
+.ihead{display:flex; flex-direction:column; gap:10px; margin-bottom:18px}
+#inst-name{font:800 clamp(40px,6vw,68px)/.9 var(--f-display); text-transform:uppercase; letter-spacing:.01em; margin:0; text-wrap:balance}
+#inst-meta{display:flex; flex-wrap:wrap; gap:6px}
+.chip{font-size:12.5px; padding:3px 10px; border-radius:999px; background:var(--surface); border:1px solid var(--line); color:var(--muted); font-variant-numeric:tabular-nums}
+#inst-blurb{margin:0; max-width:68ch; color:var(--muted)}
+#persp{margin:0; max-width:78ch; font-size:13.5px; padding:10px 14px; border-left:3px solid var(--brass); background:var(--surface); border-radius:0 8px 8px 0}
+
+/* strip */
+.strip-wrap{position:relative; margin:18px 0 22px}
+#strip{display:flex; gap:3px; overflow-x:auto; padding:6px 2px 10px; scroll-behavior:auto; scrollbar-width:thin}
+.nk{flex:none; width:40px; height:62px; border:1px solid var(--line); background:var(--surface); border-radius:7px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding-bottom:6px; gap:0; line-height:1.1}
+.nk.blk{background:var(--surface-2); height:50px; align-self:flex-start}
+.nk.cc{border-left:2px solid var(--brass)}
+.nk-n{font:700 14px var(--f-body)}
+.nk-o{font:500 10px var(--f-mono); color:var(--muted)}
+.nk:hover:not(:disabled){border-color:var(--ink)}
+.nk.is-on{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.nk.is-on .nk-o{color:var(--bg); opacity:.75}
+.nk:disabled{opacity:.35; cursor:default}
+.strip-hint{font-size:12px; color:var(--muted); margin-top:2px}
+
+/* note sheet */
+#note{display:grid; grid-template-columns:minmax(0,300px) minmax(0,1fr); gap:24px; scroll-margin-top:90px}
+.nsum{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:18px; align-self:start; position:sticky; top:96px; display:flex; flex-direction:column; gap:10px}
+.staff{width:100%; max-width:260px; height:auto; display:block}
+.staff .sl{stroke:var(--ink); stroke-width:1}
+.staff .glyph{fill:var(--ink)}
+.staff .head{fill:var(--ink)}
+.staff .head-in{fill:var(--surface)}
+.nname{font:800 64px/.9 var(--f-display); margin:0}
+.nname .o{font-size:.55em; color:var(--brass); margin-left:2px}
+.nsub{color:var(--muted); font-size:13.5px; margin:0}
+.nbtns{display:flex; gap:6px; flex-wrap:wrap}
+.btn{border:1px solid var(--line); background:var(--surface); border-radius:999px; padding:7px 14px; cursor:pointer; font-weight:600; font-size:13.5px}
+.btn:hover:not(:disabled){border-color:var(--ink)}
+.btn:disabled{opacity:.4; cursor:default}
+.btn.primary{background:var(--brass); border-color:var(--brass); color:#fff}
+:root[data-theme="dark"] .btn.primary{color:#1a1205}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .btn.primary{color:#1a1205} }
+.legend{display:grid; grid-template-columns:auto 1fr; gap:6px 10px; font-size:12.5px; color:var(--muted); align-items:center; padding-top:10px; border-top:1px solid var(--line)}
+.lg{width:16px; height:16px; border-radius:50%; border:1.5px solid var(--k-line); background:var(--k-off)}
+.lg.on{background:var(--k-on); border-color:var(--k-on)}
+.lg.half{background:linear-gradient(to top, var(--k-on) 50%, var(--k-off) 50%)}
+.lg.tr{background:var(--trill); border-color:var(--trill)}
+.lg.back{border-style:dashed}
+
+.sec-h{display:flex; align-items:baseline; gap:10px; margin:6px 0 10px}
+.sec-h h3{font:800 22px/1 var(--f-display); text-transform:uppercase; letter-spacing:.03em; margin:0}
+.sec-h .ct{color:var(--muted); font-size:13px}
+.col{display:flex; flex-direction:column; gap:22px; min-width:0}
+.grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(210px,1fr)); gap:14px}
+.grid.horiz-grid{grid-template-columns:repeat(auto-fill, minmax(300px,1fr))}
+
+.fcard{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px; display:flex; flex-direction:column; gap:10px; min-width:0}
+.fcard.big{flex-direction:row; align-items:flex-start; gap:22px; padding:18px; border-color:color-mix(in srgb, var(--brass) 45%, var(--line))}
+.fcard.big.horiz,.fcard.big:has(.dg-b){flex-direction:column}
+.fc-body{min-width:0; display:flex; flex-direction:column; gap:6px}
+.fc-title{font-size:26px; font-weight:700; letter-spacing:.02em}
+.fcard:not(.big) .fc-title{font-size:20px}
+.fc-meta{color:var(--muted); font-size:13px}
+.fc-press{margin:0; font-size:13.5px}
+.fc-press .lbl{font:700 10.5px var(--f-body); letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-right:6px}
+.trillline .lbl{color:var(--trill)}
+.fc-note{margin:0; font-size:13.5px; color:var(--muted); max-width:60ch}
+.tr-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.tr-head .mono{font-weight:700; font-size:15px}
+.tr-head .iv{font-size:12px; color:var(--muted)}
+.mini{margin-left:auto; border:1px solid var(--line); background:none; border-radius:999px; padding:2px 10px; font-size:12px; cursor:pointer}
+.mini:hover{border-color:var(--ink)}
+.empty{color:var(--muted); font-size:14px; margin:0}
+
+/* diagrams */
+.dg{display:block; height:auto; max-width:100%}
+.dg-v{width:150px}
+.fcard.big .dg-v{width:230px; flex:none}
+.dg-h .grp{font-size:8px}
+.dg-h .klab{font-size:7.5px}
+.fcard.big .dg-h{max-width:640px}
+.grid:has(.dg-b){grid-template-columns:repeat(auto-fill, minmax(250px,1fr))}
+.dg-h{width:100%; max-width:440px}
+.dg-b{width:100%; max-width:300px}
+.fcard.big .dg-b{max-width:380px}
+.dg .tube{fill:var(--tube); stroke:var(--tube-line); stroke-width:1}
+.dg .emb{fill:var(--surface); stroke:var(--tube-line)}
+.dg .joint{stroke:var(--tube-line); stroke-width:1; stroke-dasharray:2 2}
+.dg .bocal{fill:none; stroke:var(--tube-line); stroke-width:5; stroke-linecap:round}
+.dg .grp{font:700 6.4px var(--f-body); letter-spacing:.08em; fill:var(--muted)}
+.dg-b .grp{font-size:8px}
+.dg .kshape{fill:var(--k-off); stroke:var(--k-line); stroke-width:1.2}
+.dg .back .kshape{stroke-dasharray:2.5 1.8}
+.dg .on .kshape{fill:var(--k-on); stroke:var(--k-on); stroke-dasharray:none}
+.dg .tr .kshape,.dg .tr-solid .kshape{fill:var(--trill); stroke:var(--trill); stroke-dasharray:none}
+.dg .partial{fill:var(--k-on)}
+.dg .klab{font:700 6px var(--f-body); fill:var(--muted); pointer-events:none}
+.dg .on .klab,.dg .tr .klab{fill:var(--surface)}
+.dg .cap{fill:var(--surface-2); stroke:var(--tube-line)}
+.dg .vnum{font:700 15px var(--f-mono); fill:var(--muted); pointer-events:none}
+.dg .vnum.sm{font-size:11px}
+.dg .on .vnum,.dg .tr-solid .vnum{fill:var(--surface)}
+.dg .lead{stroke:var(--tube-line); stroke-width:6; stroke-linecap:round; fill:none}
+.dg .mpc{fill:var(--tube-line)}
+.dg .slide{fill:var(--tube); stroke:var(--tube-line)}
+.dg .slide-end{fill:none; stroke:var(--tube-line); stroke-width:12}
+.dg .tick{stroke:var(--muted)}
+.dg .tnum{font:600 10px var(--f-mono); fill:var(--muted)}
+@keyframes flick{0%,45%{opacity:1} 55%,100%{opacity:.25}}
+.dg .tr .kshape{animation:flick .5s steps(1,end) infinite}
+.no-anim .dg .tr .kshape{animation:none}
+@media (prefers-reduced-motion: reduce){ .dg .tr .kshape{animation:none} }
+
+.acc{display:inline-flex; border:1px solid var(--line); border-radius:999px; padding:3px; background:var(--surface); gap:2px}
+.acc-b{border:0; background:none; border-radius:999px; padding:5px 11px; font-size:13px; font-weight:600; cursor:pointer; color:var(--muted); white-space:nowrap}
+.acc-b:hover{color:var(--ink)}
+.acc-b.is-on{background:var(--ink); color:var(--bg)}
+.vtabs{display:inline-flex; align-self:flex-start; border-bottom:2px solid var(--line); gap:4px; margin-top:4px}
+.vt{border:0; background:none; padding:8px 14px; font:700 14px var(--f-body); color:var(--muted); cursor:pointer; margin-bottom:-2px; border-bottom:3px solid transparent}
+.vt:hover{color:var(--ink)}
+.vt.is-on{color:var(--ink); border-bottom-color:var(--brass)}
+.ov-grid{display:grid; gap:8px; grid-template-columns:repeat(auto-fill, minmax(104px,1fr))}
+.ov-grid.ov-h{grid-template-columns:repeat(auto-fill, minmax(230px,1fr))}
+.ov-grid.ov-b{grid-template-columns:repeat(auto-fill, minmax(150px,1fr))}
+.ov{display:flex; flex-direction:column; align-items:stretch; gap:4px; text-align:left; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:8px; cursor:pointer; min-width:0}
+.ov:hover{border-color:var(--ink)}
+.ov.cc{border-left:3px solid var(--brass)}
+.ov.is-on{outline:2px solid var(--brass); outline-offset:1px}
+.ov-top{display:flex; justify-content:space-between; align-items:baseline; gap:4px}
+.ov-n{font:800 22px/1 var(--f-display)}
+.ov-n small{font-size:.6em; color:var(--brass); margin-left:1px}
+.ov-e{font-size:11px; color:var(--muted)}
+.ov-f{font-size:15px; font-weight:700}
+.ov-dg{display:flex; justify-content:center}
+.ov-dg .dg{width:100%}
+.ov-v .ov-dg .dg{max-width:86px}
+.ov-meta{font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums}
+.ov-badges{display:flex; gap:4px; flex-wrap:wrap; min-height:17px}
+.bdg{font:700 10px var(--f-body); letter-spacing:.03em; padding:2px 6px; border-radius:4px; background:var(--surface-2); color:var(--muted)}
+.bdg.tr{background:var(--trill-soft); color:var(--trill)}
+footer{border-top:1px solid var(--line); padding-block:28px 40px; color:var(--muted); font-size:13.5px}
+footer h2{font:800 20px var(--f-display); text-transform:uppercase; color:var(--ink); margin:0 0 8px; letter-spacing:.03em}
+footer ul{margin:0 0 14px; padding-left:18px}
+footer a{color:var(--brass)}
+.foot-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:24px}
+.examples{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px}
+.ex{border:1px dashed var(--line); background:none; border-radius:999px; padding:3px 10px; font-size:12.5px; cursor:pointer; color:var(--muted)}
+.ex:hover{color:var(--ink); border-color:var(--ink)}
+
+@media (max-width: 980px){
+  #note{grid-template-columns:minmax(0,1fr)}
+  .nsum{position:static; display:grid; grid-template-columns:minmax(0,160px) minmax(0,1fr); align-items:center}
+  .nsum .legend{grid-column:1/-1}
+}
+@media (max-width: 820px){
+  .shell{grid-template-columns:minmax(0,1fr); gap:16px; padding-top:14px}
+  #side{position:static; flex-direction:row; overflow-x:auto; gap:14px; padding-bottom:6px}
+  #side .fam{flex:none}
+  #side ul{flex-direction:row; gap:4px}
+  .inst-btn{white-space:nowrap; border:1px solid var(--line); background:var(--surface)}
+  .fcard.big{flex-direction:column}
+  .top-in{gap:10px}
+  .brand h1{font-size:22px}
+}
+@media (max-width: 480px){
+  .ov-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ov-grid.ov-h,.ov-grid.ov-b{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .acc-b{padding:5px 8px}
+  .wrap{padding-inline:16px}
+  .nsum{grid-template-columns:minmax(0,1fr)}
+  .staff{max-width:200px}
+  .nname{font-size:52px}
+  .grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px}
+  .grid.horiz-grid{grid-template-columns:minmax(0,1fr)}
+  .dg-v{width:100%; max-width:170px; margin-inline:auto}
+  .fcard.big .dg-v{width:100%; max-width:220px}
+  .grid:has(.dg-b){grid-template-columns:minmax(0,1fr)}
+  .fcard{padding:10px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-in">
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="4" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="26" r="20" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="26" r="16.5" fill="none" stroke="currentColor" stroke-width="1"/><g transform="translate(0 2)"><path d="M24 7.800000000000001 l-2.6 4.6 h5.2 Z" fill="var(--brass)" transform="rotate(0 24 24)"/><path d="M24 7.800000000000001 l-2.6 4.6 h5.2 Z" fill="currentColor" transform="rotate(90 24 24)"/><path d="M24 7.800000000000001 l-2.6 4.6 h5.2 Z" fill="currentColor" transform="rotate(180 24 24)"/><path d="M24 7.800000000000001 l-2.6 4.6 h5.2 Z" fill="currentColor" transform="rotate(270 24 24)"/><path d="M34.96 13.04 L33.76 14.24 M34.96 34.96 L33.76 33.76 M13.04 34.96 L14.24 33.76 M13.04 13.04 L14.24 14.24 " stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><g transform="translate(24 24) scale(.82) translate(-24 -24)"><g transform="rotate(35 24 24)"><path d="M22.4 8 L25.6 8 L25.9 13 H22.1 Z" fill="var(--brass)"/><rect x="21.3" y="13" width="5.4" height="19.5" rx="1.4" fill="currentColor"/><path d="M21.3 31.5 H26.7 L29 38.5 H19 Z" fill="currentColor"/><circle cx="24" cy="17.5" r="1.3" fill="var(--bg)"/><circle cx="24" cy="22" r="1.3" fill="var(--bg)"/><circle cx="24" cy="26.5" r="1.3" fill="var(--bg)"/></g></g></g></svg>
+      <h1>Band Instrument <span>Atlas</span></h1>
+    </div>
+    <div class="search" role="search">
+      <svg class="mag" width="17" height="17" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13.5 13.5 L18.5 18.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="q" type="search" autocomplete="off" placeholder="Search: clarinet Bb4 · trill A B flute · tuba E2 · side key" aria-label="Search fingerings" aria-controls="results">
+      <div id="results" role="listbox" hidden></div>
+    </div>
+    <div class="acc" role="group" aria-label="Show accidentals as">
+      <button class="acc-b" data-a="sharp" aria-pressed="false" title="Show black-key notes as sharps">♯ Sharps</button><button class="acc-b" data-a="flat" aria-pressed="false" title="Show black-key notes as flats">♭ Flats</button><button class="acc-b" data-a="mixed" aria-pressed="false" title="C♯, E♭, F♯, G♯, B♭">Mixed</button>
+    </div>
+    <div class="opts">
+      <label><input type="checkbox" id="opt-labels" checked> Key letters</label>
+      <label><input type="checkbox" id="opt-anim" checked> Flash trill keys</label>
+    </div>
+  </div>
+</header>
+
+<div class="wrap shell">
+  <nav id="side" aria-label="Instruments"></nav>
+  <main>
+    <div class="ihead">
+      <h2 id="inst-name">Clarinet</h2>
+      <div id="inst-meta"></div>
+      <p id="inst-blurb"></p>
+      <p id="persp"></p>
+      <div class="vtabs" role="group" aria-label="View">
+        <button class="vt is-on" data-v="note" aria-pressed="true">One note</button><button class="vt" data-v="range" aria-pressed="false">Full range chart</button>
+      </div>
+    </div>
+    <section id="overview" hidden>
+      <div class="sec-h"><h3 id="ov-title">Full range</h3><span class="ct">Standard fingering for every written note. Select one for alternates and trills.</span></div>
+      <div id="ov-grid" class="ov-grid"></div>
+    </section>
+    <div class="strip-wrap">
+      <div id="strip" aria-label="Choose a written note"></div>
+      <div class="strip-hint">Written pitch. Use ← → to step through notes, / to search.</div>
+    </div>
+    <section id="note" aria-live="polite">
+      <aside class="nsum">
+        <div id="n-staff"></div>
+        <div>
+          <p class="nname" id="n-name"></p>
+          <p class="nsub" id="n-enh"></p>
+          <p class="nsub" id="n-concert"></p>
+          <p class="nsub" id="n-count"></p>
+          <div class="nbtns" style="margin-top:10px">
+            <button class="btn" id="prev" aria-label="Previous note">← Lower</button>
+            <button class="btn primary" id="play">▶ Hear it</button>
+            <button class="btn" id="next" aria-label="Next note">Higher →</button>
+          </div>
+        </div>
+        <div class="legend">
+          <span class="lg on"></span><span>Press / cover</span>
+          <span class="lg"></span><span>Leave up / open</span>
+          <span class="lg half"></span><span>Half-hole or partly covered</span>
+          <span class="lg tr"></span><span>Trill: move this key rapidly</span>
+          <span class="lg back"></span><span>Thumb or back key (dashed)</span>
+        </div>
+      </aside>
+      <div class="col">
+        <div>
+          <div class="sec-h"><h3>Standard</h3></div>
+          <div id="std"></div>
+        </div>
+        <div>
+          <div class="sec-h" id="alt-h"><h3>Alternates</h3><span class="ct">for tuning, tone and smoother technique</span></div>
+          <div id="alts" class="grid"></div>
+        </div>
+        <div id="trills-wrap">
+          <div class="sec-h"><h3 id="tr-from-h">Trills</h3><span class="ct">half and whole steps</span></div>
+          <div id="tr-from" class="grid"></div>
+          <div class="sec-h" style="margin-top:18px"><h3 id="tr-to-h">Trills to</h3></div>
+          <div id="tr-to" class="grid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div>
+      <h2>Searching</h2>
+      <p style="margin:0">Type an instrument, a note, or both. Add “trill” and two notes for a trill, “alt” for notes with alternates, or a key name.</p>
+      <div class="examples">
+        <button class="ex">clarinet Bb4</button><button class="ex">trill A B flute</button><button class="ex">alto sax F#6</button><button class="ex">tuba E2</button><button class="ex">horn D5</button><button class="ex">trombone B3</button><button class="ex">side key</button><button class="ex">oboe alt F4</button>
+      </div>
+    </div>
+    <div>
+      <h2>Sources</h2>
+      <ul id="sources"></ul>
+      <p style="margin:0">Woodwind fingerings follow the Woodwind Fingering Guide's basic, alternate and trill charts. Brass fingerings are built from each instrument's harmonic series and checked against the Everett and Yamaha charts; partial tuning notes follow Everett's overtone charts. Keywork varies by maker and model, so test alternates on your own instrument with a tuner.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const GLYPH={"treble": "M434 2Q464 -103 464 -170Q464 -223 427.0 -257.0Q390 -291 337 -291Q287 -291 250.0 -261.5Q213 -232 213 -190Q213 -160 233.5 -133.5Q254 -107 283.5 -107.0Q313 -107 331.5 -128.5Q350 -150 350 -178Q350 -240 280 -240Q298 -268 338 -268Q353 -268 368.5 -263.5Q384 -259 401.0 -248.0Q418 -237 428.5 -213.5Q439 -190 439 -157Q439 -136 411 -6Q389 -12 356 -12Q259 -12 189.5 60.0Q120 132 120 232Q120 267 131.5 303.0Q143 339 157.5 366.5Q172 394 200.5 428.5Q229 463 248.5 483.5Q268 504 303 539Q280 621 280 689Q280 779 313.0 839.5Q346 900 379 900Q389 900 401.5 887.0Q414 874 426.0 851.0Q438 828 446.5 790.5Q455 753 455 710Q455 551 342 447L368 329Q384 332 397 332Q458 332 500.0 282.5Q542 233 542 162Q542 44 434 2ZM426 746Q426 801 394 801Q358 801 333.0 748.0Q308 695 308 630Q308 588 321 557Q359 580 392.5 639.5Q426 699 426 746ZM498 128Q498 183 466.0 216.0Q434 249 383 249L428 23Q498 52 498 128ZM407 17 361 247Q334 241 311.5 214.0Q289 187 289 158Q289 143 295.0 128.5Q301 114 309.5 104.0Q318 94 327.0 86.0Q336 78 342.0 74.5Q348 71 348 71L340 66Q307 75 277.5 106.0Q248 137 248 184Q248 231 277.5 270.5Q307 310 343 323L325 430Q168 299 168 177Q168 104 223.0 55.0Q278 6 348 6Q365 6 407 17Z", "bass": "M564 704Q582 704 594.5 691.0Q607 678 607.0 661.0Q607 644 593.0 631.0Q579 618 563 618Q521 618 521 663Q521 681 534.0 692.5Q547 704 564 704ZM607 469Q607 450 594.0 437.0Q581 424 564 424Q521 424 521 469Q521 485 533.5 498.0Q546 511 564.0 511.0Q582 511 594.5 497.0Q607 483 607 469ZM285 757Q366 757 421.0 701.5Q476 646 476 569Q476 531 465.5 495.0Q455 459 432.0 426.5Q409 394 386.0 367.0Q363 340 326.0 313.0Q289 286 264.0 267.5Q239 249 196.5 226.0Q154 203 135.5 193.5Q117 184 80 166L75 182Q76 183 102.0 200.0Q128 217 144.0 227.5Q160 238 191.5 263.0Q223 288 244.0 309.5Q265 331 291.5 363.5Q318 396 334.0 427.0Q350 458 361.5 498.0Q373 538 373 578Q373 735 262 735Q225 735 199.0 725.5Q173 716 161.5 702.0Q150 688 145.0 677.5Q140 667 140 659Q140 644 160 644Q168 644 179.0 647.5Q190 651 194 651Q221 651 239.0 634.0Q257 617 257 592Q257 563 235.0 544.0Q213 525 183 525Q144 525 119.0 548.0Q94 571 94 607Q94 673 150.5 715.0Q207 757 285 757Z", "sharp": "M365 24 319 6V-193L275 -209V-10L138 -63V-262L94 -279V-80L50 -96V0L94 17V262L50 245V341L94 358V589L138 606V376L275 429V659L319 675V446L365 464V366L319 348V104L365 122ZM275 88V332L138 279V34Z", "flat": "M222 441Q275 441 302.0 408.0Q329 375 329 317Q329 273 299.5 234.0Q270 195 192.5 117.0Q115 39 56 -34V783L99 802V402Q148 441 222 441ZM232 308Q232 373 183 373Q159 373 134.5 358.5Q110 344 99 319V87Q159 155 195.5 214.5Q232 274 232 308Z"};
+/* ===== Woodwind fingering data =====
+   Format: NOTE = keys ; note        (standard fingering)
+           NOTE + keys ; note        (alternate)
+           LOW~HIGH = keys ; note    (trill: ^ marks the key(s) you move)
+   Holes: L1 L2 L3 / R1 R2 R3 (groups like L123, R13). L1h = half-hole,
+   L1q = mostly open, L1t = mostly covered. "-" = everything open.
+   Sources: Woodwind Fingering Guide (wfg.woodwind.org) basic, alternate and
+   trill charts; trill notes for sax from The Instrumentalist. */
+
+const WW_DATA = {};
+
+WW_DATA.clarinet = `
+E3 = T L123 LE R123 ; Left pinky E. Use when the next note needs the right pinky.
+E3 + T L123 R123 RE ; Right pinky E. Use when the next note needs the left pinky.
+F3 = T L123 R123 RF ; Right pinky F. Use with left-pinky notes or no pinky.
+F3 + T L123 LF R123 ; Left pinky F. Use when the next note needs the right pinky.
+F#3 = T L123 LFs R123 ; Left pinky F♯.
+F#3 + T L123 R123 RFs ; Right pinky F♯, on models that have it.
+G3 = T L123 R123
+G#3 = T L123 R123 RGs
+A3 = T L123 R12
+Bb3 = T L123 R1
+B3 = T L123 R2
+B3 + T L123 R1 SLb ; Chromatic: B/F♯ sliver key. Smooth for B♭–B.
+C4 = T L123
+C#4 = T L123 LCs
+D4 = T L12
+Eb4 = T L12 k4 ; Lowest right-hand side key.
+Eb4 + T L12 SLe ; E♭/B♭ sliver key. Chromatic; use next to D4.
+E4 = T L1
+F4 = T
+F#4 = L1
+G4 = - ; Open G: no keys at all.
+G#4 = Gs
+A4 = A
+A4 + Gs k2 ; G♯ key plus side key 2. Clearer throat A.
+Bb4 = R A
+Bb4 + A k2 ; A key plus side key 2. Trill fingering with A4.
+Bb4 + Gs k1 ; G♯ key plus side key 1. Clearer, better-tuned throat B♭.
+B4 = R T L123 LE R123 ; Left pinky B. Use when the next note needs the right pinky.
+B4 + R T L123 R123 RE ; Right pinky B. Use when the next note needs the left pinky.
+C5 = R T L123 R123 RF ; Right pinky C.
+C5 + R T L123 LF R123 ; Left pinky C.
+C#5 = R T L123 LFs R123 ; Left pinky C♯.
+C#5 + R T L123 R123 RFs ; Right pinky C♯, on models that have it.
+D5 = R T L123 R123
+Eb5 = R T L123 R123 RGs
+E5 = R T L123 R12
+F5 = R T L123 R1
+F#5 = R T L123 R2
+F#5 + R T L123 R1 SLb ; Chromatic: B/F♯ sliver key, use next to F5.
+G5 = R T L123
+G#5 = R T L123 LCs
+A5 = R T L12
+Bb5 = R T L12 k4 ; Lowest side key.
+Bb5 + R T L12 SLe ; Sliver key. Chromatic; use next to A5.
+Bb5 + R T L23 LCs ; Trill fingering with A♭5.
+B5 = R T L1
+C6 = R T
+C#6 = R T L23 R12
+D6 = R T L23 R1 RGs
+D6 + R T Gs k4 ; Less flat. Trill fingering with C6.
+D6 + R T Gs ; Trill fingering with C6.
+Eb6 = R T L23 R1 SLb RGs
+Eb6 + R T L23 R3 RGs ; Use next to lower clarion notes.
+Eb6 + R T L23 R2 RGs ; Flat, but easy in fast passages.
+E6 = R T L23 RGs
+F6 = R T L23 LCs RGs
+F6 + R T L123 LCs R123 ; For slurs from the lower registers and for pp.
+F#6 = R T L2 RGs
+F#6 + R T L12 k4 RGs ; Accurate pitch; speaks easily; good for wide skips.
+F#6 + R T L12 R123 RGs ; For slurs from below; stable at pp and ff.
+G6 = R T L2 R12 RGs
+G6 + R T L1 R12 RGs ; For slurs from clarion notes.
+G#6 = R T L23 LFs R13
+G#6 + R T k4 RGs ; Responds well at all dynamics.
+G#6 + R T R1 RGs ; Easy to finger, good tuning.
+
+E3~F3 = T L123 LE R123 ^RF ; Hold left E, trill the right F key.
+E3~F#3 = T L123 LE R123 ^RFs
+F3~F#3 = T L123 LFs R123 ^RF ; Hold left F♯, trill the right F key.
+F3~G3 = T L123 R123 ^RF
+F#3~G3 = T L123 ^LFs R123
+F#3~G#3 = T L123 ^LFs R123 RGs
+G3~G#3 = T L123 R123 ^RGs
+G3~A3 = T L123 R12 ^R3
+G#3~A3 = T L123 R12 ^R3 RGs
+A3~Bb3 = T L123 R1 ^R2
+A3~B3 = T L123 ^R1 R2
+Bb3~B3 = T L123 R1 ^SLb
+Bb3~C4 = T L123 ^R1
+B3~C4 = T L123 ^R2
+C4~C#4 = T L123 ^LCs
+C4~D4 = T L12 ^L3
+C#4~D4 = T L12 ^L3 LCs
+D4~Eb4 = T L12 ^k4
+D4~E4 = T L1 ^L2
+E4~F4 = T ^L1
+E4~F#4 = ^T L1
+F4~G4 = ^T
+F#4~G4 = ^L1
+G4~G#4 = ^Gs
+G4~A4 = ^A
+G#4~A4 = Gs ^k2 ; Side key 2 raises the throat G♯ a half step.
+G#4~Bb4 = Gs ^k1 ; Side key 1 raises the throat G♯ a whole step.
+A4~Bb4 = A ^k2
+A4~B4 = A ^k1 ; Side key 1 gives B without crossing the break.
+Bb4~B4 = R A ^k2 ; Avoids crossing the break.
+Bb4~C5 = R A ^k1 ; Avoids crossing the break.
+B4~C5 = R T L123 LE R123 ^RF
+B4~C#5 = R T L123 LE R123 ^RFs
+C5~C#5 = R T L123 LFs R123 ^RF
+C5~D5 = R T L123 R123 ^RF
+C#5~D5 = R T L123 ^LFs R123
+C#5~D#5 = R T L123 ^LFs R123 RGs
+D5~Eb5 = R T L123 R123 ^RGs
+D5~E5 = R T L123 R12 ^R3
+Eb5~E5 = R T L123 R12 ^R3 RGs
+E5~F5 = R T L123 R1 ^R2
+E5~F#5 = R T L123 ^R1 R2
+F5~F#5 = R T L123 R1 ^SLb
+F5~G5 = R T L123 ^R1
+F#5~G5 = R T L123 ^R2
+G5~G#5 = R T L123 ^LCs
+G5~A5 = R T L12 ^L3
+G#5~A5 = R T L12 ^L3 LCs
+A5~Bb5 = R T L12 ^k4
+A5~B5 = R T L1 ^L2
+B5~C6 = R T ^L1
+C6~D6 = R T ^Gs ; D6 is slightly flat with this fingering.
+D6~Eb6 = R T ^Gs L23 R1 RGs ; Good for rapid trills.
+D6~E6 = R T L23 ^R1 RGs
+E6~F6 = R T L23 ^LCs RGs
+`;
+
+WW_DATA.flute = `
+B3 = T L123 R123 B ; B-foot only.
+C4 = T L123 R123 C
+C#4 = T L123 R123 Cs
+D4 = T L123 R123
+Eb4 = T L123 R123 Eb
+E4 = T L123 R12 Eb
+F4 = T L123 R1 Eb
+F#4 = T L123 R3 Eb
+F#4 + T L123 R2 Eb ; For slurs with E.
+G4 = T L123 Eb
+G#4 = T L123 Gs Eb
+A4 = T L12 Eb
+A4 + T L12 Gs R1 Eb ; More overtones; brighter.
+Bb4 = T L1 R1 Eb ; "One-and-one" B♭.
+Bb4 + Bb L1 Eb ; Thumb B♭. Best in flat keys without B natural.
+Bb4 + T L1 rBb Eb ; Right-hand B♭ lever. Trill fingering.
+B4 = T L1 Eb
+C5 = L1 Eb
+C#5 = Eb ; Nearly all open. C♯ is the flute's weakest note; check pitch.
+D5 = T L23 R123
+D5 + T L123 R123 ; Harmonic of D4.
+Eb5 = T L23 R123 Eb
+E5 = T L123 R12 Eb
+F5 = T L123 R1 Eb
+F#5 = T L123 R3 Eb
+F#5 + T L123 R2 Eb ; For slurs from E.
+G5 = T L123 Eb
+G#5 = T L123 Gs Eb
+A5 = T L12 Eb
+A5 + T L12 Gs R1 Eb ; Good for ff.
+Bb5 = T L1 R1 Eb
+Bb5 + Bb L1 Eb ; Thumb B♭.
+Bb5 + T L1 rBb Eb ; Right-hand lever. Trill fingering.
+B5 = T L1 Eb
+C6 = L1 Eb
+C#6 = Eb
+D6 = T L23 Eb
+D6 + T L23 Gs R1 Eb ; Very sharp; good for pp.
+Eb6 = T L123 Gs R123 Eb
+Eb6 + T L23 tDs Eb ; For slurs from D6.
+E6 = T L12 R12 Eb
+E6 + T L12 tDs Eb ; Clear and in tune; responds like D6.
+F6 = T L13 R1 Eb
+F#6 = T L13 R3 Eb
+G6 = L123 Eb
+G#6 = L23 Gs Eb
+A6 = T L2 R1 Eb
+Bb6 = T R1 tD
+B6 = T L13 tDs
+C7 = L123 Gs R1 gz ; B-foot with gizmo key.
+C7 + L123 Gs R1 ; C-foot flute.
+
+C4~D4 = T L123 R123 ^C
+C#4~D4 = T L123 R123 ^Cs
+D4~Eb4 = T L123 R123 ^Eb
+E4~F4 = T L123 R1 ^R2 Eb
+E4~F#4 = T L123 ^R1 R2 Eb ; Uses the R2 F♯.
+F4~F#4 = T L123 ^R1 R3 Eb
+F4~G4 = T L123 ^R1 Eb
+F#4~G4 = T L123 ^R3 Eb
+G4~G#4 = T L123 ^Gs Eb
+G4~A4 = T L12 ^L3 Eb
+G#4~A4 = T L12 ^L3 Gs Eb
+A4~Bb4 = T L1 ^L2 rBb Eb ; Hold the right-hand B♭ lever.
+A4~B4 = T L1 ^L2 Eb
+Bb4~B4 = T L1 ^rBb Eb
+Bb4~C5 = ^Bb L1 Eb ; Roll the thumb off the B♭ lever.
+B4~C5 = ^T L1 Eb
+C5~C#5 = ^L1 Eb
+C5~D5 = L1 ^tD Eb ; First octave uses the 1st (D) trill key.
+C#5~D5 = ^tD Eb
+C#5~D#5 = ^tDs Eb
+D5~Eb5 = T L23 R123 ^Eb
+D5~E5 = T L23 R12 ^R3
+Eb5~E5 = T L23 R12 ^R3 Eb
+E5~F5 = T L123 R1 ^R2 Eb
+E5~F#5 = T L123 ^R1 R2 Eb
+F5~F#5 = T L123 ^R1 R3 Eb
+F5~G5 = T L123 ^R1 Eb
+F#5~G5 = T L123 ^R3 Eb
+G5~G#5 = T L123 ^Gs Eb
+G5~A5 = T L12 ^L3 Eb
+G#5~A5 = T L12 ^L3 Gs Eb
+A5~Bb5 = T L1 ^L2 rBb Eb
+A5~B5 = T L1 ^L2 Eb
+Bb5~B5 = T L1 ^rBb Eb
+B5~C6 = ^T L1 Eb
+C6~C#6 = ^L1 Eb
+C6~D6 = L1 ^tDs Eb ; Second octave uses the 2nd (D♯) trill key.
+C#6~D6 = ^tD Eb
+C#6~D#6 = ^tD ^tDs Eb ; Both trill keys together.
+D6~Eb6 = T L23 ^tDs Eb
+`;
+
+WW_DATA.oboe = `
+Bb3 = L123 lBb R123 rC ; Low B♭ key; some student oboes lack it.
+B3 = L123 lB R123 rC
+C4 = L123 R123 rC
+C4 + L123 R123 ban ; Banana key, so the pinky doesn't slide.
+C#4 = L123 R123 rCs
+D4 = L123 R123
+Eb4 = L123 R123 rEb ; Right pinky E♭.
+Eb4 + L123 lEb R123 ; Left pinky E♭. Use next to right-pinky notes.
+E4 = L123 R12
+F4 = L123 R12 F ; Regular F.
+F4 + L123 R13 ; Forked F. Use around E♭ and D.
+F4 + L123 lF R12 ; Left F, on models with a left F key.
+F#4 = L123 R1
+G4 = L123
+G#4 = L123 lGs
+G#4 + L123 sGs ; Right-hand side G♯ key. Good for trills.
+A4 = L12
+Bb4 = L12 R1
+B4 = L1
+C5 = L1 R1
+C#5 = L1h L23 R123 rCs ; Half-hole.
+C#5 + L23 R123 rCs ; Clearer, sharper sound. Good for ff.
+D5 = L1h L23 R123 ; Half-hole.
+D5 + L23 R123 ; Clearer, sharper sound. Good for ff.
+D5 + L1 R1 rD ; Trill fingering with C5.
+Eb5 = L1h L23 R123 rEb ; Half-hole.
+Eb5 + L1h L23 lEb R123 ; Left E♭.
+E5 = O1 L123 R12
+F5 = O1 L123 R12 F ; Regular F.
+F5 + O1 L123 R13 ; Forked F.
+F5 + O1 L123 lF R12 ; Left F.
+F#5 = O1 L123 R1
+G5 = O1 L123
+G#5 = O1 L123 lGs
+G#5 + O1 L123 sGs ; Side G♯. Trill fingering.
+A5 = O2 L12
+Bb5 = O2 L12 R1
+B5 = O2 L1
+B5 + O2 L1 tB ; Trill fingering with B♭5.
+C6 = O2 L1 R1
+C#6 = L23 R1 rC
+D6 = L1h L23 R2 rC
+Eb6 = L1h L23 lB R23
+Eb6 + L1h L23 R23 rEb ; Use next to E♭5 or D6.
+E6 = O1 L1h L23 lGs R23 rEb
+E6 + O1 L1h L23 lGs lEb R23
+F6 = O1 L1h L2 lGs R23 rEb
+
+C4~D4 = L123 R123 ^rC
+C#4~D4 = L123 R123 ^rCs
+D4~Eb4 = L123 R123 ^rEb
+D4~E4 = L123 R12 ^R3
+E4~F4 = L123 R12 ^F
+F4~F#4 = L123 R1 ^R3 ; From forked F.
+F#4~G4 = L123 ^R1
+F#4~G#4 = L123 lGs ^R1
+G4~G#4 = L123 ^sGs ; Side G♯ key.
+G4~A4 = L12 ^L3
+G#4~A4 = L12 ^L3 lGs
+A4~Bb4 = L12 ^R1
+A4~B4 = L1 ^L2
+B4~C5 = L1 ^R1
+C5~C#5 = L1 R1 ^tCs ; C♯ trill key.
+C5~D5 = L1 R1 ^tD ; D trill key.
+C#5~D5 = L1h L23 R123 ^rCs
+D5~Eb5 = L1h L23 R123 ^rEb
+E5~F5 = O1 L123 R12 ^F
+F5~F#5 = O1 L123 R1 ^R3 ; From forked F.
+F#5~G5 = O1 L123 ^R1
+G5~G#5 = O1 L123 ^sGs
+A5~Bb5 = O2 L12 ^R1
+A5~B5 = O2 L1 ^L2
+B5~C6 = O2 L1 ^R1
+`;
+
+WW_DATA.bassoon = `
+Bb1 = lD lC lB lBb L123 E R123 rF
+B1 = lD lC lB L123 E R123 rF
+C2 = lD lC L123 E R123 rF
+C#2 = lD lC L123 lCs E R123 rF
+D2 = lD L123 E R123 rF
+Eb2 = lD L123 lEb E R123 rF
+E2 = W L123 E R123 rF
+E2 + W L123 lCs E R123 rF ; Lowers pitch; tone matches D2 and F2.
+F2 = W L123 R123 rF
+F#2 = W L123 Fs R123 rF ; Right-thumb F♯.
+F#2 + W L123 R123 rF rFs ; Pinky F♯. Use next to right-thumb notes.
+G2 = W L123 R123
+G#2 = W L123 R123 rGs
+A2 = W L123 R12
+Bb2 = W L123 Bb R12
+B2 = W L123 R1
+C3 = W L123
+C#3 = lD tCs W L123
+D3 = W L12
+Eb3 = W L13
+Eb3 + W L13 Bb R2
+E3 = W L1
+F3 = W
+F#3 = W L1q L23 Fs R123 rF ; Leave more than half of LH 1 open.
+F#3 + W L1q L23 R123 rF rFs ; Pinky F♯. Use next to right-thumb notes.
+G3 = W L1h L23 lEb R123 ; Cover about half of LH 1.
+G#3 = W L1t L23 R123 rGs ; Cover more than half of LH 1.
+A3 = L123 R12
+A3 + fA L123 R12 ; Flick the A key for slurs.
+Bb3 = L123 Bb R12
+Bb3 + fA L123 Bb R12 ; Flick fingering for slurs.
+B3 = L123 R1
+B3 + fC L123 R1 ; Flick the C key for slurs.
+C4 = L123
+C4 + fC L123 ; Flick fingering for slurs.
+C#4 = lD tCs L123
+D4 = L12
+D4 + fD L12 ; Flick the D key for slurs.
+Eb4 = L12 R123
+E4 = L13 lEb R123
+F4 = L13 lEb R12
+F#4 = L23 lEb Bb R12
+F#4 + L23 lEb R12 rF
+G4 = W L1h L23 lEb R1 rF
+G#4 = W L1t L23 lEb R3
+A4 = fA tCs L123 lEb R3
+Bb4 = fA tCs L123 lEb R12 rF
+
+E2~F2 = W L123 ^E R123 rF ; Trill the right-thumb E key.
+F2~F#2 = W L123 ^Fs R123 rF
+G2~G#2 = W L123 R123 ^rGs
+G2~A2 = W L123 R12 ^R3
+A2~Bb2 = W L123 R12 ^Bb
+A2~B2 = W L123 R1 ^R2
+B2~C3 = W L123 ^R1
+C3~D3 = W L12 ^L3
+D3~E3 = W L1 ^L2
+A3~Bb3 = L123 R12 ^Bb
+A3~B3 = L123 R1 ^R2
+B3~C4 = L123 ^R1
+C4~D4 = L12 ^L3
+`;
+
+WW_DATA.sax = `
+A3 = A L123 Bb R123 C ; Low A key (baritone only).
+Bb3 = L123 Bb R123 C
+B3 = L123 B R123 C
+C4 = L123 R123 C
+C#4 = L123 Cs R123 C
+D4 = L123 R123
+Eb4 = L123 R123 Eb
+E4 = L123 R12
+F4 = L123 R1
+F#4 = L123 R2
+F#4 + L123 R1 tFs ; Chromatic F♯ key. Use next to F.
+G4 = L123
+G#4 = L123 Gs
+A4 = L12
+Bb4 = L12 sBb ; Side B♭.
+Bb4 + L1 bis ; Bis key. For flat keys with no B natural.
+Bb4 + L1 R1 ; "One-and-one." Use next to F.
+Bb4 + L1 R2 ; Sharp. Use next to F♯.
+B4 = L1
+C5 = L2
+C5 + L1 sC ; Side C. Chromatic; use next to B.
+C#5 = - ; Open.
+D5 = T L123 R123
+Eb5 = T L123 R123 Eb
+E5 = T L123 R12
+F5 = T L123 R1
+F#5 = T L123 R2
+F#5 + T L123 R1 tFs ; Chromatic F♯ key.
+G5 = T L123
+G#5 = T L123 Gs
+A5 = T L12
+Bb5 = T L12 sBb ; Side B♭.
+Bb5 + T L1 bis ; Bis key.
+Bb5 + T L1 R1 ; One-and-one.
+B5 = T L1
+C6 = T L2
+C6 + T L1 sC ; Side C.
+C#6 = T
+D6 = T pD
+Eb6 = T pD pEb
+E6 = T pD pEb sE
+E6 + T fF L23 ; Front F. Less stable; use next to C6 and C♯6.
+F6 = T pD pEb pF sE
+F6 + T fF L2 ; Front F. Less stable; use next to C6.
+F#6 = T pD pEb pF sE sFs ; High F♯ key, on models that have it.
+
+B3~C4 = L123 ^B R123 C
+C4~D4 = L123 R123 ^C
+C#4~D4 = L123 ^Cs R123
+D4~Eb4 = L123 R123 ^Eb
+D4~E4 = L123 R12 ^R3
+Eb4~E4 = L123 R12 ^R3 Eb
+Eb4~F4 = L123 R1 ^R2 ^R3 Eb ; Trill RH 2 and 3 together.
+E4~F4 = L123 R1 ^R2
+E4~F#4 = L123 ^R1 R2
+F4~F#4 = L123 R1 ^tFs
+F4~G4 = L123 ^R1
+F#4~G4 = L123 ^R2
+F#4~G#4 = L123 Gs ^R2
+G4~G#4 = L123 ^Gs
+G4~A4 = L12 ^L3
+G#4~A4 = L12 ^L3 Gs
+A4~Bb4 = L12 ^sBb ; Side B♭ key: the clearest A–B♭ trill.
+A4~B4 = L1 ^L2
+Bb4~B4 = L1 ^bis
+B4~C5 = L1 ^sC ; Side C key.
+B4~C#5 = ^L1
+C5~C#5 = ^L2
+C5~D5 = L2 ^pEb ; The E♭ palm key sounds D in this trill, so you don't cross the break.
+D5~Eb5 = T L123 R123 ^Eb
+D5~E5 = T L123 R12 ^R3
+Eb5~E5 = T L123 R12 ^R3 Eb
+E5~F5 = T L123 R1 ^R2
+E5~F#5 = T L123 ^R1 R2
+F5~F#5 = T L123 R1 ^tFs
+F5~G5 = T L123 ^R1
+F#5~G5 = T L123 ^R2
+F#5~G#5 = T L123 Gs ^R2
+G5~G#5 = T L123 ^Gs
+G5~A5 = T L12 ^L3
+G#5~A5 = T L12 ^L3 Gs
+A5~Bb5 = T L12 ^sBb
+A5~B5 = T L1 ^L2
+Bb5~B5 = T L1 ^bis
+B5~C6 = T L1 ^sC
+B5~C#6 = T ^L1
+C6~C#6 = T ^L2
+C6~D6 = T L2 ^pD ; The D palm key is the standard trill key to D.
+C#6~D6 = T ^pD
+D6~Eb6 = T pD ^pEb
+Eb6~E6 = T pD pEb ^sE
+E6~F6 = T pD pEb sE ^pF
+`;
+
+/* ===== Notes ===== */
+const SPELL = {
+  mixed:['C','C♯','D','E♭','E','F','F♯','G','G♯','A','B♭','B'],
+  sharp:['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'],
+  flat:['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B']};
+let PCN = SPELL.mixed;
+const LET = {C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+const oct = m => Math.floor(m/12)-1;
+const nm = m => PCN[m%12]+oct(m);
+const enh = m => { const pc = m%12; if(![1,3,6,8,10].includes(pc)) return null; return (PCN[pc]===SPELL.sharp[pc] ? SPELL.flat[pc] : SPELL.sharp[pc]) + oct(m); };
+const slug = m => PCN[m%12].replace('♯','s').replace('♭','b')+oct(m);
+function parseNote(s){
+  const r = /^([A-Ga-g])(#|s|b|♯|♭)?(-?\d)$/.exec(s.trim());
+  if(!r) return null;
+  let m = LET[r[1].toUpperCase()] + 12*(+r[3]+1);
+  if(r[2]==='#'||r[2]==='s'||r[2]==='♯') m++;
+  if(r[2]==='b'||r[2]==='♭') m--;
+  return m;
+}
+const IV = {1:'half step',2:'whole step'};
+
+/* ===== Woodwind key layouts (player's view) =====
+   t: h = tone hole/ring, k = key, b = thumb key on the back (dashed) */
+const LAYOUTS = {
+clarinet:{vb:[170,370], tube:[[68,10,24,350]], joints:[206],
+  labels:[[30,30,'THUMB'],[30,38,'(BACK)'],[132,82,'RH SIDE'],[40,140,'LH PINKY'],[122,290,'RH PINKY']],
+  keys:[
+  {id:'R',t:'b',x:30,y:50,w:18,h:9,lab:'R',name:'Register key (left thumb)'},
+  {id:'T',t:'b',x:30,y:70,r:9,lab:'',name:'Thumb hole (left thumb)'},
+  {id:'A',t:'k',x:80,y:26,w:22,h:8,lab:'A',name:'A key (LH index)'},
+  {id:'Gs',t:'k',x:54,y:52,w:9,h:18,lab:'',name:'G♯ key (LH index, side)'},
+  {id:'L1',t:'h',x:80,y:70,r:10,name:'LH 1 (index)'},
+  {id:'L2',t:'h',x:80,y:98,r:10,name:'LH 2 (middle)'},
+  {id:'SLe',t:'k',x:99,y:112,w:6,h:14,lab:'',name:'E♭/B♭ sliver key (LH 3)'},
+  {id:'L3',t:'h',x:80,y:126,r:10,name:'LH 3 (ring)'},
+  {id:'k1',t:'k',x:132,y:96,w:18,h:11,lab:'1',name:'Side trill key 1 (top)'},
+  {id:'k2',t:'k',x:132,y:111,w:18,h:11,lab:'2',name:'Side trill key 2'},
+  {id:'k3',t:'k',x:132,y:126,w:18,h:11,lab:'3',name:'Side trill key 3'},
+  {id:'k4',t:'k',x:132,y:141,w:18,h:11,lab:'4',name:'Side key 4 (E♭/B♭)'},
+  {id:'LCs',t:'k',x:40,y:152,w:26,h:11,lab:'C♯',name:'C♯/G♯ key (left pinky)'},
+  {id:'LFs',t:'k',x:40,y:167,w:26,h:11,lab:'F♯',name:'F♯/C♯ key (left pinky)'},
+  {id:'LF',t:'k',x:40,y:182,w:26,h:11,lab:'F',name:'F/C key (left pinky)'},
+  {id:'LE',t:'k',x:40,y:197,w:26,h:11,lab:'E',name:'E/B key (left pinky)'},
+  {id:'R1',t:'h',x:80,y:222,r:10,name:'RH 1 (index)'},
+  {id:'SLb',t:'k',x:99,y:236,w:6,h:14,lab:'',name:'B/F♯ sliver key (RH)'},
+  {id:'R2',t:'h',x:80,y:250,r:10,name:'RH 2 (middle)'},
+  {id:'R3',t:'h',x:80,y:278,r:10,name:'RH 3 (ring)'},
+  {id:'RGs',t:'k',x:122,y:302,w:26,h:11,lab:'A♭',name:'A♭/E♭ key (right pinky)'},
+  {id:'RFs',t:'k',x:122,y:317,w:26,h:11,lab:'F♯',name:'F♯/C♯ key (right pinky)'},
+  {id:'RF',t:'k',x:122,y:332,w:26,h:11,lab:'F',name:'F/C key (right pinky)'},
+  {id:'RE',t:'k',x:122,y:347,w:26,h:11,lab:'E',name:'E/B key (right pinky)'},
+]},
+sax:{vb:[170,350], tube:[[68,14,24,300]], joints:[],
+  labels:[[18,48,'THUMB'],[18,56,'(BACK)'],[46,24,'PALM'],[130,172,'RH SIDE'],[46,150,'LH PINKY'],[110,288,'RH PINKY']],
+  keys:[
+  {id:'T',t:'b',x:18,y:72,w:20,h:10,lab:'8va',name:'Octave key (left thumb)'},
+  {id:'A',t:'b',x:18,y:90,w:16,h:9,lab:'A',name:'Low A key (left thumb, baritone only)'},
+  {id:'pD',t:'k',x:46,y:38,w:10,h:18,lab:'D',name:'Palm key D'},
+  {id:'pEb',t:'k',x:46,y:60,w:10,h:18,lab:'E♭',name:'Palm key E♭'},
+  {id:'pF',t:'k',x:54,y:82,w:10,h:16,lab:'F',name:'Palm key F'},
+  {id:'fF',t:'k',x:80,y:52,w:16,h:7,lab:'',name:'Front F key (LH index)'},
+  {id:'L1',t:'h',x:80,y:74,r:10,name:'LH 1 (index)'},
+  {id:'bis',t:'k',x:80,y:90,w:7,h:7,lab:'',name:'Bis B♭ key'},
+  {id:'L2',t:'h',x:80,y:106,r:10,name:'LH 2 (middle)'},
+  {id:'L3',t:'h',x:80,y:136,r:10,name:'LH 3 (ring)'},
+  {id:'Gs',t:'k',x:50,y:162,w:22,h:10,lab:'G♯',name:'G♯ key (left pinky)'},
+  {id:'Cs',t:'k',x:38,y:177,w:18,h:10,lab:'C♯',name:'Low C♯ key (left pinky)'},
+  {id:'B',t:'k',x:60,y:180,w:18,h:10,lab:'B',name:'Low B key (left pinky)'},
+  {id:'Bb',t:'k',x:48,y:195,w:20,h:10,lab:'B♭',name:'Low B♭ key (left pinky)'},
+  {id:'sE',t:'k',x:130,y:186,w:20,h:10,lab:'E',name:'High E side key (RH)'},
+  {id:'sC',t:'k',x:130,y:200,w:20,h:10,lab:'C',name:'Side C key (RH)'},
+  {id:'sBb',t:'k',x:130,y:214,w:20,h:10,lab:'B♭',name:'Side B♭ key (RH)'},
+  {id:'sFs',t:'k',x:130,y:232,w:20,h:10,lab:'F♯',name:'High F♯ key (RH)'},
+  {id:'R1',t:'h',x:80,y:206,r:10,name:'RH 1 (index)'},
+  {id:'R2',t:'h',x:80,y:236,r:10,name:'RH 2 (middle)'},
+  {id:'tFs',t:'k',x:98,y:252,w:6,h:10,lab:'',name:'Alternate F♯ key (RH)'},
+  {id:'R3',t:'h',x:80,y:266,r:10,name:'RH 3 (ring)'},
+  {id:'Eb',t:'k',x:110,y:300,w:22,h:10,lab:'E♭',name:'Low E♭ key (right pinky)'},
+  {id:'C',t:'k',x:110,y:315,w:22,h:10,lab:'C',name:'Low C key (right pinky)'},
+]},
+oboe:{vb:[170,350], tube:[[70,10,20,330]], joints:[196],
+  labels:[[24,40,'THUMB'],[24,48,'(BACK)'],[130,172,'RH SIDE'],[44,144,'LH PINKY'],[136,294,'RH PINKY']],
+  keys:[
+  {id:'O1',t:'b',x:24,y:64,w:20,h:10,lab:'8va',name:'First octave key (left thumb)'},
+  {id:'O2',t:'k',x:54,y:58,w:9,h:20,lab:'II',name:'Second (side) octave key (LH index)'},
+  {id:'L1',t:'h',x:80,y:74,r:10,name:'LH 1 (index) with half-hole plate'},
+  {id:'tD',t:'k',x:60,y:90,w:10,h:8,lab:'',name:'D trill key (LH)'},
+  {id:'tB',t:'k',x:100,y:88,w:10,h:8,lab:'',name:'B trill key (LH)'},
+  {id:'L2',t:'h',x:80,y:104,r:10,name:'LH 2 (middle)'},
+  {id:'tCs',t:'k',x:100,y:119,w:10,h:8,lab:'',name:'C♯ trill key (LH)'},
+  {id:'L3',t:'h',x:80,y:134,r:10,name:'LH 3 (ring)'},
+  {id:'lGs',t:'k',x:46,y:156,w:22,h:10,lab:'G♯',name:'G♯ key (left pinky)'},
+  {id:'lF',t:'k',x:62,y:170,w:14,h:9,lab:'F',name:'Left F key (left pinky)'},
+  {id:'lEb',t:'k',x:36,y:171,w:18,h:10,lab:'E♭',name:'E♭ key (left pinky)'},
+  {id:'lB',t:'k',x:46,y:185,w:20,h:10,lab:'B',name:'Low B key (left pinky)'},
+  {id:'lBb',t:'k',x:36,y:199,w:20,h:10,lab:'B♭',name:'Low B♭ key (left pinky)'},
+  {id:'sA',t:'k',x:130,y:186,w:18,h:10,lab:'A',name:'Side A trill key (RH)'},
+  {id:'sGs',t:'k',x:130,y:200,w:18,h:10,lab:'G♯',name:'Side G♯ key (RH)'},
+  {id:'R1',t:'h',x:80,y:216,r:10,name:'RH 1 (index)'},
+  {id:'rD',t:'k',x:100,y:230,w:10,h:8,lab:'',name:'D trill key (RH)'},
+  {id:'R2',t:'h',x:80,y:244,r:10,name:'RH 2 (middle)'},
+  {id:'F',t:'k',x:100,y:258,w:10,h:9,lab:'F',name:'F key (RH ring finger)'},
+  {id:'R3',t:'h',x:80,y:272,r:10,name:'RH 3 (ring)'},
+  {id:'ban',t:'k',x:104,y:284,w:8,h:12,lab:'',name:'Banana key (C alternate, RH ring)'},
+  {id:'rC',t:'k',x:124,y:302,w:22,h:10,lab:'C',name:'Low C key (right pinky)'},
+  {id:'rCs',t:'k',x:104,y:315,w:20,h:10,lab:'C♯',name:'Low C♯ key (right pinky)'},
+  {id:'rEb',t:'k',x:126,y:328,w:20,h:10,lab:'E♭',name:'E♭ key (right pinky)'},
+]},
+bassoon:{vb:[190,350], tube:[[80,40,20,152],[80,198,20,140]], joints:[], bocal:true,
+  labels:[[42,22,'LH THUMB'],[30,128,'LOW KEYS'],[52,198,'RH THUMB'],[126,140,'LH PINKY'],[132,290,'RH PINKY']],
+  keys:[
+  {id:'fA',t:'b',x:24,y:42,w:15,h:9,lab:'A',name:'High A flick key (LH thumb)'},
+  {id:'fC',t:'b',x:42,y:34,w:15,h:9,lab:'C',name:'High C flick key (LH thumb)'},
+  {id:'fD',t:'b',x:60,y:42,w:15,h:9,lab:'D',name:'High D flick key (LH thumb)'},
+  {id:'W',t:'b',x:44,y:74,w:20,h:10,lab:'W',name:'Whisper key (LH thumb)'},
+  {id:'tCs',t:'b',x:44,y:96,w:16,h:9,lab:'C♯',name:'C♯ key (LH thumb)'},
+  {id:'lD',t:'b',x:24,y:142,w:18,h:10,lab:'D',name:'Low D key (LH thumb)'},
+  {id:'lC',t:'b',x:24,y:157,w:18,h:10,lab:'C',name:'Low C key (LH thumb)'},
+  {id:'lB',t:'b',x:24,y:172,w:18,h:10,lab:'B',name:'Low B key (LH thumb)'},
+  {id:'lBb',t:'b',x:24,y:187,w:18,h:10,lab:'B♭',name:'Low B♭ key (LH thumb)'},
+  {id:'L1',t:'h',x:90,y:80,r:9,name:'LH 1 (index)'},
+  {id:'L2',t:'h',x:90,y:108,r:9,name:'LH 2 (middle)'},
+  {id:'L3',t:'h',x:90,y:136,r:9,name:'LH 3 (ring)'},
+  {id:'lEb',t:'k',x:126,y:154,w:20,h:10,lab:'E♭',name:'E♭ key (left pinky)'},
+  {id:'lCs',t:'k',x:126,y:169,w:20,h:10,lab:'C♯',name:'Low C♯ key (left pinky)'},
+  {id:'E',t:'b',x:52,y:216,w:18,h:10,lab:'E',name:'Low E key (RH thumb)'},
+  {id:'Fs',t:'b',x:52,y:231,w:18,h:10,lab:'F♯',name:'F♯ key (RH thumb)'},
+  {id:'Bb',t:'b',x:52,y:246,w:18,h:10,lab:'B♭',name:'B♭ key (RH thumb)'},
+  {id:'R1',t:'h',x:90,y:226,r:9,name:'RH 1 (index)'},
+  {id:'R2',t:'h',x:90,y:254,r:9,name:'RH 2 (middle)'},
+  {id:'R3',t:'h',x:90,y:282,r:9,name:'RH 3 (ring)'},
+  {id:'rF',t:'k',x:132,y:302,w:20,h:10,lab:'F',name:'F key (right pinky)'},
+  {id:'rFs',t:'k',x:132,y:317,w:20,h:10,lab:'F♯',name:'F♯ key (right pinky)'},
+  {id:'rGs',t:'k',x:132,y:332,w:20,h:10,lab:'A♭',name:'A♭ (G♯) key (right pinky)'},
+]},
+flute:{vb:[440,140], tube:[[14,57,416,24]], joints:[200,320], flute:true,
+  labels:[[36,46,'HEAD'],[72,128,'THUMB (UNDERSIDE)'],[184,122,'LH PINKY'],[370,128,'RH PINKY · FOOT'],[262,30,'TRILL KEYS']],
+  keys:[
+  {id:'Bb',t:'b',x:62,y:104,w:20,h:12,lab:'B♭',name:'Thumb B♭ lever (left thumb)'},
+  {id:'T',t:'b',x:84,y:104,w:20,h:12,lab:'B',name:'Thumb B key (left thumb)'},
+  {id:'L1',t:'h',x:102,y:69,r:11,name:'LH 1 (index)'},
+  {id:'L2',t:'h',x:136,y:69,r:11,name:'LH 2 (middle)'},
+  {id:'L3',t:'h',x:166,y:69,r:11,name:'LH 3 (ring)'},
+  {id:'Gs',t:'k',x:184,y:102,w:20,h:12,lab:'G♯',name:'G♯ key (left pinky)'},
+  {id:'rBb',t:'k',x:200,y:46,w:16,h:11,lab:'B♭',name:'Right-hand B♭ lever (RH index)'},
+  {id:'R1',t:'h',x:228,y:69,r:11,name:'RH 1 (index)'},
+  {id:'tD',t:'k',x:247,y:44,w:13,h:11,lab:'D',name:'1st trill key (D)'},
+  {id:'R2',t:'h',x:266,y:69,r:11,name:'RH 2 (middle)'},
+  {id:'tDs',t:'k',x:285,y:44,w:13,h:11,lab:'D♯',name:'2nd trill key (D♯)'},
+  {id:'R3',t:'h',x:304,y:69,r:11,name:'RH 3 (ring)'},
+  {id:'Eb',t:'k',x:334,y:102,w:22,h:12,lab:'E♭',name:'E♭ (D♯) key (right pinky)'},
+  {id:'Cs',t:'k',x:362,y:92,w:18,h:12,lab:'C♯',name:'Low C♯ roller (right pinky)'},
+  {id:'C',t:'k',x:382,y:92,w:18,h:12,lab:'C',name:'Low C roller (right pinky)'},
+  {id:'B',t:'k',x:404,y:92,w:18,h:12,lab:'B',name:'Low B roller (B-foot)'},
+  {id:'gz',t:'k',x:404,y:46,w:16,h:11,lab:'gz',name:'Gizmo key (B-foot)'},
+]},
+};
+LAYOUTS.piccolo = Object.assign({}, LAYOUTS.flute, {
+  vb:[380,140], tube:[[14,57,356,24]], joints:[200],
+  labels:LAYOUTS.flute.labels.filter(l=>!/FOOT/.test(l[2])).concat([[338,128,'RH PINKY']]),
+  keys:LAYOUTS.flute.keys.filter(k=>!['Cs','C','B','gz'].includes(k.id))
+});
+const PERSPECTIVE = {
+  clarinet:'Drawn the way you see your own clarinet: mouthpiece at the top, your left-hand pinky keys on the left, the right-hand side keys and pinky keys on the right. Thumb keys sit on the back of the instrument and are drawn dashed.',
+  sax:'Drawn from the player\'s side: palm keys and the left-pinky table on the left, the side keys under your right palm on the right, the octave key (left thumb, on the back) dashed.',
+  oboe:'Drawn from the player\'s side: reed at the top, left-pinky keys on the left, right-hand side keys and pinky keys on the right. The thumb octave key on the back is dashed.',
+  bassoon:'Drawn from the player\'s side, where the thumb keys face you: left-thumb keys on the wing joint and right-thumb keys on the boot are dashed; pinky keys on the right.',
+  flute:'Drawn looking down at the flute as you hold it: headjoint on your left, footjoint on your right, thumb keys underneath (dashed, toward you), trill keys on the far side.',
+  piccolo:'Drawn looking down at the piccolo as you hold it: headjoint on your left, thumb keys underneath (dashed), trill keys on the far side.',
+  valves:'Drawn from above, the way you look down at your valves: valve 1 is nearest your mouthpiece.',
+  horn:'Drawn as your left hand sees the levers: thumb trigger first, then levers 1–3 under your index, middle and ring fingers.',
+  slide:'Drawn from the player\'s side: you are at the left, the slide extends away to the right.'
+};
+
+/* ===== Parsing woodwind data ===== */
+function parseFing(str){
+  const keys = {}, trill = new Set(), toks = str.trim().split(/\s+/);
+  for(let t of toks){
+    if(!t || t==='-') continue;
+    let tr = false;
+    if(t[0]==='^'){ tr = true; t = t.slice(1); }
+    let m = /^([LR])([1-3]+)$/.exec(t), m2 = /^([LR][1-3])([hqt])$/.exec(t);
+    const ids = [];
+    if(m) for(const d of m[2]) ids.push(m[1]+d);
+    else if(m2){ keys[m2[1]] = m2[2]; continue; }
+    else ids.push(t);
+    for(const id of ids){ if(tr) trill.add(id); else keys[id] = 'c'; }
+  }
+  return {keys, trill, raw:str.trim()};
+}
+function parseWW(text, exclude){
+  const notes = {}, trills = [];
+  const bad = f => exclude && [...Object.keys(f.keys), ...f.trill].some(k=>exclude.includes(k));
+  for(let line of text.split('\n')){
+    line = line.trim(); if(!line) continue;
+    const r = /^(\S+?)(?:~(\S+))?\s+([=+])\s+([^;]*?)\s*(?:;\s*(.*))?$/.exec(line);
+    if(!r){ console.warn('bad line', line); continue; }
+    const f = parseFing(r[4]); f.note = r[5]||''; f.std = r[3]==='=';
+    if(bad(f)) continue;
+    const lo = parseNote(r[1]);
+    if(r[2]){ trills.push({lo, hi:parseNote(r[2]), f}); continue; }
+    (notes[lo] ||= []).push(f);
+  }
+  for(const k in notes){ const a = notes[k]; a.sort((x,y)=>(y.std-x.std)); a[0].std = true; for(let i=1;i<a.length;i++) a[i].std=false; }
+  return {notes, trills};
+}
+
+/* ===== Brass generation (harmonic series × valve/slide lengths) ===== */
+const OFF = {1:0,2:12,3:19,4:24,5:28,6:31,7:34,8:36,9:38,10:40,12:43,15:47,16:48};
+const PTEND = {2:'in tune',3:'slightly sharp',4:'in tune',5:'flat — lip up slightly',6:'slightly sharp',7:'very flat — lip up or avoid',8:'in tune',9:'slightly sharp',10:'flat',12:'sharp',15:'',16:''};
+const V3 = [['0',0],['2',1],['1',2],['1-2',3],['3',3],['2-3',4],['1-3',5],['1-2-3',6]];
+const V4 = V3.concat([['4',5],['2-4',6],['1-4',7],['1-2-4',8],['2-3-4',9],['1-3-4',10],['1-2-3-4',11]]);
+const PREF3 = ['0','2','1','1-2','2-3','1-3','1-2-3','3'];
+const PREF4 = ['0','2','1','1-2','2-3','4','2-4','1-4','1-2-4','2-3-4','1-3-4','1-2-3-4','3','1-3','1-2-3'];
+const NONCOMP = {7:'1-2-4 or 1-4',8:'2-3-4',9:'1-3-4',10:'1-2-3-4',11:'not available (false tone only)'};
+
+function comboNote(c, fam){
+  if(fam==='tpt'){ if(c==='1-3') return 'Sharp; extend the 3rd-valve slide.'; if(c==='1-2-3') return 'Very sharp; extend the 3rd-valve slide.'; if(c==='1-2') return 'Slightly sharp.'; if(c==='3') return 'Same tube length as 1-2; usually a little flatter.'; }
+  if(fam==='low'){ if(c==='1-3') return 'Sharp; 4 is usually better in tune.'; if(c==='1-2-3') return 'Sharp; 2-4 is usually better in tune.'; if(c==='3') return 'Same length as 1-2.'; }
+  if(fam==='horn'){ if(c==='3') return 'Third valve alone tends to be flat.'; if(c==='1-2') return 'Slightly sharp.'; }
+  return '';
+}
+function valveOpts(n, fund, partials, combos, pref, side){
+  const out = [];
+  for(const p of partials) for(const [c,low] of combos)
+    if(!(low > 6 && p > 3) && fund + OFF[p] - low === n) out.push({p, c, low, side});
+  out.sort((a,b)=> (a.p===7)-(b.p===7) || a.low-b.low || pref.indexOf(a.c)-pref.indexOf(b.c));
+  return out;
+}
+function brassNote(inst, n){
+  const B = inst.brass;
+  if(B.type==='valve'){
+    const combos = B.valves===4 ? V4 : V3, pref = B.valves===4 ? PREF4 : PREF3;
+    const opts = valveOpts(n, B.fund, B.partials, combos, pref);
+    return opts.slice(0, 5).map((o,i)=>({...o, std:i===0,
+      note:[comboNote(o.c, B.fam), (B.valves===4 && /4/.test(o.c) && o.p===2 && NONCOMP[o.low]) ? 'Non-compensating instrument: '+NONCOMP[o.low]+'.' : ''].filter(Boolean).join(' ')}));
+  }
+  if(B.type==='horn'){
+    const F = valveOpts(n, 36, [2,3,4,5,6,8,9,10,12,15,16], V3, PREF3, 'F');
+    const Bb = valveOpts(n, 41, [2,3,4,5,6,8,9,10,12], V3, PREF3, 'B♭');
+    const first = n >= 68 ? [Bb, F] : [F, Bb];
+    const list = [];
+    if(first[0][0]) list.push(first[0][0]);
+    if(first[1][0]) list.push(first[1][0]);
+    for(const o of [...first[0].slice(1,3), ...first[1].slice(1,3)]) list.push(o);
+    return list.map((o,i)=>({...o, std:i===0, note:comboNote(o.c,'horn')}));
+  }
+  if(B.type==='slide'){
+    const out = [];
+    for(const p of [2,3,4,5,6,7,8,9,10,12]) for(let pos=1; pos<=7; pos++)
+      if(34 + OFF[p] - (pos-1) === n) out.push({p, pos, att:0});
+    const atts = B.atts || [];
+    for(const a of atts) for(const p of [2,3,4,5,6]) for(let k=1; k<=a.max; k++)
+      if(34 - a.low + OFF[p] - (k-1) === n) out.push({p, pos:k, att:a.low, attName:a.name, attTag:a.tag});
+    out.sort((a,b)=> (a.att>0)-(b.att>0) || (a.p===7)-(b.p===7) || a.pos-b.pos);
+    // if no plain-slide option, best attachment option = shortest position
+    if(out.length && out[0].att>0) out.sort((a,b)=>a.pos-b.pos || a.att-b.att);
+    return out.slice(0,6).map((o,i)=>({...o, std:i===0,
+      note: o.p===7 ? 'Seventh partial is flat: raise (shorten) the slide slightly.' : (o.att && o.pos>=6 ? 'Very long position; you may need to pull the attachment tuning slide.' : '')}));
+  }
+}
+
+/* ===== Instruments ===== */
+const SRC = {
+  wfg:{t:'Woodwind Fingering Guide — basic, alternate & trill charts',u:'https://www.wfg.woodwind.org/'},
+  instr:{t:'The Instrumentalist — Saxophone Trill Fingerings',u:'https://theinstrumentalist.com/august-september-2020/saxophone-trill-fingerings/'},
+  everett:{t:'Micah Everett, University of Mississippi Low Brass — fingering, position & overtone charts',u:'https://olemiss.edu/lowbrass/lowbrassmethods/charts/tromboneposition.pdf'},
+  yamaha:{t:'Yamaha Musical Instrument Guide — trumpet fingering diagram',u:'https://www.yamaha.com/en/musical_instrument_guide/trumpet/play/play002.html'},
+  horn:{t:'Horn Matters — Farkas, Schuller, Berv & Tuckwell on double-horn fingerings',u:'https://hornmatters.com/?p=10852'},
+  pimentel:{t:'Bret Pimentel — Clarinet pinky fingerings & woodwind trill technique',u:'https://bretpimentel.com/woodwind-trill-technique/'},
+};
+const INSTRUMENTS = [
+  {id:'piccolo', name:'Piccolo', short:'Picc', fam:'Woodwinds', key:'C', layout:'piccolo', data:'flute', exclude:['Cs','C','B','gz'], tr:12, clef:'treble', blurb:'Sounds an octave higher than written. Fingerings match the flute, without the foot joint.', src:['wfg'], al:['piccolo','picc']},
+  {id:'flute', name:'Flute', short:'Fl', fam:'Woodwinds', key:'C', layout:'flute', data:'flute', tr:0, clef:'treble', blurb:'Closed-G♯ Boehm flute. Low B and the gizmo key need a B-foot.', src:['wfg'], al:['flute','fl','flutes']},
+  {id:'oboe', name:'Oboe', short:'Ob', fam:'Woodwinds', key:'C', layout:'oboe', data:'oboe', tr:0, clef:'treble', blurb:'Conservatory-system oboe; also English horn by written note.', src:['wfg'], al:['oboe','ob','english horn']},
+  {id:'bassoon', name:'Bassoon', short:'Bsn', fam:'Woodwinds', key:'C', layout:'bassoon', data:'bassoon', tr:0, clef:'bass', blurb:'Heckel-system (German) bassoon. Concert pitch, bass clef.', src:['wfg'], al:['bassoon','bsn','fagott']},
+  {id:'clarinet', name:'B♭ Clarinet', short:'Cl', fam:'Woodwinds', key:'B♭', layout:'clarinet', data:'clarinet', tr:-2, clef:'treble', blurb:'Boehm-system clarinet. Sounds a major 2nd lower than written.', src:['wfg','pimentel'], al:['clarinet','clar','cl','bb clarinet','soprano clarinet']},
+  {id:'bassclarinet', name:'Bass Clarinet', short:'B.Cl', fam:'Woodwinds', key:'B♭', layout:'clarinet', data:'clarinet', maxNote:84, tr:-14, clef:'treble', blurb:'Same written fingerings as the soprano clarinet through the clarion. Sounds a major 9th lower. Altissimo fingerings differ on bass clarinet.', src:['wfg'], al:['bass clarinet','bass clar','bcl','bass cl']},
+  {id:'altosax', name:'Alto Saxophone', short:'A.Sx', fam:'Woodwinds', key:'E♭', layout:'sax', data:'sax', exclude:['A'], tr:-9, clef:'treble', blurb:'Sounds a major 6th lower than written. All saxophones share these written fingerings.', src:['wfg','instr'], al:['alto sax','alto saxophone','alto','asax','sax','saxophone']},
+  {id:'tenorsax', name:'Tenor Saxophone', short:'T.Sx', fam:'Woodwinds', key:'B♭', layout:'sax', data:'sax', exclude:['A'], tr:-14, clef:'treble', blurb:'Sounds a major 9th lower than written.', src:['wfg','instr'], al:['tenor sax','tenor saxophone','tenor','tsax']},
+  {id:'barisax', name:'Baritone Saxophone', short:'B.Sx', fam:'Woodwinds', key:'E♭', layout:'sax', data:'sax', tr:-21, clef:'treble', blurb:'Sounds an octave and a major 6th lower than written. Most modern baris have a low A key.', src:['wfg','instr'], al:['bari sax','baritone sax','baritone saxophone','bari','bsax']},
+  {id:'trumpet', name:'Trumpet / Cornet', short:'Tpt', fam:'Brass', key:'B♭', tr:-2, clef:'treble', diagram:'valves', min:54, max:84, brass:{type:'valve', valves:3, fund:48, partials:[2,3,4,5,6,7,8], fam:'tpt'}, blurb:'B♭ trumpet or cornet. Sounds a major 2nd lower than written.', src:['yamaha','everett'], al:['trumpet','tpt','cornet','trumpets']},
+  {id:'mellophone', name:'Mellophone', short:'Mello', fam:'Brass', key:'F', tr:-7, clef:'treble', diagram:'valves', min:54, max:81, brass:{type:'valve', valves:3, fund:48, partials:[2,3,4,5,6,7,8], fam:'tpt'}, blurb:'F mellophone. Uses trumpet fingerings by written note; sounds a perfect 5th lower.', src:['yamaha'], al:['mellophone','mello']},
+  {id:'horn', name:'Horn in F (double)', short:'Hn', fam:'Brass', key:'F', tr:-7, clef:'treble', diagram:'horn', min:42, max:84, brass:{type:'horn'}, blurb:'F/B♭ double horn. F side below written G♯4, B♭ side (thumb) from G♯4 up. Single F horns use the F-side fingerings. Sounds a perfect 5th lower.', src:['horn','everett'], al:['horn','french horn','f horn','double horn','hn']},
+  {id:'trombone', name:'Trombone', short:'Tbn', fam:'Brass', key:'C', tr:0, clef:'bass', diagram:'slide', min:36, max:77, brass:{type:'slide', atts:[{low:5,max:6,name:'F attachment',tag:'T'}]}, blurb:'Tenor trombone, concert pitch. Positions marked T need an F attachment (trigger).', src:['everett'], al:['trombone','tbn','bone','tenor trombone']},
+  {id:'basstrombone', name:'Bass Trombone', short:'B.Tbn', fam:'Brass', key:'C', tr:0, clef:'bass', diagram:'slide', min:34, max:70, brass:{type:'slide', atts:[{low:5,max:6,name:'F valve',tag:'F'},{low:4,max:6,name:'G♭ valve',tag:'G♭'},{low:8,max:5,name:'both valves (D)',tag:'D'}]}, blurb:'Bass trombone with independent F and G♭ valves. Concert pitch.', src:['everett'], al:['bass trombone','bass bone','btbn']},
+  {id:'euphonium', name:'Euphonium (bass clef)', short:'Euph', fam:'Brass', key:'C', tr:0, clef:'bass', diagram:'valves', min:35, max:72, brass:{type:'valve', valves:4, fund:34, partials:[2,3,4,5,6,7,8,9,10,12], fam:'low'}, blurb:'Four-valve compensating euphonium or baritone, concert pitch. Three-valve players use the non-4 fingerings.', src:['everett'], al:['euphonium','euph','baritone bass clef','baritone bc']},
+  {id:'baritonetc', name:'Baritone (treble clef)', short:'Bar TC', fam:'Brass', key:'B♭', tr:-14, clef:'treble', diagram:'valves', min:54, max:84, brass:{type:'valve', valves:3, fund:48, partials:[2,3,4,5,6,7,8], fam:'tpt'}, blurb:'Treble-clef baritone or euphonium. Fingerings match trumpet by written note; sounds a major 9th lower.', src:['everett','yamaha'], al:['baritone','baritone tc','baritone treble clef','euphonium tc','euph tc','bari tc']},
+  {id:'tuba', name:'Tuba (BB♭)', short:'Tuba', fam:'Brass', key:'C', tr:0, clef:'bass', diagram:'valves', min:23, max:62, brass:{type:'valve', valves:4, fund:22, partials:[2,3,4,5,6,7,8,9,10], fam:'low'}, blurb:'BB♭ tuba with a 4th valve (compensating). Sousaphone and 3-valve tubas use the non-4 fingerings. Concert pitch.', src:['everett'], al:['tuba','bb tuba','sousaphone','sousa']},
+];
+
+/* ===== Build woodwind data per instrument ===== */
+const PARSED = {};
+for(const ins of INSTRUMENTS){
+  if(ins.brass) continue;
+  const p = parseWW(WW_DATA[ins.data], ins.exclude);
+  if(ins.maxNote){ for(const k in p.notes) if(+k > ins.maxNote) delete p.notes[k]; p.trills = p.trills.filter(t=>t.hi<=ins.maxNote); }
+  const ms = Object.keys(p.notes).map(Number).sort((a,b)=>a-b);
+  ins.min = ms[0]; ins.max = ms[ms.length-1];
+  PARSED[ins.id] = p;
+}
+function fingerings(ins, n){
+  if(ins.brass) return brassNote(ins, n) || [];
+  return PARSED[ins.id].notes[n] || [];
+}
+
+/* ===== Helpers ===== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let CLIP = 0;
+const store = {
+  get(){ try{ return JSON.parse(localStorage.getItem('bfa')||'{}'); }catch(e){ return {}; } },
+  set(v){ try{ localStorage.setItem('bfa', JSON.stringify(Object.assign(store.get(), v))); }catch(e){} }
+};
+const S = { ins:null, note:null, labels:true, anim:true, acc:'mixed', view:'note' };
+
+/* ===== Woodwind diagram ===== */
+function shortName(k){ return k.name.replace(/\s*\(.*\)$/,''); }
+function pressText(L, f){
+  const parts = [];
+  const hole = (side) => ['1','2','3'].filter(d => f.keys[side+d]).map(d => d + ({h:' (half)',q:' (¼ covered)',t:' (¾ covered)'}[f.keys[side+d]]||'')).join(' ');
+  const lh = hole('L'), rh = hole('R');
+  if(lh) parts.push('LH '+lh);
+  if(rh) parts.push('RH '+rh);
+  const other = L.keys.filter(k => !/^[LR][123]$/.test(k.id) && f.keys[k.id]).map(k => k.name);
+  const trill = L.keys.filter(k => f.trill.has(k.id)).map(k => /^[LR][123]$/.test(k.id) ? (k.id[0]==='L'?'LH ':'RH ')+k.id[1] : shortName(k));
+  return { press: parts.concat(other), trill };
+}
+function svgWW(layoutId, f, hide, mini){
+  const L0 = LAYOUTS[layoutId], L = hide ? Object.assign({}, L0, {keys:L0.keys.filter(k=>!hide.includes(k.id))}) : L0, [w,h] = L.vb;
+  const pt = pressText(L, f);
+  const aria = (pt.press.length ? 'Press: '+pt.press.join(', ') : 'All keys open') + (pt.trill.length ? '. Trill: '+pt.trill.join(', ') : '');
+  let s = `<svg class="dg ${L.flute?'dg-h':'dg-v'}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(aria)}">`;
+  for(const [x,y,tw,th] of L.tube) s += `<rect class="tube" x="${x}" y="${y}" width="${tw}" height="${th}" rx="${Math.min(tw,th)/2}"/>`;
+  if(L.flute){ s += `<ellipse class="emb" cx="40" cy="69" rx="8" ry="4.5"/>`; for(const x of L.joints) s += `<line class="joint" x1="${x}" x2="${x}" y1="58" y2="80"/>`; }
+  else for(const y of L.joints) s += `<line class="joint" x1="${L.tube[0][0]}" x2="${L.tube[0][0]+L.tube[0][2]}" y1="${y}" y2="${y}"/>`;
+  if(L.bocal) s += `<path class="bocal" d="M90 40 C90 26 98 16 122 10"/><path class="bocal" d="M100 196 L100 192"/>`;
+  else if(!L.flute) s += `<path class="tube" d="M${L.tube[0][0]+4} ${L.tube[0][1]+2} L${L.tube[0][0]+L.tube[0][2]/2} 2 L${L.tube[0][0]+L.tube[0][2]-4} ${L.tube[0][1]+2} Z"/>`;
+  if(!mini) for(const [x,y,t] of L.labels) s += `<text class="grp" x="${x}" y="${y}" text-anchor="middle">${t}</text>`;
+  for(const k of L.keys){
+    const st = f.trill.has(k.id) ? 'tr' : (f.keys[k.id]||'');
+    const cls = (st==='c'?'on':st==='tr'?'tr':'') + (k.t==='b'?' back':'');
+    s += `<g class="key ${cls}"><title>${esc(k.name)}${st==='c'?' — pressed':st==='tr'?' — trill this key':st?' — partly covered':''}</title>`;
+    if(k.t==='h' || (k.t==='b' && k.r)){
+      s += `<circle class="kshape" cx="${k.x}" cy="${k.y}" r="${k.r}"/>`;
+      if(st==='h'||st==='q'||st==='t'){
+        const fr = {h:.5,q:.25,t:.75}[st], id = 'c'+(++CLIP), r = k.r;
+        s += `<clipPath id="${id}"><circle cx="${k.x}" cy="${k.y}" r="${r-1}"/></clipPath><rect class="partial" clip-path="url(#${id})" x="${k.x-r}" y="${k.y+r-2*r*fr}" width="${2*r}" height="${2*r*fr}"/>`;
+      }
+    } else {
+      const rx = Math.min(k.w,k.h)/2;
+      s += `<rect class="kshape" x="${k.x-k.w/2}" y="${k.y-k.h/2}" width="${k.w}" height="${k.h}" rx="${rx}"/>`;
+      if(S.labels && !mini && k.lab && (k.w>=14||k.h>=16)) s += `<text class="klab" x="${k.x}" y="${k.y+2.2}" text-anchor="middle">${k.lab}</text>`;
+    }
+    s += `</g>`;
+  }
+  return s + `</svg>`;
+}
+
+/* ===== Brass diagrams ===== */
+function svgValves(o, ins){
+  const nv = ins.brass.valves || 3, on = new Set(o.c==='0' ? [] : o.c.split('-'));
+  const xs = [76,126,176,232].slice(0,nv);
+  let s = `<svg class="dg dg-b" viewBox="0 0 270 112" role="img" aria-label="${esc(o.c==='0'?'Open, no valves':'Valves '+o.c)}">`;
+  s += `<path class="lead" d="M10 56 H40"/><circle class="mpc" cx="10" cy="56" r="5"/><text class="grp" x="18" y="40" text-anchor="middle">YOU</text>`;
+  s += `<rect class="tube" x="44" y="40" width="${(nv===4?160:150)}" height="32" rx="16"/>`;
+  if(nv===4) s += `<path class="lead" d="M206 56 H216"/><rect class="tube" x="214" y="40" width="36" height="32" rx="16"/>`;
+  xs.forEach((x,i)=>{
+    const v = String(i+1), p = on.has(v);
+    s += `<g class="key ${p?'on':''}"><title>Valve ${v}${p?' — pressed':' — up'}</title><circle class="cap" cx="${x}" cy="56" r="21"/><circle class="kshape" cx="${x}" cy="56" r="15"/><text class="vnum" x="${x}" y="61" text-anchor="middle">${v}</text></g>`;
+  });
+  s += `<text class="grp" x="${(xs[0]+xs[nv-1])/2}" y="102" text-anchor="middle">${nv===4?'4TH VALVE AT RIGHT':'VALVE 1 IS NEAREST YOU'}</text>`;
+  return s + `</svg>`;
+}
+function svgHorn(o){
+  const on = new Set(o.c==='0' ? [] : o.c.split('-')), th = o.side==='B♭';
+  let s = `<svg class="dg dg-b" viewBox="0 0 270 112" role="img" aria-label="${esc((th?'Thumb trigger down (B♭ side), ':'F side, ')+(o.c==='0'?'open':'levers '+o.c))}">`;
+  s += `<g class="key ${th?'on':''}"><title>Thumb trigger — ${th?'pressed (B♭ side)':'up (F side)'}</title><rect class="kshape" x="34" y="44" width="40" height="22" rx="11"/><text class="vnum" x="54" y="60" text-anchor="middle">T</text></g>`;
+  [1,2,3].forEach((v,i)=>{
+    const x = 112 + i*46, p = on.has(String(v));
+    s += `<g class="key ${p?'on':''}"><title>Lever ${v}${p?' — pressed':' — up'}</title><rect class="kshape" x="${x-15}" y="24" width="30" height="60" rx="15"/><text class="vnum" x="${x}" y="60" text-anchor="middle">${v}</text></g>`;
+  });
+  s += `<text class="grp" x="54" y="36" text-anchor="middle">THUMB</text><text class="grp" x="158" y="102" text-anchor="middle">INDEX · MIDDLE · RING</text>`;
+  return s + `</svg>`;
+}
+const eqPos = (k, att) => att ? 1 + 12*Math.log2(1 + Math.pow(2, att/12)*(Math.pow(2,(k-1)/12)-1)) : k;
+function svgSlide(o){
+  const X = p => 50 + (p-1)*27, ep = eqPos(o.pos, o.att), x = X(ep), L = 84;
+  let s = `<svg class="dg dg-b" viewBox="0 0 320 112" role="img" aria-label="${esc((o.att?o.attName+', ':'')+'position '+o.pos)}">`;
+  s += `<text class="grp" x="16" y="24" text-anchor="middle">YOU</text><circle class="mpc" cx="16" cy="40" r="5"/>`;
+  s += `<rect class="tube" x="20" y="37" width="${X(7.6)+L-20}" height="5" rx="2.5" opacity=".55"/><rect class="tube" x="20" y="64" width="${X(7.6)+L-20}" height="5" rx="2.5" opacity=".55"/>`;
+  s += `<rect class="slide" x="${x-4}" y="33" width="${L}" height="12" rx="6"/><rect class="slide" x="${x-4}" y="61" width="${L}" height="12" rx="6"/>`;
+  s += `<path class="slide-end" d="M${x+L-4} 39 a14 14 0 0 1 0 28"/>`;
+  for(let p=1;p<=7;p++) s += `<line class="tick" x1="${X(p)}" x2="${X(p)}" y1="80" y2="86"/><text class="tnum" x="${X(p)}" y="98" text-anchor="middle">${p}</text>`;
+  s += `<g class="key on"><title>Slide brace at position ${o.pos}${o.att?' with '+esc(o.attName):''}</title><rect class="kshape" x="${x-4}" y="28" width="8" height="50" rx="4"/></g>`;
+  if(o.att) s += `<g class="key tr-solid"><title>${esc(o.attName)} pressed</title><rect class="kshape" x="2" y="80" width="34" height="18" rx="9"/><text class="vnum sm" x="19" y="93" text-anchor="middle">${esc(o.attTag==='T'?'F':o.attTag)}</text></g>`;
+  return s + `</svg>`;
+}
+/* ===== Staff ===== */
+function svgStaff(m, clef){
+  const sp = 8, bottom = 70, nameP = PCN[m%12], letter = nameP[0], acc = nameP[1]||'';
+  const d = 'CDEFGAB'.indexOf(letter) + 7*oct(m);
+  const bd = clef==='treble' ? 30 : 18, y = dd => bottom - (dd-bd)*sp/2, ny = y(d);
+  let s = `<svg class="staff" viewBox="0 8 150 112" role="img" aria-label="${esc(nameP+oct(m)+' on the '+clef+' clef staff')}">`;
+  for(let i=0;i<5;i++) s += `<line class="sl" x1="4" x2="146" y1="${bottom-i*sp}" y2="${bottom-i*sp}"/>`;
+  const sc = sp/159;
+  if(clef==='treble') s += `<path class="glyph" d="${GLYPH.treble}" transform="translate(6 ${y(32)+0.85*sp}) scale(${sc} ${-sc})"/>`;
+  else s += `<path class="glyph" d="${GLYPH.bass}" transform="translate(6 ${y(24)+3.5*sp}) scale(${sc} ${-sc})"/>`;
+  for(let l=bd-2; l>=d; l-=2) s += `<line class="sl" x1="80" x2="104" y1="${y(l)}" y2="${y(l)}"/>`;
+  for(let l=bd+10; l<=d; l+=2) s += `<line class="sl" x1="80" x2="104" y1="${y(l)}" y2="${y(l)}"/>`;
+  if(acc){ const a = acc==='♯'?'sharp':'flat', s2 = sc*.5, off = acc==='♯'?175:290; s += `<path class="glyph" d="${GLYPH[a]}" transform="translate(64 ${ny+off*s2}) scale(${s2} ${-s2})"/>`; }
+  s += `<ellipse class="head" cx="92" cy="${ny}" rx="6.4" ry="4.4"/><ellipse class="head-in" cx="92" cy="${ny}" rx="3.3" ry="2.1" transform="rotate(-35 92 ${ny})"/>`;
+  return s + `</svg>`;
+}
+
+/* ===== Audio ===== */
+let AC = null;
+function tone(midi, t0, dur){
+  AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+  const o = AC.createOscillator(), g = AC.createGain(), f = AC.createBiquadFilter();
+  o.type = 'sawtooth'; o.frequency.value = 440*Math.pow(2,(midi-69)/12);
+  f.type = 'lowpass'; f.frequency.value = 1800;
+  const t = AC.currentTime + t0;
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.16, t+.03); g.gain.setValueAtTime(.16, t+dur-.05); g.gain.linearRampToValueAtTime(0, t+dur);
+  o.connect(f); f.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+dur+.02);
+}
+function playNote(m){ try{ tone(m + S.ins.tr, 0, 1.1); }catch(e){} }
+function playTrill(lo, hi){ try{ for(let i=0;i<14;i++) tone((i%2?hi:lo)+S.ins.tr, i*.11, .11); }catch(e){} }
+
+/* ===== Rendering ===== */
+function famIcon(ins){ return ins.key; }
+function renderSidebar(){
+  let h = '';
+  for(const fam of ['Woodwinds','Brass']){
+    h += `<div class="fam"><h2 class="eyebrow">${fam}</h2><ul>`;
+    for(const ins of INSTRUMENTS.filter(i=>i.fam===fam))
+      h += `<li><button class="inst-btn ${S.ins===ins?'is-on':''}" data-ins="${ins.id}" aria-pressed="${S.ins===ins}"><span>${esc(ins.name)}</span><span class="tag">${ins.key}</span></button></li>`;
+    h += `</ul></div>`;
+  }
+  $('#side').innerHTML = h;
+}
+function transText(ins){
+  if(!ins.tr) return 'Concert pitch';
+  const iv = {12:'an octave higher', '-2':'a major 2nd lower', '-7':'a perfect 5th lower', '-9':'a major 6th lower', '-14':'a major 9th lower', '-21':'an octave + major 6th lower'}[ins.tr];
+  return 'Sounds '+iv+' than written';
+}
+function renderInst(){
+  const ins = S.ins;
+  $('#inst-name').textContent = ins.name;
+  $('#inst-meta').innerHTML = `<span class="chip">${ins.key==='C'?'C instrument':ins.key+' instrument'}</span><span class="chip">${transText(ins)}</span><span class="chip">${ins.tr?'Written range':'Range'} ${nm(ins.min)}–${nm(ins.max)}</span><span class="chip">${ins.clef==='treble'?'Treble':'Bass'} clef</span>`;
+  $('#inst-blurb').textContent = ins.blurb;
+  const pkey = ins.brass ? ins.diagram : ins.layout;
+  $('#persp').innerHTML = `<strong>Player's view.</strong> ${esc(PERSPECTIVE[pkey==='valves'?'valves':pkey])}`;
+  let st = '';
+  for(let m=ins.min; m<=ins.max; m++){
+    const has = fingerings(ins, m).length > 0, blk = [1,3,6,8,10].includes(m%12);
+    st += `<button class="nk ${blk?'blk':''} ${m===S.note?'is-on':''} ${m%12===0?'cc':''}" data-n="${m}" ${has?'':'disabled'} aria-label="${nm(m)}${enh(m)?' / '+enh(m):''}" aria-pressed="${m===S.note}"><span class="nk-n">${PCN[m%12]}</span><span class="nk-o">${oct(m)}</span></button>`;
+  }
+  $('#strip').innerHTML = st;
+}
+function scrollStrip(){
+  const wrap = $('#strip'), b = wrap.querySelector('.is-on');
+  if(b) wrap.scrollLeft = b.offsetLeft - wrap.clientWidth/2 + b.clientWidth/2;
+}
+function brassCard(o, ins, big){
+  let title, meta = [], dg;
+  if(ins.brass.type==='slide'){
+    title = o.att ? `${o.attTag==='T'?'T':o.attTag}${o.pos}` : `${o.pos}`;
+    meta.push(o.att ? `Position ${o.pos} with ${o.attName}` : `Position ${o.pos}`);
+    dg = svgSlide(o);
+  } else if(ins.brass.type==='horn'){
+    title = (o.side==='B♭'?'T ':'')+(o.c==='0'?'0':o.c);
+    meta.push(o.side==='B♭' ? 'B♭ side (thumb down)' : 'F side (thumb up)');
+    dg = svgHorn(o);
+  } else {
+    title = o.c==='0' ? '0' : o.c;
+    meta.push(o.c==='0' ? 'Open' : 'Valves '+o.c);
+    dg = svgValves(o, ins);
+  }
+  meta.push(`Partial ${o.p} · ${PTEND[o.p]}`);
+  return `<article class="fcard ${big?'big':''}">${dg}<div class="fc-body"><div class="fc-title mono">${esc(title)}</div><div class="fc-meta">${meta.map(esc).join('<br>')}</div>${o.note?`<p class="fc-note">${esc(o.note)}</p>`:''}</div></article>`;
+}
+function wwCard(f, ins, big, extraTitle){
+  const L = LAYOUTS[ins.layout], pt = pressText(L, f);
+  return `<article class="fcard ww ${big?'big':''} ${LAYOUTS[ins.layout].flute?'horiz':''}">${svgWW(ins.layout, f, ins.exclude)}<div class="fc-body">${extraTitle||''}<p class="fc-press"><span class="lbl">Press</span> ${pt.press.length?esc(pt.press.join(' · ')):'Nothing — all keys open'}</p>${pt.trill.length?`<p class="fc-press trillline"><span class="lbl">Trill</span> ${esc(pt.trill.join(' + '))}</p>`:''}${f.note?`<p class="fc-note">${esc(f.note)}</p>`:''}</div></article>`;
+}
+
+function miniBrass(o, ins){
+  if(ins.brass.type==='slide') return svgSlide(o);
+  if(ins.brass.type==='horn') return svgHorn(o);
+  return svgValves(o, ins);
+}
+function brassLabel(o, ins){
+  if(ins.brass.type==='slide') return o.att ? (o.attTag==='T'?'T':o.attTag)+o.pos : String(o.pos);
+  if(ins.brass.type==='horn') return (o.side==='B♭'?'T ':'')+o.c;
+  return o.c;
+}
+function renderOverview(){
+  const ins = S.ins, horiz = !ins.brass && LAYOUTS[ins.layout].flute;
+  let h = '';
+  for(let m=ins.min; m<=ins.max; m++){
+    const fs = fingerings(ins, m);
+    if(!fs.length) continue;
+    const f = fs[0], alts = fs.length-1;
+    const trills = ins.brass ? 0 : PARSED[ins.id].trills.filter(t=>t.lo===m).length;
+    const dg = ins.brass ? miniBrass(f, ins) : svgWW(ins.layout, f, ins.exclude, true);
+    h += `<button class="ov ${m%12===0?'cc':''} ${m===S.note?'is-on':''}" data-n="${m}" aria-label="${esc(nm(m))}: open fingering details">
+      <span class="ov-top"><span class="ov-n">${PCN[m%12]}<small>${oct(m)}</small></span>${enh(m)?`<span class="ov-e">${enh(m)}</span>`:''}</span>
+      ${ins.brass?`<span class="ov-f mono">${esc(brassLabel(f, ins))}</span>`:''}
+      <span class="ov-dg">${dg}</span>
+      <span class="ov-meta">${ins.tr?`sounds ${nm(m+ins.tr)}`:'&nbsp;'}</span>
+      <span class="ov-badges">${alts?`<span class="bdg">+${alts} alt</span>`:''}${trills?`<span class="bdg tr">${trills} trill${trills>1?'s':''}</span>`:''}</span>
+    </button>`;
+  }
+  const g = $('#ov-grid');
+  g.className = 'ov-grid ' + (horiz ? 'ov-h' : ins.brass ? 'ov-b' : 'ov-v');
+  g.innerHTML = h;
+  try{ history.replaceState(null, '', '#'+ins.id+'-range'); }catch(e){}
+  store.set({ins:ins.id});
+  $('#ov-title').textContent = `${ins.name}: every note, ${nm(ins.min)} to ${nm(ins.max)}`;
+}
+function setView(v){
+  S.view = v; store.set({view:v});
+  document.querySelectorAll('.vt').forEach(b => { const on = b.dataset.v===v; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
+  $('#note').hidden = v!=='note';
+  $('#overview').hidden = v!=='range';
+  $('.strip-wrap').hidden = v!=='note';
+  if(v==='range') renderOverview(); else { renderNote(); scrollStrip(); }
+}
+function setAcc(a){
+  S.acc = a; PCN = SPELL[a]; store.set({acc:a});
+  document.querySelectorAll('.acc-b').forEach(b => { const on = b.dataset.a===a; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
+  if(!S.ins) return;
+  renderInst();
+  if(S.view==='range') renderOverview(); else { renderNote(); scrollStrip(); }
+  const q = $('#q'); if(q.value.trim() && !$('#results').hidden) renderResults(search(q.value));
+}
+function renderNote(){
+  const ins = S.ins, m = S.note, fs = fingerings(ins, m);
+  const concert = m + ins.tr;
+  $('#n-staff').innerHTML = svgStaff(m, ins.clef);
+  $('#n-name').innerHTML = `${PCN[m%12]}<span class="o">${oct(m)}</span>`;
+  $('#n-enh').textContent = enh(m) ? 'also '+enh(m) : '';
+  $('#n-concert').textContent = ins.tr ? `Written · sounds ${nm(concert)} concert` : 'Concert pitch';
+  $('#n-count').textContent = `${fs.length} fingering${fs.length===1?'':'s'}`;
+  const std = fs[0], alts = fs.slice(1);
+  const hz = !ins.brass && LAYOUTS[ins.layout].flute;
+  ['#alts','#tr-from','#tr-to'].forEach(id => $(id).classList.toggle('horiz-grid', hz));
+  $('#std').innerHTML = std ? (ins.brass ? brassCard(std, ins, true) : wwCard(std, ins, true)) : '<p class="empty">No fingering listed for this note.</p>';
+  $('#alt-h').hidden = !alts.length;
+  $('#alts').innerHTML = alts.map(f => ins.brass ? brassCard(f, ins) : wwCard(f, ins)).join('');
+  // trills
+  const tw = $('#trills-wrap');
+  if(ins.brass){ tw.hidden = true; }
+  else {
+    tw.hidden = false;
+    const all = PARSED[ins.id].trills, from = all.filter(t=>t.lo===m), to = all.filter(t=>t.hi===m);
+    const card = t => wwCard(t.f, ins, false, `<div class="tr-head"><span class="mono">${nm(t.lo)} ⇄ ${nm(t.hi)}</span><span class="iv">${IV[t.hi-t.lo]||''}</span><button class="mini play-tr" data-lo="${t.lo}" data-hi="${t.hi}" aria-label="Play the trill ${nm(t.lo)} to ${nm(t.hi)}">▶ Hear</button></div>`);
+    $('#tr-from').innerHTML = from.length ? from.map(card).join('') : `<p class="empty">No special trill fingering starting on ${nm(m)}. Use the regular fingerings for both notes.</p>`;
+    $('#tr-to-h').hidden = !to.length;
+    $('#tr-to').innerHTML = to.map(card).join('');
+    $('#tr-from-h').textContent = `Trills up from ${nm(m)}`;
+    $('#tr-to-h').textContent = `Trills up to ${nm(m)}`;
+  }
+  document.querySelectorAll('#strip .nk').forEach(b => { const on = +b.dataset.n===m; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
+  $('#prev').disabled = !findStep(-1); $('#next').disabled = !findStep(1);
+  store.set({ins:ins.id, note:m});
+  try{ history.replaceState(null, '', '#'+ins.id+'-'+slug(m)); }catch(e){}
+}
+function findStep(dir){
+  for(let m=S.note+dir; m>=S.ins.min && m<=S.ins.max; m+=dir) if(fingerings(S.ins,m).length) return m;
+  return null;
+}
+function selectInst(id, note){
+  const ins = INSTRUMENTS.find(i=>i.id===id) || INSTRUMENTS[4];
+  S.ins = ins;
+  let m = note;
+  if(m==null || m<ins.min || m>ins.max || !fingerings(ins,m).length){
+    m = Math.round((ins.min+ins.max)/2) - 4;
+    while(m<=ins.max && !fingerings(ins,m).length) m++;
+  }
+  S.note = m;
+  renderSidebar(); renderInst();
+  if(S.view==='range') renderOverview(); else { renderNote(); requestAnimationFrame(scrollStrip); }
+}
+function selectNote(m){ S.note = m; if(S.view!=='note') setView('note'); else { renderNote(); scrollStrip(); } }
+
+/* ===== Search ===== */
+let INDEX = null;
+function buildIndex(){
+  INDEX = [];
+  for(const ins of INSTRUMENTS){
+    for(let m=ins.min; m<=ins.max; m++){
+      const fs = fingerings(ins, m); if(!fs.length) continue;
+      INDEX.push({ins, m, kind:'note', n:fs.length, text:(ins.name+' '+fs.map(f=>f.note||'').join(' ')+' '+(ins.brass?fs.map(f=>f.c||('position '+f.pos)).join(' '):'')).toLowerCase()});
+    }
+    if(!ins.brass) for(const t of PARSED[ins.id].trills) INDEX.push({ins, m:t.lo, hi:t.hi, kind:'trill', text:(ins.name+' trill '+(t.f.note||'')).toLowerCase()});
+  }
+}
+const STOP = new Set(['the','a','for','on','in','to','of','fingering','fingerings','chart','note','notes','how','play','what','is','and','with','alt','alternate','alternates','trill','trills','written','high','low','from','up']);
+function search(q){
+  if(!INDEX) buildIndex();
+  q = ' '+q.toLowerCase().replace(/[♯]/g,'#').replace(/[♭]/g,'b').replace(/\s+/g,' ')+' ';
+  // instruments (longest alias wins)
+  let insHits = [];
+  let best = 0;
+  for(const ins of INSTRUMENTS) for(const a of ins.al){
+    if(q.includes(' '+a+' ')){ if(a.length > best){ best = a.length; insHits = [ins]; } else if(a.length===best && !insHits.includes(ins)) insHits.push(ins); }
+  }
+  if(best){ const a = INSTRUMENTS.flatMap(i=>i.al).filter(x=>x.length===best && q.includes(' '+x+' '))[0]; q = q.replace(' '+a+' ', ' '); }
+  const wantTrill = /\btrills?\b/.test(q), wantAlt = /\balt(ernate)?s?\b/.test(q);
+  // notes
+  const notes = [];
+  q = q.replace(/(?:^|\s)([a-g])(#|b|s(?=\d)| ?sharp| ?flat)?(-?\d)?(?=\s)/g, (all, l, ac, o) => {
+    let pc = LET[l.toUpperCase()];
+    if(ac && /#|s|sharp/.test(ac)) pc = (pc+1)%12;
+    if(ac && /^ ?(b|flat)$/.test(ac)) pc = (pc+11)%12;
+    notes.push({pc, o: o==null?null:+o}); return ' ';
+  });
+  const terms = q.split(' ').filter(w => w && !STOP.has(w) && w.length>1);
+  const nmatch = (m, n) => m%12===n.pc && (n.o==null || oct(m)===n.o);
+  let res = INDEX.filter(e => !insHits.length || insHits.includes(e.ins));
+  if(wantTrill || (notes.length===2)) res = res.filter(e=>e.kind==='trill' || (!wantTrill && false));
+  else res = res.filter(e=>e.kind==='note');
+  if(notes.length===1) res = res.filter(e => nmatch(e.m, notes[0]) || (e.kind==='trill' && nmatch(e.hi, notes[0])));
+  if(notes.length>=2) res = res.filter(e => e.kind==='trill' && ((nmatch(e.m,notes[0])&&nmatch(e.hi,notes[1])) || (nmatch(e.m,notes[1])&&nmatch(e.hi,notes[0]))));
+  if(terms.length) res = res.filter(e => terms.every(t => e.text.includes(t)));
+  if(wantAlt) res = res.filter(e => e.kind!=='note' || e.n>1);
+  const out = [];
+  if(insHits.length && !notes.length && !terms.length && !wantTrill && !wantAlt) insHits.forEach(i => out.push({ins:i, kind:'inst'}));
+  if(!insHits.length && !notes.length && !terms.length && !wantTrill) return out;
+  return out.concat(res.slice(0, 40));
+}
+function renderResults(list){
+  const box = $('#results');
+  if(!$('#q').value.trim()){ box.hidden = true; return; }
+  box.hidden = false;
+  if(!list.length){ box.innerHTML = `<p class="empty">No matches. Try an instrument and a note, like “tenor sax F♯5”, “trill A B flute”, or a key name like “side key”.</p>`; return; }
+  box.innerHTML = list.map((e,i) => {
+    if(e.kind==='inst') return `<button class="res" role="option" data-i="${i}"><span class="r-main">${esc(e.ins.name)}</span><span class="r-sub">Open instrument · ${nm(e.ins.min)}–${nm(e.ins.max)}</span></button>`;
+    if(e.kind==='trill') return `<button class="res" role="option" data-i="${i}"><span class="r-main">${nm(e.m)} ⇄ ${nm(e.hi)} <span class="r-tag tr">trill</span></span><span class="r-sub">${esc(e.ins.name)}</span></button>`;
+    return `<button class="res" role="option" data-i="${i}"><span class="r-main">${nm(e.m)}${enh(e.m)?' / '+enh(e.m):''}</span><span class="r-sub">${esc(e.ins.name)} · ${e.n} fingering${e.n>1?'s':''}</span></button>`;
+  }).join('');
+  box._list = list;
+}
+function goResult(e){
+  $('#results').hidden = true;
+  if(e.kind==='inst') selectInst(e.ins.id);
+  else {
+    if(S.ins!==e.ins) selectInst(e.ins.id, e.m); else selectNote(e.m);
+    const target = e.kind==='trill' ? $('#trills-wrap') : $('#note');
+    target.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth', block:'start'});
+  }
+}
+
+/* ===== Events ===== */
+function init(){
+  const saved = store.get();
+  S.labels = saved.labels !== false; S.anim = saved.anim !== false;
+  S.acc = SPELL[saved.acc] ? saved.acc : 'mixed'; PCN = SPELL[S.acc];
+  document.querySelectorAll('.acc-b').forEach(b => { const on = b.dataset.a===S.acc; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
+  S.view = saved.view==='range' ? 'range' : 'note';
+  $('#opt-labels').checked = S.labels; $('#opt-anim').checked = S.anim;
+  document.documentElement.classList.toggle('no-anim', !S.anim);
+  let id = saved.ins, note = saved.note;
+  const h = location.hash.replace('#','');
+  if(h){ const [a,b] = h.split('-'); if(INSTRUMENTS.some(i=>i.id===a)){ id = a; note = (b && b!=='range') ? parseNote(b) : null; } }
+  if(/-range$/.test(h)) S.view = 'range';
+  selectInst(id || 'clarinet', note);
+  setView(S.view);
+  document.querySelectorAll('.vt').forEach(b => b.onclick = () => setView(b.dataset.v));
+  document.querySelectorAll('.acc-b').forEach(b => b.onclick = () => setAcc(b.dataset.a));
+  $('#ov-grid').addEventListener('click', e => { const b = e.target.closest('.ov'); if(b){ S.note = +b.dataset.n; setView('note'); window.scrollTo({top: $('.ihead').offsetTop - 70}); } });
+
+  $('#side').addEventListener('click', e => { const b = e.target.closest('.inst-btn'); if(b) selectInst(b.dataset.ins, S.note); });
+  $('#strip').addEventListener('click', e => { const b = e.target.closest('.nk'); if(b && !b.disabled) selectNote(+b.dataset.n); });
+  $('#prev').onclick = () => { const m = findStep(-1); if(m!=null) selectNote(m); };
+  $('#next').onclick = () => { const m = findStep(1); if(m!=null) selectNote(m); };
+  $('#play').onclick = () => playNote(S.note);
+  document.addEventListener('click', e => { const b = e.target.closest('.play-tr'); if(b) playTrill(+b.dataset.lo, +b.dataset.hi); });
+  $('#opt-labels').onchange = e => { S.labels = e.target.checked; store.set({labels:S.labels}); renderNote(); };
+  $('#opt-anim').onchange = e => { S.anim = e.target.checked; store.set({anim:S.anim}); document.documentElement.classList.toggle('no-anim', !S.anim); };
+  document.addEventListener('keydown', e => {
+    if(e.target.closest('input,textarea')) return;
+    if(e.key==='ArrowRight'){ const m=findStep(1); if(m!=null){ selectNote(m); e.preventDefault(); } }
+    if(e.key==='ArrowLeft'){ const m=findStep(-1); if(m!=null){ selectNote(m); e.preventDefault(); } }
+    if(e.key==='/'){ e.preventDefault(); $('#q').focus(); }
+  });
+  const q = $('#q'); let sel = -1;
+  q.addEventListener('input', () => { sel = -1; renderResults(search(q.value)); });
+  q.addEventListener('focus', () => { if(q.value.trim()) renderResults(search(q.value)); });
+  q.addEventListener('keydown', e => {
+    const box = $('#results'), items = [...box.querySelectorAll('.res')];
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); if(!items.length) return; sel = (sel + (e.key==='ArrowDown'?1:-1) + items.length) % items.length; items.forEach((it,i)=>it.classList.toggle('is-sel', i===sel)); items[sel].scrollIntoView({block:'nearest'}); }
+    if(e.key==='Enter'){ e.preventDefault(); const list = box._list||[]; if(list.length) goResult(list[Math.max(sel,0)]); q.blur(); }
+    if(e.key==='Escape'){ box.hidden = true; q.blur(); }
+  });
+  $('#results').addEventListener('click', e => { const b = e.target.closest('.res'); if(b) goResult($('#results')._list[+b.dataset.i]); });
+  document.addEventListener('click', e => { if(!e.target.closest('.search')) $('#results').hidden = true; });
+  document.querySelectorAll('.ex').forEach(b => b.onclick = () => { q.value = b.textContent; q.focus(); renderResults(search(q.value)); });
+  // sources
+  $('#sources').innerHTML = Object.values(SRC).map(s => `<li><a href="${s.u}" target="_blank" rel="noopener">${esc(s.t)}</a></li>`).join('');
+}
+init();
+
+</script>
+</body>
+</html>
