@@ -1426,7 +1426,7 @@ function noiseBuf(){
   for(let i=0;i<d.length;i++) d[i] = Math.random()*2-1;
   return NOISE = b;
 }
-function tone(midi, t0, dur, voiceName){
+function tone(midi, t0, dur, voiceName, out){
   const ac = ctx(), V = VOICES[voiceName||'clarinet'], f0 = 440*Math.pow(2,(midi-69)/12);
   const t = ac.currentTime + t0, end = t + dur;
   const o = ac.createOscillator(); o.setPeriodicWave(waveFor(voiceName||'clarinet')); o.frequency.value = f0;
@@ -1438,7 +1438,8 @@ function tone(midi, t0, dur, voiceName){
   g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t+V.att); g.gain.setValueAtTime(peak*.92, Math.max(t+V.att, end-V.rel)); g.gain.linearRampToValueAtTime(0, end);
   let node = lp;
   if(V.bp){ const bp = ac.createBiquadFilter(); bp.type='peaking'; bp.frequency.value = V.bp; bp.gain.value = 5; bp.Q.value = 1.2; lp.connect(bp); node = bp; }
-  o.connect(lp); node.connect(g); g.connect(ac.destination);
+  const dest = out || ac.destination;
+  o.connect(lp); node.connect(g); g.connect(dest);
   if(V.vib && dur > .35){
     const lfo = ac.createOscillator(), lg = ac.createGain();
     lfo.frequency.value = V.vib[0]; lg.gain.setValueAtTime(0, t); lg.gain.linearRampToValueAtTime(V.vib[1], t+.35);
@@ -1448,7 +1449,7 @@ function tone(midi, t0, dur, voiceName){
     const n = ac.createBufferSource(), nb = ac.createBiquadFilter(), ng = ac.createGain();
     n.buffer = noiseBuf(); n.loop = true; nb.type='bandpass'; nb.frequency.value = Math.min(f0*3, 9000); nb.Q.value = 1.4;
     ng.gain.setValueAtTime(0, t); ng.gain.linearRampToValueAtTime(V.breath, t+.03); ng.gain.linearRampToValueAtTime(V.breath*.4, t+.3); ng.gain.linearRampToValueAtTime(0, end);
-    n.connect(nb); nb.connect(ng); ng.connect(ac.destination); n.start(t); n.stop(end+.05);
+    n.connect(nb); nb.connect(ng); ng.connect(dest); n.start(t); n.stop(end+.05);
   }
   o.start(t); o.stop(end+.05);
 }
@@ -1775,7 +1776,9 @@ function renderScale(){
   store.set({ins:ins.id, sc:{mode:SC.mode, type:SC.type, key:SC.key, basis:SC.basis, octs:SC.octs, vaKey:SC.vaKey, vaChrom:SC.vaChrom}});
 }
 let SC_TIMERS = [];
-function stopScale(){ SC_TIMERS.forEach(clearTimeout); SC_TIMERS = []; document.querySelectorAll('.sc-card.is-play,.sn.is-play').forEach(e=>e.classList.remove('is-play')); const b = $('#sc-play'); if(b) b.textContent = '▶ Play scale'; SC.playing = false; }
+function stopScale(){ SC_TIMERS.forEach(clearTimeout); SC_TIMERS = [];
+  if(SC.bus){ const bus = SC.bus; SC.bus = null; try{ bus.gain.cancelScheduledValues(AC.currentTime); bus.gain.setValueAtTime(bus.gain.value, AC.currentTime); bus.gain.linearRampToValueAtTime(0, AC.currentTime + .04); setTimeout(()=>{ try{ bus.disconnect(); }catch(e){} }, 80); }catch(e){} }
+  document.querySelectorAll('.sc-card.is-play,.sn.is-play').forEach(e=>e.classList.remove('is-play')); const b = $('#sc-play'); if(b) b.textContent = '▶ Play scale'; SC.playing = false; }
 function playScale(){
   if(SC.playing){ stopScale(); return; }
   const notes = SC.notes, c = SC.cur; if(!notes) return;
@@ -1785,11 +1788,12 @@ function playScale(){
   const mid = notes.findIndex(n => n.m === Math.max(...notes.map(x=>x.m)));
   const durs = notes.map((n,i) => chrom ? (va ? .25 : .5) : (va ? ((i===0||i===mid||i===notes.length-1) ? 1 : .5) : 1));
   if(!va && !chrom) durs[durs.length-1] = 2;
+  try{ const ac = ctx(); SC.bus = ac.createGain(); SC.bus.gain.value = 1; SC.bus.connect(ac.destination); }catch(e){ SC.bus = null; }
   SC.playing = true; $('#sc-play').textContent = '■ Stop';
   let t = 0;
   notes.forEach((n,i) => {
     const d = durs[i]*beat;
-    try{ tone(n.m + S.ins.tr, t, Math.max(.08, d*(i===notes.length-1?1.6:.92)), voice()); }catch(e){}
+    try{ tone(n.m + S.ins.tr, t, Math.max(.08, d*(i===notes.length-1?1.6:.92)), voice(), SC.bus); }catch(e){}
     const at = t;
     SC_TIMERS.push(setTimeout(() => {
       document.querySelectorAll('.sc-card.is-play,.sn.is-play').forEach(e=>e.classList.remove('is-play'));
