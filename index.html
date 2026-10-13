@@ -369,7 +369,9 @@ footer a{color:var(--brass)}
       <p class="sc-sub" id="sc-sub"></p>
       <div class="sc-staff" id="sc-staff"></div>
       <div class="sc-scroll"><div id="sc-grid" class="ov-grid"></div></div>
-      <p class="sc-note">Accidentals are written out on every note. Select any note to see its alternates and trills. Octave choices and starting notes cover every range in the All-Virginia (VBODA) audition requirements; choose “Written” to call scales by key name as auditions do.</p>
+      <div class="sec-h" id="sc-down-h" hidden style="margin-top:16px"><h3>On the way down</h3><span class="ct">melodic minor lowers the 6th and 7th when descending</span></div>
+      <div class="sc-scroll"><div id="sc-grid-down" class="ov-grid"></div></div>
+      <p class="sc-note">The cards show each note once; during playback they light up going up, then again in reverse coming down. Accidentals are written out on every note. Select any note to see its alternates and trills. Octave choices and starting notes cover every range in the All-Virginia (VBODA) audition requirements; choose “Written” to call scales by key name as auditions do.</p>
     </section>
     <section id="overview" hidden>
       <div class="sec-h"><h3 id="ov-title">Full range</h3><span class="ct">Standard fingering for every written note. Select one for alternates and trills.</span></div>
@@ -1552,7 +1554,7 @@ function renderOverview(){
   const g = $('#ov-grid');
   g.className = 'ov-grid ' + (horiz ? 'ov-h' : !ins.brass ? 'ov-v' : ins.brass.type==='slide' ? 'ov-s' : ins.brass.type==='horn' || !ins.brass.vert ? 'ov-b' : 'ov-vb');
   g.innerHTML = h;
-  try{ history.replaceState(null, '', '#'+ins.id+'-range'); }catch(e){}
+  setHash(ins.id+'-range');
   store.set({ins:ins.id});
   $('#ov-title').textContent = `${ins.name}: every note, ${nm(ins.min)} to ${nm(ins.max)}`;
 }
@@ -1771,17 +1773,26 @@ function renderScale(){
   const chromView = SC.type==='chromatic';
   $('#sc-grid').style.setProperty('--cols', chromView ? 12 : 7);
   const mid = notes.findIndex(n => n.m === Math.max(...notes.map(x=>x.m)));
-  $('#sc-grid').innerHTML = notes.map((n,i) => {
+  // one card per pitch: the ascending notes, plus any notes used only on the way down (melodic minor)
+  const up = notes.slice(0, mid+1), seen = new Set(up.map(n=>n.m));
+  const downOnly = []; notes.slice(mid+1).forEach(n => { if(!seen.has(n.m)){ seen.add(n.m); downOnly.push(n); } });
+  const per = SC.type==='chromatic' ? 12 : 7;
+  const card = (n, i, extra) => {
     const f = fingerings(ins, n.m)[0];
     const dg = ins.brass ? miniBrass(f, ins) : svgWW(ins.layout, f, ins.exclude, true);
-    return `<button class="ov sc-card ${i===mid?'turn':''} ${i % (SC.type==='chromatic'?12:7)===0?'row-start':''}" data-i="${i}" data-n="${n.m}" aria-label="${n.deg?'Scale degree '+n.deg+', ':''}${noteLabel(n)}">
+    return `<button class="ov sc-card ${!extra && i===mid?'turn':''} ${!extra && i % per===0?'row-start':''}" data-n="${n.m}" aria-label="${n.deg?'Scale degree '+n.deg+', ':''}${noteLabel(n)}">
       <span class="ov-top"><span class="ov-n">${LETTERS[n.letter]+ACC_TXT[n.acc]}<small>${Math.floor((n.m-(NAT[n.letter]+n.acc))/12)-1}</small></span>${n.deg?`<span class="deg">${n.deg}</span>`:''}</span>
       ${ins.brass?`<span class="ov-f mono">${esc(brassLabel(f, ins))}</span>`:''}
       <span class="ov-dg">${dg}</span>
-      <span class="ov-meta">${i < mid ? '↑ up' : i === mid ? 'top' : '↓ down'}</span>
+      <span class="ov-meta">${extra ? 'descending only' : i === mid ? 'top note' : '&nbsp;'}</span>
     </button>`;
-  }).join('');
-  try{ history.replaceState(null, '', '#'+ins.id+'-scales'); }catch(e){}
+  };
+  $('#sc-grid').innerHTML = up.map((n,i) => card(n,i,false)).join('');
+  $('#sc-down-h').hidden = !downOnly.length;
+  $('#sc-grid-down').className = $('#sc-grid').className;
+  $('#sc-grid-down').style.setProperty('--cols', per);
+  $('#sc-grid-down').innerHTML = downOnly.sort((a,b)=>b.m-a.m).map(n => card(n,0,true)).join('');
+  setHash(ins.id+'-scales');
   store.set({ins:ins.id, sc:{mode:SC.mode, type:SC.type, key:SC.key, basis:SC.basis, octs:SC.octs, vaKey:SC.vaKey, vaChrom:SC.vaChrom}});
 }
 let SC_TIMERS = [];
@@ -1806,7 +1817,7 @@ function playScale(){
     const at = t;
     SC_TIMERS.push(setTimeout(() => {
       document.querySelectorAll('.sc-card.is-play,.sn.is-play').forEach(e=>e.classList.remove('is-play'));
-      const card = document.querySelector(`.sc-card[data-i="${i}"]`), head = document.querySelector(`.sn[data-i="${i}"]`);
+      const card = document.querySelector(`.sc-card[data-n="${n.m}"]`), head = document.querySelector(`.sn[data-i="${i}"]`);
       card && card.classList.add('is-play'); head && head.classList.add('is-play');
     }, at*1000));
     t += d;
@@ -1824,7 +1835,7 @@ function initScales(){
   document.querySelectorAll('.sc-oct').forEach(b => b.onclick = () => { SC.octs = +b.dataset.o; re(); });
   $('#sc-play').onclick = playScale;
   $('#sc-tempo').oninput = e => { $('#sc-bpm').textContent = e.target.value; };
-  $('#sc-grid').addEventListener('click', e => { const b = e.target.closest('.sc-card'); if(b){ stopScale(); S.note = +b.dataset.n; setView('note'); window.scrollTo({top: $('.ihead').offsetTop - 70}); } });
+  $('#scales').addEventListener('click', e => { const b = e.target.closest('.sc-card'); if(b){ stopScale(); markPush(); S.note = +b.dataset.n; setView('note'); window.scrollTo({top: $('.ihead').offsetTop - 70}); } });
 }
 
 function renderNote(){
@@ -1857,7 +1868,7 @@ function renderNote(){
   document.querySelectorAll('#strip .nk').forEach(b => { const on = +b.dataset.n===m; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
   $('#prev').disabled = !findStep(-1); $('#next').disabled = !findStep(1);
   store.set({ins:ins.id, note:m});
-  try{ history.replaceState(null, '', '#'+ins.id+'-'+slug(m)); }catch(e){}
+  setHash(ins.id+'-'+slug(m));
 }
 function findStep(dir){
   for(let m=S.note+dir; m>=S.ins.min && m<=S.ins.max; m+=dir) if(fingerings(S.ins,m).length) return m;
@@ -1876,6 +1887,29 @@ function selectInst(id, note){
   if(S.view==='range') renderOverview(); else if(S.view==='scale'){ SC.start = null; if(SC.playing) stopScale(); renderScale(); } else { renderNote(); requestAnimationFrame(scrollStrip); }
 }
 function selectNote(m){ S.note = m; if(S.view!=='note') setView('note'); else { renderNote(); scrollStrip(); } }
+
+/* ===== Browser history: back/forward between views, instruments and notes ===== */
+let PUSH_NEXT = false;
+const markPush = () => { PUSH_NEXT = true; };
+function setHash(h){
+  try{
+    if(PUSH_NEXT && location.hash !== '#'+h) history.pushState(null, '', '#'+h);
+    else history.replaceState(null, '', '#'+h);
+  }catch(e){}
+  PUSH_NEXT = false;
+}
+function restoreFromHash(){
+  const h = location.hash.replace('#','');
+  if(!h) return;
+  const [a,b] = h.split('-');
+  if(!INSTRUMENTS.some(i=>i.id===a)) return;
+  PUSH_NEXT = false;
+  if(SC.playing) stopScale();
+  S.view = b==='range' ? 'range' : b==='scales' ? 'scale' : 'note';
+  const note = (b && b!=='range' && b!=='scales') ? parseNote(b) : S.note;
+  selectInst(a, note);
+  setView(S.view);
+}
 
 /* ===== Search ===== */
 let INDEX = null;
@@ -1936,6 +1970,7 @@ function renderResults(list){
   box._list = list;
 }
 function goResult(e){
+  markPush();
   $('#results').hidden = true;
   if(e.kind==='inst') selectInst(e.ins.id);
   else {
@@ -1962,11 +1997,12 @@ function init(){
   if(/-scales$/.test(h)) S.view = 'scale';
   selectInst(id || 'clarinet', note);
   setView(S.view);
-  document.querySelectorAll('.vt').forEach(b => b.onclick = () => setView(b.dataset.v));
+  document.querySelectorAll('.vt').forEach(b => b.onclick = () => { if(S.view!==b.dataset.v){ markPush(); setView(b.dataset.v); } });
   document.querySelectorAll('.acc-b').forEach(b => b.onclick = () => setAcc(b.dataset.a));
-  $('#ov-grid').addEventListener('click', e => { const b = e.target.closest('.ov'); if(b){ S.note = +b.dataset.n; setView('note'); window.scrollTo({top: $('.ihead').offsetTop - 70}); } });
+  $('#ov-grid').addEventListener('click', e => { const b = e.target.closest('.ov'); if(b){ markPush(); S.note = +b.dataset.n; setView('note'); window.scrollTo({top: $('.ihead').offsetTop - 70}); } });
 
-  $('#inst-sel').addEventListener('change', e => selectInst(e.target.value, S.note));
+  $('#inst-sel').addEventListener('change', e => { markPush(); selectInst(e.target.value, S.note); });
+  window.addEventListener('popstate', restoreFromHash);
   $('#strip').addEventListener('click', e => { const b = e.target.closest('.nk'); if(b && !b.disabled) selectNote(+b.dataset.n); });
   $('#prev').onclick = () => { const m = findStep(-1); if(m!=null) selectNote(m); };
   $('#next').onclick = () => { const m = findStep(1); if(m!=null) selectNote(m); };
