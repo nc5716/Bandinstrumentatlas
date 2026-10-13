@@ -1025,16 +1025,7 @@ oboe:{vb:[170,350], tube:[], joints:[],
   {id:'rCs',t:'k',x:104,y:315,w:20,h:10,lab:'C♯',name:'Low C♯ key (right pinky)'},
   {id:'rEb',t:'k',x:126,y:328,w:20,h:10,lab:'E♭',name:'E♭ key (right pinky)'},
 ]},
-bassoon:{vb:[190,352], tube:[], joints:[],
-  body:[
-    '<path class="bocal" d="M90 40 C90 26 98 16 122 10"/>',
-    '<rect class="tube" x="3" y="2" width="16" height="12" rx="3"/>',
-    '<rect class="tube" x="5" y="12" width="12" height="326" rx="4"/>',
-    '<rect class="tube ring" x="3" y="120" width="16" height="6" rx="2"/>',
-    '<path class="tube" d="M80 40 L100 40 L100 192 L80 192 Z"/>',
-    '<path class="tube" d="M78 196 L102 196 L102 334 L78 334 Z"/>',
-    '<rect class="tube" x="2" y="332" width="102" height="18" rx="9"/>'
-  ],
+bassoon:{vb:[190,350], tube:[[80,40,20,152],[80,198,20,140]], joints:[], bocal:true,
   labels:[[42,22,'LH THUMB'],[30,128,'LOW KEYS'],[52,198,'RH THUMB'],[126,140,'LH PINKY'],[132,290,'RH PINKY']],
   keys:[
   {id:'fA',t:'b',x:24,y:42,w:15,h:9,lab:'A',name:'High A flick key (LH thumb)'},
@@ -1356,23 +1347,22 @@ function svgHorn(o){
 const eqPos = (k, att) => att ? 1 + 12*Math.log2(1 + Math.pow(2, att/12)*(Math.pow(2,(k-1)/12)-1)) : k;
 function svgSlide(o, mini){
   const X = p => 50 + (p-1)*26, ep = eqPos(o.pos, o.att), x = X(ep), L = 100;
-  const yA = 74, yB = 96, r = (yB-yA)/2;
+  const yA = 60, yB = 82, r = (yB-yA)/2, yBell = 52;
   const pipe = (d, w=7, cls='') => `<path class="pipe-o ${cls}" d="${d}" stroke-width="${w+2.4}"/><path class="pipe-i ${cls}" d="${d}" stroke-width="${w}"/>`;
-  let s = `<svg class="dg dg-b ${mini?'dg-slide-mini':''}" viewBox="0 0 330 150" role="img" aria-label="${esc((o.att?o.attName+', ':'')+'position '+o.pos)}">`;
-  // bell section: gooseneck from the slide up and over, tuning slide behind you, bell flaring out near 3rd–4th position
+  let s = `<svg class="dg dg-b ${mini?'dg-slide-mini':''}" viewBox="0 18 330 106" role="img" aria-label="${esc((o.att?o.attName+', ':'')+'position '+o.pos)}">`;
+  // bell section sits right behind the slide; the bell rim falls between 3rd and 4th position
   const rim = X(3.6);
-  s += pipe(`M34 ${yB} C34 ${yB+12} 18 ${yB+12} 18 ${yB-6} L18 44 C18 30 26 26 38 26 L${rim-62} 26`, 6);
-  s += `<path class="bell" d="M${rim-64} 22.5 C${rim-30} 22.5 ${rim-12} 16 ${rim} 2 L${rim+1} 2 L${rim+1} 52 L${rim} 52 C${rim-12} 38 ${rim-30} 29.5 ${rim-64} 29.5 Z"/>`;
-  s += `<ellipse class="bellrim" cx="${rim}" cy="27" rx="3.2" ry="25"/>`;
-  s += `<text class="grp" x="${rim+12}" y="14">BELL</text>`;
-  // mouthpiece and inner slide (only visible up to the outer slide)
+  s += pipe(`M34 ${yB} C34 ${yB+11} 16 ${yB+11} 16 ${yB-4} L16 ${yBell+9} C16 ${yBell+2} 22 ${yBell} 32 ${yBell} L${rim-58} ${yBell}`, 6);
+  s += `<path class="bell" d="M${rim-60} ${yBell-3.5} C${rim-30} ${yBell-3.5} ${rim-12} ${yBell-10} ${rim} ${yBell-26} L${rim+1} ${yBell-26} L${rim+1} ${yBell+26} L${rim} ${yBell+26} C${rim-12} ${yBell+10} ${rim-30} ${yBell+3.5} ${rim-60} ${yBell+3.5} Z"/>`;
+  s += `<ellipse class="bellrim" cx="${rim}" cy="${yBell}" rx="3.4" ry="26"/>`;
+  if(!mini) s += `<text class="grp" x="${rim+10}" y="${yBell-18}">BELL</text>`;
+  // mouthpiece and inner slide (visible only up to the outer slide), drawn in front of the bell
   s += `<path class="mpc-cup" d="M4 ${yA-6} Q12 ${yA-6} 14 ${yA-2} L22 ${yA-1.5} L22 ${yA+1.5} L14 ${yA+2} Q12 ${yA+6} 4 ${yA+6} Z"/>`;
-  s += `<text class="grp" x="12" y="${yA-12}" text-anchor="middle">YOU</text>`;
+  s += `<text class="grp" x="12" y="${yA-11}" text-anchor="middle">YOU</text>`;
   s += pipe(`M22 ${yA} L${x} ${yA}`, 4) + pipe(`M30 ${yB} L${x} ${yB}`, 4);
   s += `<rect class="brace" x="27" y="${yA-3}" width="6" height="${yB-yA+6}" rx="3"/>`;
-  // outer slide with its crook (the U-bend) at the far end
   s += pipe(`M${x-4} ${yA} L${x+L} ${yA} A${r} ${r} 0 0 1 ${x+L} ${yB} L${x-4} ${yB}`, 7.5, 'outer');
-  for(let p=1;p<=7;p++) s += `<line class="tick" x1="${X(p)}" x2="${X(p)}" y1="${yB+16}" y2="${yB+22}"/><text class="tnum ${Math.round(ep)===p&&!o.att?'tnum-on':''}" x="${X(p)}" y="${yB+36}" text-anchor="middle">${p}</text>`;
+  for(let p=1;p<=7;p++) s += `<line class="tick" x1="${X(p)}" x2="${X(p)}" y1="${yB+14}" y2="${yB+20}"/><text class="tnum ${Math.round(ep)===p&&!o.att?'tnum-on':''}" x="${X(p)}" y="${yB+34}" text-anchor="middle">${p}</text>`;
   s += `<g class="key on"><title>Hand slide at position ${o.pos}${o.att?' with '+esc(o.attName):''}</title><path class="kshape" d="M${x-2} ${yA-7} C${x-6} ${yA+4} ${x-6} ${yB-4} ${x-2} ${yB+7} L${x+4} ${yB+7} C${x} ${yB-4} ${x} ${yA+4} ${x+4} ${yA-7} Z"/></g>`;
   if(o.att) s += `<g class="key tr-solid"><title>${esc(o.attName)} pressed</title><rect class="kshape" x="38" y="${yB+8}" width="30" height="16" rx="8"/><text class="vnum sm" x="53" y="${yB+20}" text-anchor="middle">${esc(o.attTag==='T'?'F':o.attTag)}</text></g>`;
   return s + `</svg>`;
