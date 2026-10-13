@@ -249,6 +249,13 @@ main{min-width:0}
 .sc-card .deg{font:700 11px var(--f-mono); color:var(--muted); border:1px solid var(--line); border-radius:999px; min-width:20px; text-align:center; padding:1px 5px}
 .sc-card.turn{border-color:var(--brass)}
 .sc-card.is-play{background:var(--brass-soft); border-color:var(--brass)}
+.sc-scroll{overflow-x:auto; padding-bottom:4px}
+.ov-grid.sc-rows{grid-template-columns:repeat(var(--cols,7), minmax(var(--minc,96px), 1fr))}
+.ov-grid.sc-rows.ov-h{--minc:170px}
+.ov-grid.sc-rows.ov-s{--minc:210px}
+.ov-grid.sc-rows.ov-b{--minc:140px}
+.ov-grid.sc-rows.ov-vb{--minc:80px}
+.sc-card.row-start{box-shadow:inset 3px 0 0 var(--brass)}
 .sc-note{color:var(--muted); font-size:13px; margin:12px 0 0}
 .ov-grid.ov-s{grid-template-columns:repeat(auto-fill, minmax(250px,1fr))}
 .ov-grid.ov-vb{grid-template-columns:repeat(auto-fill, minmax(96px,1fr))}
@@ -361,7 +368,7 @@ footer a{color:var(--brass)}
       <div class="sec-h sc-head"><h3 id="sc-title">Scale</h3></div>
       <p class="sc-sub" id="sc-sub"></p>
       <div class="sc-staff" id="sc-staff"></div>
-      <div id="sc-grid" class="ov-grid"></div>
+      <div class="sc-scroll"><div id="sc-grid" class="ov-grid"></div></div>
       <p class="sc-note">Accidentals are written out on every note. Select any note to see its alternates and trills. Octave choices and starting notes cover every range in the All-Virginia (VBODA) audition requirements; choose “Written” to call scales by key name as auditions do.</p>
     </section>
     <section id="overview" hidden>
@@ -1760,12 +1767,14 @@ function renderScale(){
   SC.notes = notes; SC.cur = c;
   $('#sc-staff').innerHTML = staffMulti(notes.map(n=>({...n})), ins.clef);
   const horiz = !ins.brass && LAYOUTS[ins.layout].flute;
-  $('#sc-grid').className = 'ov-grid ' + (horiz ? 'ov-h' : !ins.brass ? 'ov-v' : ins.brass.type==='slide' ? 'ov-s' : ins.brass.type==='horn' || !ins.brass.vert ? 'ov-b' : 'ov-vb');
+  $('#sc-grid').className = 'ov-grid sc-rows ' + (horiz ? 'ov-h' : !ins.brass ? 'ov-v' : ins.brass.type==='slide' ? 'ov-s' : ins.brass.type==='horn' || !ins.brass.vert ? 'ov-b' : 'ov-vb');
+  const chromView = SC.type==='chromatic';
+  $('#sc-grid').style.setProperty('--cols', chromView ? 12 : 7);
   const mid = notes.findIndex(n => n.m === Math.max(...notes.map(x=>x.m)));
   $('#sc-grid').innerHTML = notes.map((n,i) => {
     const f = fingerings(ins, n.m)[0];
     const dg = ins.brass ? miniBrass(f, ins) : svgWW(ins.layout, f, ins.exclude, true);
-    return `<button class="ov sc-card ${i===mid?'turn':''}" data-i="${i}" data-n="${n.m}" aria-label="${n.deg?'Scale degree '+n.deg+', ':''}${noteLabel(n)}">
+    return `<button class="ov sc-card ${i===mid?'turn':''} ${i % (SC.type==='chromatic'?12:7)===0?'row-start':''}" data-i="${i}" data-n="${n.m}" aria-label="${n.deg?'Scale degree '+n.deg+', ':''}${noteLabel(n)}">
       <span class="ov-top"><span class="ov-n">${LETTERS[n.letter]+ACC_TXT[n.acc]}<small>${Math.floor((n.m-(NAT[n.letter]+n.acc))/12)-1}</small></span>${n.deg?`<span class="deg">${n.deg}</span>`:''}</span>
       ${ins.brass?`<span class="ov-f mono">${esc(brassLabel(f, ins))}</span>`:''}
       <span class="ov-dg">${dg}</span>
