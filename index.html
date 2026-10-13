@@ -316,6 +316,46 @@ footer a{color:var(--brass)}
   .grid:has(.dg-b){grid-template-columns:minmax(0,1fr)}
   .fcard{padding:10px}
 }
+
+/* Explore */
+.xp-bar{display:flex; gap:10px; flex-wrap:wrap; margin:4px 0 14px}
+.xp-bar select{height:36px; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px; padding:0 14px; font:600 13.5px var(--f-body); max-width:100%}
+.xp-wrap{display:grid; grid-template-columns:minmax(0,auto) minmax(0,1fr); gap:20px; align-items:start}
+.xp-dg{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:18px; display:flex; flex-direction:column; align-items:center; gap:14px}
+.xp-dg .dg-v{width:300px}
+.xp-dg .dg-h{width:640px; max-width:100%}
+.xp-dg .dg-b{width:380px; max-width:100%}
+.xp-dg .dg-vb{width:150px; max-width:150px}
+.xp-dg svg [data-k]{cursor:pointer}
+.xp-dg svg [data-k]:hover .kshape{stroke:var(--brass); stroke-width:2}
+.xp-dg svg [data-k]:focus{outline:none}
+.xp-dg svg [data-k]:focus-visible .kshape{stroke:var(--brass); stroke-width:2.6}
+.xp-ctl{display:flex; flex-direction:column; gap:10px; width:100%}
+.xp-ctl .seg{flex-wrap:wrap}
+.xp-res{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:18px; min-width:0}
+.xp-k{font:700 11px var(--f-body); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:12px 0 6px}
+.xp-note{display:flex; gap:14px; align-items:center; padding:8px 0; border-top:1px solid var(--line)}
+.xp-note:first-of-type{border-top:0}
+.xp-staff .staff{width:130px}
+.xp-nm{font:800 34px/1 var(--f-display); margin:0 0 4px}
+.xp-enh{font-size:18px; color:var(--muted)}
+.xp-note .nbtns{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+.xp-miss{border-left:3px solid var(--trill); padding:4px 0 4px 12px}
+.xp-miss .xp-k{margin-top:4px; color:var(--trill)}
+.xp-miss p{margin:0 0 4px}
+.xp-near{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px}
+.xp-apply{width:100%; text-align:left; border:1px solid var(--line); background:none; color:var(--ink); border-radius:10px; padding:7px 12px; cursor:pointer; font-size:13.5px}
+.xp-apply:hover{border-color:var(--ink)}
+.xp-apply small{color:var(--muted)}
+.xp-chips{display:flex; flex-direction:column; gap:6px}
+.xp-chip{display:grid; grid-template-columns:auto 90px 1fr auto auto; gap:10px; align-items:center; border:1px solid var(--line); border-radius:10px; padding:6px 10px}
+.xp-chip.rare{opacity:.7}
+.xp-chip .xp-play{border:1px solid var(--line); background:none; color:var(--ink); border-radius:999px; width:30px; height:30px; cursor:pointer}
+.xp-chip .xp-play:hover{border-color:var(--ink)}
+.xp-cn{font:800 20px var(--f-display)}
+.xp-cn .xp-enh{font-size:13px}
+.xp-cm{font-size:12.5px; color:var(--muted)}
+@media (max-width: 820px){ .xp-wrap{grid-template-columns:1fr} .xp-dg .dg-v{width:240px} .xp-chip{grid-template-columns:auto 1fr auto; } .xp-chip .xp-cm{grid-column:2 / -1; grid-row:2} .xp-chip .mini{display:none} }
 </style>
 </head>
 <body>
@@ -352,7 +392,7 @@ footer a{color:var(--brass)}
       <p id="inst-blurb"></p>
       <p id="persp"></p>
       <div class="vtabs" role="group" aria-label="View">
-        <button class="vt is-on" data-v="note" aria-pressed="true">One note</button><button class="vt" data-v="range" aria-pressed="false">Full range chart</button><button class="vt" data-v="scale" aria-pressed="false">Scales</button>
+        <button class="vt is-on" data-v="note" aria-pressed="true">One note</button><button class="vt" data-v="range" aria-pressed="false">Full range chart</button><button class="vt" data-v="scale" aria-pressed="false">Scales</button><button class="vt" data-v="explore" aria-pressed="false">Explore</button>
       </div>
     </div>
     <section id="scales" hidden>
@@ -372,6 +412,15 @@ footer a{color:var(--brass)}
       <div class="sec-h" id="sc-down-h" hidden style="margin-top:16px"><h3>On the way down</h3><span class="ct">melodic minor lowers the 6th and 7th when descending</span></div>
       <div class="sc-scroll"><div id="sc-grid-down" class="ov-grid"></div></div>
       <p class="sc-note">The cards show each note once; during playback they light up going up, then again in reverse coming down. Accidentals are written out on every note. Select any note to see its alternates and trills. Octave choices and starting notes cover every range in the All-Virginia (VBODA) audition requirements; choose “Written” to call scales by key name as auditions do.</p>
+    </section>
+    <section id="explore" hidden>
+      <div class="sec-h"><h3>Explore: build a fingering</h3><span class="ct" id="xp-hint"></span></div>
+      <div class="xp-bar"><select id="xp-load" aria-label="Start from a note's standard fingering"></select><button class="btn" id="xp-clear">Release everything</button></div>
+      <div class="xp-wrap">
+        <div class="xp-dg" id="xp-dg"></div>
+        <div class="xp-res" id="xp-res" aria-live="polite"></div>
+      </div>
+      <p class="sc-note">Results come from the same standard and alternate charts used everywhere else on the site. A combination that isn't in them may still squeak out a pitch on a real instrument, but it isn't one players use.</p>
     </section>
     <section id="overview" hidden>
       <div class="sec-h"><h3 id="ov-title">Full range</h3><span class="ct">Standard fingering for every written note. Select one for alternates and trills.</span></div>
@@ -435,7 +484,6 @@ footer a{color:var(--brass)}
     <div>
       <h2>Sources</h2>
       <ul id="sources"></ul>
-      <p style="margin:0">Woodwind fingerings follow the Woodwind Fingering Guide's basic, alternate and trill charts. Brass fingerings are built from each instrument's harmonic series and checked against the Everett and Yamaha charts; partial tuning notes follow Everett's overtone charts. Keywork varies by maker and model, so test alternates on your own instrument with a tuner.</p>
     </div>
   </div>
   <div class="wrap copy">© New Phrase Collective 2026 · Created by Nathan Vaughn-Childs</div>
@@ -1299,7 +1347,7 @@ function svgWW(layoutId, f, hide, mini){
   for(const k of L.keys){
     const st = f.trill.has(k.id) ? 'tr' : (f.keys[k.id]||'');
     const cls = (st==='c'?'on':st==='tr'?'tr':'') + (k.t==='b'?' back':'');
-    s += `<g class="key ${cls}"><title>${esc(k.name)}${st==='c'?' — pressed':st==='tr'?' — trill this key':st?' — partly covered':''}</title>`;
+    s += `<g class="key ${cls}" data-k="${k.id}"><title>${esc(k.name)}${st==='c'?' — pressed':st==='tr'?' — trill this key':st?' — partly covered':''}</title>`;
     if(k.t==='p'){
       s += `<path class="kshape" d="${k.d}"/>`;
     } else if(k.t==='h' || (k.t==='b' && k.r)){
@@ -1330,7 +1378,7 @@ function svgValves(o, ins){
     s += `<rect class="tube" x="38" y="${ys[2]-27}" width="44" height="${ys[0]-ys[2]+54}" rx="22"/>`;
     s += `<path class="lead" d="M60 ${ys[0]+27} V${H-24}"/><circle class="mpc" cx="60" cy="${H-20}" r="6"/><text class="grp" x="60" y="${H-4}" text-anchor="middle">YOU</text>`;
     ys.forEach((y,i)=>{ const v = String(i+1), p = on.has(v);
-      s += `<g class="key ${p?'on':''}"><title>Valve ${v}${p?' — pressed':' — up'}</title><circle class="cap" cx="60" cy="${y}" r="21"/><circle class="kshape" cx="60" cy="${y}" r="15"/><text class="vnum" x="60" y="${y+5}" text-anchor="middle">${v}</text></g>`; });
+      s += `<g class="key ${p?'on':''}" data-k="${v}"><title>Valve ${v}${p?' — pressed':' — up'}</title><circle class="cap" cx="60" cy="${y}" r="21"/><circle class="kshape" cx="60" cy="${y}" r="15"/><text class="vnum" x="60" y="${y+5}" text-anchor="middle">${v}</text></g>`; });
     return s + `</svg>`;
   }
   // baritone, euphonium, tuba: valves side by side as they sit in playing position
@@ -1339,7 +1387,7 @@ function svgValves(o, ins){
   s += `<rect class="tube" x="26" y="30" width="160" height="40" rx="20"/>`;
   if(nv===4) s += `<path class="lead" d="M186 50 H196"/><rect class="tube" x="192" y="30" width="44" height="40" rx="20"/>`;
   xs.forEach((x,i)=>{ const v = String(i+1), p = on.has(v);
-    s += `<g class="key ${p?'on':''}"><title>Valve ${v}${p?' — pressed':' — up'}</title><circle class="cap" cx="${x}" cy="50" r="21"/><circle class="kshape" cx="${x}" cy="50" r="15"/><text class="vnum" x="${x}" y="55" text-anchor="middle">${v}</text></g>`; });
+    s += `<g class="key ${p?'on':''}" data-k="${v}"><title>Valve ${v}${p?' — pressed':' — up'}</title><circle class="cap" cx="${x}" cy="50" r="21"/><circle class="kshape" cx="${x}" cy="50" r="15"/><text class="vnum" x="${x}" y="55" text-anchor="middle">${v}</text></g>`; });
   s += `<text class="grp" x="${(xs[0]+xs[nv-1])/2}" y="94" text-anchor="middle">${nv===4?'VALVES 1 · 2 · 3, 4TH AT RIGHT':'VALVES 1 · 2 · 3, INDEX TO RING'}</text>`;
   return s + `</svg>`;
 }
@@ -1350,11 +1398,11 @@ function svgHorn(o){
   s += `<path class="lead" d="M30 18 H230"/>`;
   [54,112,158,204].forEach((x,i)=>{ s += `<circle class="cap" cx="${x}" cy="18" r="11"/><circle class="rotor" cx="${x}" cy="18" r="5"/>`; s += `<line class="rod" x1="${x}" x2="${x}" y1="29" y2="44"/>`; });
   s += `<text class="grp" x="250" y="22" text-anchor="middle">ROTORS</text>`;
-  s += `<g class="key ${th?'on':''}"><title>Thumb trigger — ${th?'pressed (B♭ side)':'up (F side)'}</title><rect class="kshape" x="34" y="62" width="40" height="22" rx="11"/><text class="vnum" x="54" y="78" text-anchor="middle">T</text></g>`;
+  s += `<g class="key ${th?'on':''}" data-k="T"><title>Thumb trigger — ${th?'pressed (B♭ side)':'up (F side)'}</title><rect class="kshape" x="34" y="62" width="40" height="22" rx="11"/><text class="vnum" x="54" y="78" text-anchor="middle">T</text></g>`;
   s += `<path class="rod" d="M54 44 V62"/>`;
   [1,2,3].forEach((v,i)=>{
     const x = 112 + i*46, p = on.has(String(v));
-    s += `<g class="key ${p?'on':''}"><title>Lever ${v}${p?' — pressed':' — up'}</title><path class="kshape" d="M${x-9} 44 H${x+9} L${x+15} 66 Q${x+15} 104 ${x} 104 Q${x-15} 104 ${x-15} 66 Z"/><text class="vnum" x="${x}" y="84" text-anchor="middle">${v}</text></g>`;
+    s += `<g class="key ${p?'on':''}" data-k="${v}"><title>Lever ${v}${p?' — pressed':' — up'}</title><path class="kshape" d="M${x-9} 44 H${x+9} L${x+15} 66 Q${x+15} 104 ${x} 104 Q${x-15} 104 ${x-15} 66 Z"/><text class="vnum" x="${x}" y="84" text-anchor="middle">${v}</text></g>`;
   });
   s += `<text class="grp" x="54" y="56" text-anchor="middle">THUMB</text><text class="grp" x="158" y="124" text-anchor="middle">INDEX · MIDDLE · RING</text>`;
   return s + `</svg>`;
@@ -1565,15 +1613,16 @@ function setView(v){
   $('#note').hidden = v!=='note';
   $('#overview').hidden = v!=='range';
   $('#scales').hidden = v!=='scale';
+  $('#explore').hidden = v!=='explore';
   $('.strip-wrap').hidden = v!=='note';
-  if(v==='range') renderOverview(); else if(v==='scale') renderScale(); else { renderNote(); scrollStrip(); }
+  if(v==='range') renderOverview(); else if(v==='scale') renderScale(); else if(v==='explore') renderExplore(); else { renderNote(); scrollStrip(); }
 }
 function setAcc(a){
   S.acc = a; PCN = SPELL[a]; store.set({acc:a});
   document.querySelectorAll('.acc-b').forEach(b => { const on = b.dataset.a===a; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
   if(!S.ins) return;
   renderInst();
-  if(S.view==='range') renderOverview(); else if(S.view==='scale') renderScale(); else { renderNote(); scrollStrip(); }
+  if(S.view==='range') renderOverview(); else if(S.view==='scale') renderScale(); else if(S.view==='explore') renderExplore(); else { renderNote(); scrollStrip(); }
   const q = $('#q'); if(q.value.trim() && !$('#results').hidden) renderResults(search(q.value));
 }
 /* ===== Scales ===== */
@@ -1893,7 +1942,7 @@ function selectInst(id, note){
   }
   S.note = m;
   renderSidebar(); renderInst();
-  if(S.view==='range') renderOverview(); else if(S.view==='scale'){ SC.start = null; if(SC.playing) stopScale(); renderScale(); } else { renderNote(); requestAnimationFrame(scrollStrip); }
+  if(S.view==='range') renderOverview(); else if(S.view==='explore') renderExplore(); else if(S.view==='scale'){ SC.start = null; if(SC.playing) stopScale(); renderScale(); } else { renderNote(); requestAnimationFrame(scrollStrip); }
 }
 function selectNote(m){ S.note = m; if(S.view!=='note') setView('note'); else { renderNote(); scrollStrip(); } }
 
@@ -1914,8 +1963,8 @@ function restoreFromHash(){
   if(!INSTRUMENTS.some(i=>i.id===a)) return;
   PUSH_NEXT = false;
   if(SC.playing) stopScale();
-  S.view = b==='range' ? 'range' : b==='scales' ? 'scale' : 'note';
-  const note = (b && b!=='range' && b!=='scales') ? parseNote(b) : S.note;
+  S.view = b==='range' ? 'range' : b==='scales' ? 'scale' : b==='explore' ? 'explore' : 'note';
+  const note = (b && !['range','scales','explore'].includes(b)) ? parseNote(b) : S.note;
   selectInst(a, note);
   setView(S.view);
 }
@@ -1995,15 +2044,16 @@ function init(){
   S.labels = saved.labels !== false; S.anim = saved.anim !== false;
   S.acc = SPELL[saved.acc] ? saved.acc : 'mixed'; PCN = SPELL[S.acc];
   document.querySelectorAll('.acc-b').forEach(b => { const on = b.dataset.a===S.acc; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
-  S.view = ['range','scale'].includes(saved.view) ? saved.view : 'note';
+  S.view = ['range','scale','explore'].includes(saved.view) ? saved.view : 'note';
   initScales();
   $('#opt-labels').checked = S.labels; $('#opt-anim').checked = S.anim;
   document.documentElement.classList.toggle('no-anim', !S.anim);
   let id = saved.ins, note = saved.note;
   const h = location.hash.replace('#','');
-  if(h){ const [a,b] = h.split('-'); if(INSTRUMENTS.some(i=>i.id===a)){ id = a; note = (b && b!=='range' && b!=='scales') ? parseNote(b) : null; } }
+  if(h){ const [a,b] = h.split('-'); if(INSTRUMENTS.some(i=>i.id===a)){ id = a; note = (b && !['range','scales','explore'].includes(b)) ? parseNote(b) : null; } }
   if(/-range$/.test(h)) S.view = 'range';
   if(/-scales$/.test(h)) S.view = 'scale';
+  if(/-explore$/.test(h)) S.view = 'explore';
   selectInst(id || 'clarinet', note);
   setView(S.view);
   document.querySelectorAll('.vt').forEach(b => b.onclick = () => { if(S.view!==b.dataset.v){ markPush(); setView(b.dataset.v); } });
@@ -2040,6 +2090,196 @@ function init(){
   // sources
   $('#sources').innerHTML = Object.values(SRC).map(s => `<li><a href="${s.u}" target="_blank" rel="noopener">${esc(s.t)}</a></li>`).join('');
 }
+
+/* ===== Explore: press keys on a blank diagram and see what (if anything) it plays ===== */
+const XP = { ins:null, keys:{}, valves:new Set(), thumb:false, pos:1, atts:new Set() };
+const XP_IDX = {};
+const xpCanon = keys => Object.keys(keys).filter(k=>keys[k]).sort().map(k=>k+':'+keys[k]).join(',');
+function xpIndex(ins){
+  if(XP_IDX[ins.id]) return XP_IDX[ins.id];
+  const map = new Map(), all = [], states = {};
+  const notes = PARSED[ins.id].notes;
+  for(const m of Object.keys(notes).map(Number).sort((a,b)=>a-b)){
+    notes[m].forEach((f,i) => {
+      const e = {m, f, std:i===0};
+      const c = xpCanon(f.keys);
+      if(!map.has(c)) map.set(c, []);
+      map.get(c).push(e); all.push(e);
+      for(const [k,v] of Object.entries(f.keys)) (states[k] ||= new Set()).add(v);
+    });
+  }
+  return XP_IDX[ins.id] = {map, all, states};
+}
+function xpKeyName(ins, id){
+  if(/^[LR][123]$/.test(id)) return (id[0]==='L'?'LH ':'RH ')+id[1];
+  const k = LAYOUTS[ins.layout].keys.find(k=>k.id===id);
+  return k ? shortName(k) : id;
+}
+function xpReset(){ XP.keys = {}; XP.valves = new Set(); XP.thumb = false; XP.pos = 1; XP.atts = new Set(); }
+const xpCombo = () => XP.valves.size ? [...XP.valves].sort().join('-') : '0';
+
+/* every pitch a brass setting can produce, with how it's normally used */
+function xpBrassNotes(ins){
+  const B = ins.brass, out = [];
+  const tag = (m, match) => { const fs = fingerings(ins, m); const i = fs.findIndex(match); return i===0 ? 'usual' : i>0 ? 'alternate' : 'rare'; };
+  if(B.type==='valve' || B.type==='horn'){
+    const c = xpCombo(), combos = B.valves===4 ? V4 : V3, ent = combos.find(x=>x[0]===c);
+    if(!ent) return {notes:[], why:`Valves ${c} isn't a fingering on this instrument.`};
+    const low = ent[1];
+    const sets = B.type==='horn'
+      ? (XP.thumb ? [[41,[2,3,4,5,6,8,9,10,12],'B♭']] : [[36,[2,3,4,5,6,8,9,10,12,15,16],'F']])
+      : [[B.fund, B.partials, null]];
+    for(const [fund, parts, side] of sets) for(const p of parts){
+      const m = fund + OFF[p] - low;
+      if(m<ins.min || m>ins.max) continue;
+      out.push({m, p, t:tag(m, o => o.c===c && (!side || o.side===side))});
+    }
+    return {notes:out};
+  }
+  // slide
+  const atts = B.atts || [];
+  let att = null;
+  if(XP.atts.size===2) att = atts.find(a=>a.tag==='D');
+  else if(XP.atts.size===1) att = atts.find(a=>a.tag===[...XP.atts][0]);
+  const low = att ? att.low : 0, maxPos = att ? att.max : 7;
+  if(XP.pos > maxPos) return {notes:[], att, why:`With the ${att.name} engaged the slide runs out after ${maxPos}th position, so ${XP.pos}th position doesn't exist.`};
+  const parts = att ? [2,3,4,5,6] : [2,3,4,5,6,7,8,9,10,12];
+  if(B.pedal && !att) parts.unshift(1);
+  for(const p of parts){
+    const m = 34 - low + OFF[p] - (XP.pos-1);
+    if(m<ins.min || m>ins.max) continue;
+    out.push({m, p, t:tag(m, o => o.pos===XP.pos && (o.att||0)===low)});
+  }
+  return {notes:out, att};
+}
+
+function xpDiagram(ins){
+  if(!ins.brass) return svgWW(ins.layout, {keys:XP.keys, trill:new Set()}, ins.exclude);
+  const B = ins.brass;
+  if(B.type==='horn') return svgHorn({c:xpCombo(), side:XP.thumb?'B♭':'F'});
+  if(B.type==='valve') return svgValves({c:xpCombo()}, ins);
+  const r = xpBrassNotes(ins), att = r.att;
+  const pos = Math.min(XP.pos, att ? att.max : 7);
+  return svgSlide({pos, att:att?att.low:0, attName:att&&att.name, attTag:att&&att.tag});
+}
+function xpControls(ins){
+  const B = ins.brass;
+  if(!B || B.type!=='slide') return '';
+  let h = `<div class="fld"><span>Slide position</span><div class="seg" id="xp-pos">${[1,2,3,4,5,6,7].map(p=>`<button data-p="${p}" class="${p===XP.pos?'is-on':''}" aria-pressed="${p===XP.pos}">${p}</button>`).join('')}</div></div>`;
+  const trig = (B.atts||[]).filter(a=>a.tag!=='D');
+  if(trig.length) h += `<div class="fld"><span>${trig.length>1?'Valves (thumb)':'Trigger (thumb)'}</span><div class="seg" id="xp-att">${trig.map(a=>{ const on = XP.atts.has(a.tag); return `<button data-a="${a.tag}" class="${on?'is-on':''}" aria-pressed="${on}">${esc(a.name)}</button>`; }).join('')}</div></div>`;
+  return `<div class="xp-ctl">${h}</div>`;
+}
+function xpNoteLine(ins, m){ return `${nm(m)}${enh(m)?` <span class="xp-enh">/ ${enh(m)}</span>`:''}`; }
+
+function xpResultWW(ins){
+  const idx = xpIndex(ins), c = xpCanon(XP.keys), hits = idx.map.get(c) || [];
+  const pt = pressText(LAYOUTS[ins.layout], {keys:XP.keys, trill:new Set()});
+  let h = `<p class="fc-press"><span class="lbl">Pressed</span> ${pt.press.length?esc(pt.press.join(' · ')):'Nothing — all keys open'}</p>`;
+  if(hits.length){
+    const uniq = [...new Map(hits.map(e=>[e.m,e])).values()];
+    h += `<div class="xp-hit"><p class="xp-k">This fingering plays</p>`;
+    h += uniq.map((e,i)=>`<div class="xp-note"><div class="xp-staff">${svgStaff(e.m, ins.clef)}</div><div><p class="xp-nm">${xpNoteLine(ins,e.m)}</p><p class="nsub">${hits.some(x=>x.m===e.m&&x.std)?'Standard fingering':'Alternate fingering'}${ins.tr?` · sounds ${nm(e.m+ins.tr)} concert`:''}</p><div class="nbtns"><button class="btn primary xp-play" data-n="${e.m}">▶ Hear it</button><button class="btn xp-go" data-n="${e.m}">Open note →</button></div></div></div>`).join('');
+    if(uniq.length>1) h += `<p class="fc-note">Same fingering, different notes: you choose between them with air speed and embouchure${ins.layout==='flute'||ins.layout==='piccolo'?' (overblowing)':''}.</p>`;
+    h += `</div>`;
+    return h;
+  }
+  if(!Object.keys(XP.keys).length && !idx.map.has('')){
+    h += `<div class="xp-miss"><p class="xp-k">Nothing pressed</p><p>All keys open isn't a standard fingering on the ${esc(ins.name)}. Click keys on the diagram to press them down.</p></div>`;
+  } else {
+    h += `<div class="xp-miss"><p class="xp-k">No standard note</p><p>This combination wouldn't normally sound a usable note on the ${esc(ins.name)}. It isn't a standard or alternate fingering in our charts.</p></div>`;
+  }
+  // nearest fingerings, one or two changes away
+  const cur = XP.keys, near = [];
+  for(const e of idx.all){
+    const ids = new Set([...Object.keys(cur), ...Object.keys(e.f.keys)]), diff = [];
+    for(const id of ids) if((cur[id]||'') !== (e.f.keys[id]||'')) diff.push(id);
+    if(diff.length && diff.length<=2) near.push({e, diff});
+  }
+  near.sort((a,b)=>a.diff.length-b.diff.length || b.e.std-a.e.std || a.e.m-b.e.m);
+  const seen = new Set(), show = near.filter(x=>{ const k = x.e.m+'|'+x.diff.join(); if(seen.has(k)) return false; seen.add(k); return true; }).slice(0,6);
+  if(show.length){
+    h += `<p class="xp-k" style="margin-top:14px">Close by</p><ul class="xp-near">` + show.map(({e,diff}) => {
+      const steps = diff.map(id => { const from = cur[id]||'', to = e.f.keys[id]||''; const n = xpKeyName(ins,id);
+        return !to ? 'lift '+n : to==='c' ? (from?'fully cover ':'press ')+n : (to==='h'?'half-cover ':to==='q'?'cover ¼ of ':'cover ¾ of ')+n; });
+      return `<li><button class="xp-apply" data-n="${e.m}" data-i="${idx.all.indexOf(e)}"><span>${esc((s=>s[0].toUpperCase()+s.slice(1))(steps.join(', then ')))}</span> <b>→ ${nm(e.m)}</b>${e.std?'':' <small>(alt)</small>'}</button></li>`;
+    }).join('') + `</ul>`;
+  }
+  return h;
+}
+function xpResultBrass(ins){
+  const B = ins.brass, r = xpBrassNotes(ins);
+  let what;
+  if(B.type==='slide') what = `Position ${XP.pos}${r.att?` with the ${r.att.name}`:''}`;
+  else if(B.type==='horn') what = `${XP.thumb?'Thumb down (B♭ side)':'Thumb up (F side)'}, ${xpCombo()==='0'?'no levers':'levers '+xpCombo()}`;
+  else what = xpCombo()==='0' ? 'Open — no valves' : 'Valves '+xpCombo();
+  let h = `<p class="fc-press"><span class="lbl">Setting</span> ${esc(what)}</p>`;
+  if(!r.notes.length){
+    return h + `<div class="xp-miss"><p class="xp-k">No note</p><p>${esc(r.why || `No usable note in this instrument's charted range comes from this setting.`)}</p></div>`;
+  }
+  h += `<p class="fc-note" style="margin:6px 0 10px">On brass, one fingering gives a whole family of notes (the harmonic series). You pick which one with your lips and air. Click a note to hear it.</p><div class="xp-chips">`;
+  for(const o of r.notes.slice().reverse()){
+    const lab = {usual:'Usual fingering', alternate:'Alternate', rare:'Possible, rarely used'}[o.t];
+    h += `<div class="xp-chip ${o.t}"><button class="xp-play" data-n="${o.m}" aria-label="Hear ${esc(nm(o.m))}">▶</button><span class="xp-cn">${xpNoteLine(ins,o.m)}</span><span class="xp-cm">Partial ${o.p}${PTEND[o.p]?' · '+PTEND[o.p]:''}</span><span class="bdg ${o.t==='usual'?'':'tr'}">${lab}</span><button class="mini xp-go" data-n="${o.m}">Open</button></div>`;
+  }
+  return h + `</div>`;
+}
+function renderExplore(){
+  const ins = S.ins;
+  if(XP.ins !== ins){ XP.ins = ins; xpReset(); }
+  $('#xp-dg').innerHTML = xpDiagram(ins) + xpControls(ins);
+  $('#xp-dg').classList.toggle('horiz', !ins.brass && !!LAYOUTS[ins.layout].flute);
+  $('#xp-dg').querySelectorAll('svg [data-k]').forEach(g => { g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('aria-pressed', g.classList.contains('on')); g.setAttribute('aria-label', g.querySelector('title')?.textContent || g.dataset.k); });
+  $('#xp-res').innerHTML = ins.brass ? xpResultBrass(ins) : xpResultWW(ins);
+  // starting-point menu
+  const opts = [];
+  for(let m=ins.min; m<=ins.max; m++) if(fingerings(ins,m).length) opts.push(`<option value="${m}">${nm(m)}</option>`);
+  $('#xp-load').innerHTML = `<option value="">Load a note's fingering…</option>` + opts.join('');
+  $('#xp-hint').textContent = ins.brass
+    ? (ins.brass.type==='slide' ? 'Choose a slide position (and trigger, if your horn has one) to see every note it can play.' : 'Click the valves to press them down; click again to let them up.')
+    : 'Click a key or tone hole to press it down; click again to lift it.' + (Object.values(xpIndex(ins).states).some(s=>s.has('h')) ? ' Tone holes that can be half-covered cycle: covered → half-covered → open.' : '');
+  setHash(ins.id+'-explore');
+  store.set({ins:ins.id});
+}
+function xpToggle(id){
+  const ins = S.ins;
+  if(ins.brass){
+    if(id==='T') XP.thumb = !XP.thumb;
+    else XP.valves.has(id) ? XP.valves.delete(id) : XP.valves.add(id);
+  } else {
+    const st = xpIndex(ins).states[id] || new Set(['c']);
+    const cycle = [''].concat(['c','h','q','t'].filter(s => s==='c' || st.has(s)));
+    const nx = cycle[(cycle.indexOf(XP.keys[id]||'')+1) % cycle.length];
+    if(nx) XP.keys[id] = nx; else delete XP.keys[id];
+  }
+  renderExplore();
+}
+function xpLoad(m){
+  const ins = S.ins, f = fingerings(ins, m)[0]; if(!f) return;
+  xpReset();
+  if(!ins.brass) XP.keys = {...f.keys};
+  else if(ins.brass.type==='slide'){ XP.pos = f.pos; if(f.att){ if(f.attTag==='D') (ins.brass.atts||[]).filter(a=>a.tag!=='D').forEach(a=>XP.atts.add(a.tag)); else XP.atts.add(f.attTag); } }
+  else { if(f.c!=='0') f.c.split('-').forEach(v=>XP.valves.add(v)); XP.thumb = f.side==='B♭'; }
+  renderExplore();
+}
+function initExplore(){
+  const box = $('#explore');
+  box.addEventListener('click', e => {
+    const k = e.target.closest('#xp-dg svg [data-k]'); if(k){ xpToggle(k.dataset.k); return; }
+    const p = e.target.closest('#xp-pos button'); if(p){ XP.pos = +p.dataset.p; renderExplore(); return; }
+    const a = e.target.closest('#xp-att button'); if(a){ XP.atts.has(a.dataset.a) ? XP.atts.delete(a.dataset.a) : XP.atts.add(a.dataset.a); renderExplore(); return; }
+    const pl = e.target.closest('.xp-play'); if(pl){ playNote(+pl.dataset.n); return; }
+    const go = e.target.closest('.xp-go'); if(go){ markPush(); S.note = +go.dataset.n; setView('note'); window.scrollTo({top: $('.ihead').offsetTop - 70}); return; }
+    const ap = e.target.closest('.xp-apply'); if(ap){ const en = xpIndex(S.ins).all[+ap.dataset.i]; XP.keys = {...en.f.keys}; renderExplore(); return; }
+  });
+  box.addEventListener('keydown', e => {
+    const k = e.target.closest('#xp-dg svg [data-k]');
+    if(k && (e.key==='Enter' || e.key===' ')){ e.preventDefault(); const id = k.dataset.k; xpToggle(id); const again = $(`#xp-dg svg [data-k="${CSS.escape(id)}"]`); if(again) again.focus(); }
+  });
+  $('#xp-clear').onclick = () => { xpReset(); renderExplore(); };
+  $('#xp-load').onchange = e => { if(e.target.value) xpLoad(+e.target.value); };
+}
+initExplore();
 init();
 
 </script>
