@@ -357,11 +357,11 @@ footer a{color:var(--brass)}
     </div>
     <section id="scales" hidden>
       <div class="sc-controls">
-        <label class="fld pr-only"><span>Key</span><select id="sc-key"></select></label>
+        <label class="fld pr-only nc"><span>Key</span><select id="sc-key"></select></label>
         <label class="fld pr-only"><span>Scale</span><select id="sc-type"><option value="major">Major</option><option value="natural">Natural minor</option><option value="harmonic">Harmonic minor</option><option value="melodic">Melodic minor</option><option value="chromatic">Chromatic</option></select></label>
-        <div class="fld pr-only" id="sc-basis-wrap"><span>Key is</span><div class="seg"><button class="sc-basis" data-b="concert">Concert</button><button class="sc-basis" data-b="written">Written</button></div></div>
-        <div class="fld pr-only"><span>Octaves</span><div class="seg" id="sc-octs"><button class="sc-oct" data-o="1">1</button><button class="sc-oct" data-o="2">2</button><button class="sc-oct" data-o="3">3</button></div></div>
-        <label class="fld pr-only"><span>Start on</span><select id="sc-start"></select></label>
+        <div class="fld pr-only nc" id="sc-basis-wrap"><span>Key is</span><div class="seg"><button class="sc-basis" data-b="concert">Concert</button><button class="sc-basis" data-b="written">Written</button></div></div>
+        <div class="fld pr-only nc"><span>Octaves</span><div class="seg" id="sc-octs"><button class="sc-oct" data-o="1">1</button><button class="sc-oct" data-o="2">2</button><button class="sc-oct" data-o="3">3</button></div></div>
+        <label class="fld pr-only nc"><span>Start on</span><select id="sc-start"></select></label>
         <label class="fld pr-only"><span>Tempo <b id="sc-bpm">90</b></span><input id="sc-tempo" type="range" min="50" max="160" value="90"></label>
         <button class="btn primary" id="sc-play">▶ Play scale</button>
       </div>
@@ -1688,6 +1688,7 @@ function renderScaleControls(){
   document.querySelectorAll('.sc-mode').forEach(b => { const on = b.dataset.m===SC.mode; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
   document.querySelectorAll('.pr-only').forEach(e => e.hidden = va);
   document.querySelectorAll('.va-only').forEach(e => e.hidden = !va);
+  document.querySelectorAll('.nc').forEach(e => e.hidden = SC.type==='chromatic');
   if(va){
     $('#va-key').innerHTML = VA_KEYS.map(k => `<option value="${k[0]},${k[1]}" ${!SC.vaChrom&&k[0]===SC.vaKey[0]&&k[1]===SC.vaKey[1]?'selected':''}>${tonicName(k[0],k[1])} major</option>`).join('') + `<option value="chrom" ${SC.vaChrom?'selected':''}>Chromatic</option>`;
     return;
@@ -1700,7 +1701,7 @@ function renderScaleControls(){
     $('#sc-key').innerHTML = FLAT_SP.map((k,i) => `<option value="${k[0]},${k[1]}" ${(NAT[SC.key[0]]+SC.key[1]+12)%12===i?'selected':''}>${tonicName(k[0],k[1])}</option>`).join('');
   }
   $('#sc-type').value = SC.type;
-  $('#sc-basis-wrap').hidden = !ins.tr;
+  $('#sc-basis-wrap').hidden = !ins.tr || SC.type==='chromatic';
   document.querySelectorAll('.sc-basis').forEach(b => { const on = b.dataset.b===SC.basis; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
   document.querySelectorAll('.sc-oct').forEach(b => { const on = +b.dataset.o===SC.octs; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
 }
@@ -1720,6 +1721,10 @@ function currentScale(){
     for(let m=Math.max(ins.min, R.floor); m<=ins.max; m++) if(m%12===pc && fitsScale(ins, m, 'major', octs)){ start = m; break; }
     const [cL,cA] = concertTonic(wL,wA,ins,false);
     return {ins, va:true, wL, wA, cL, cA, octs, start, list:start==null?[]:[start], tempo:100};
+  }
+  if(SC.type==='chromatic'){
+    const R = VA[ins.id], start = R ? R.chrom[0] : ins.min, end = R ? R.chrom[1] : ins.max;
+    return {ins, chrom:true, va:!!R, start, end, tempo:+$('#sc-tempo').value||90};
   }
   const minor = SC.type!=='major' && SC.type!=='chromatic';
   let [L,a] = SC.key, wL, wA, cL, cA;
@@ -1754,6 +1759,10 @@ function renderScale(){
     title = `All-Virginia: ${tonicName(c.wL,c.wA)} major, ${c.octs} octave${c.octs>1?'s':''}`;
     sub = `Called by written key name. ${noteLabel(notes[0])} up to ${noteLabel(notes[notes.length>>1])} and back down${ins.tr?` (sounds concert ${tonicName(c.cL,c.cA)} major)`:''}. Legato tongue up and down, quarter = 100: quarter-note tonic, then eighth notes.`;
     $('#va-info').innerHTML = `<b>Required:</b> ${c.octs} octave${c.octs>1?'s':''} · ${noteLabel(notes[0])}–${noteLabel(notes[notes.length>>1])} · quarter = 100`;
+  } else if(c.chrom){
+    notes = scaleNotes(c.start, 0, 'chromatic', 0, c.end);
+    title = `Chromatic scale: ${nm(c.start)} to ${nm(c.end)}`;
+    sub = c.va ? `The All-Virginia audition range for ${ins.name} (written pitch), up and back down. Slur ascending, tongue descending${/trombone/.test(ins.id)?' (trombones: legato tongue up, staccato tongue down)':''}.` : `${ins.name} isn't part of the All-Virginia requirements, so this covers its full charted range (written pitch).`;
   } else {
     document.querySelectorAll('.sc-oct').forEach(b => { const o = +b.dataset.o; b.disabled = !c.avail.includes(o); b.title = b.disabled ? 'Doesn’t fit the charted range in this key' : ''; const on = o===c.octs; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
     $('#sc-start').innerHTML = c.list.map(m => `<option value="${m}" ${m===c.start?'selected':''}>${SC.type==='chromatic'?nm(m):tonicName(c.wL,c.wA)+(Math.floor((m-(NAT[c.wL]+c.wA))/12)-1)}</option>`).join('');
