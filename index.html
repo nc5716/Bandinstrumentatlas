@@ -418,8 +418,14 @@ footer a{color:var(--brass)}
 .qz-controls{margin-bottom:12px}
 .qz-score{display:flex; flex-wrap:wrap; gap:8px 22px; align-items:center; margin:0 0 14px; color:var(--muted); font-size:14px}
 .qz-score b{color:var(--ink); font-size:18px}
-.qz-wrap{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,auto); gap:20px; align-items:start}
+.qz-wrap{display:grid; grid-template-columns:minmax(0,auto) minmax(260px,440px); justify-content:start; align-items:stretch; background:var(--surface); border:1px solid var(--line); border-radius:var(--r); overflow:hidden; max-width:100%}
+.qz-wrap > .xp-res, .qz-wrap > .xp-dg{border:0; border-radius:0; background:none}
+.qz-wrap > .xp-dg{justify-content:center; padding:22px 26px}
+.qz-wrap > .xp-res{border-left:1px solid var(--line); padding:22px 26px; display:flex; flex-direction:column; justify-content:center}
+.qz-wrap.one > .xp-res{border-left:0}
 .qz-wrap.one{grid-template-columns:1fr}
+.qz-wrap .qz-fb .fcard{border:1px solid var(--line); border-radius:10px; padding:10px; width:auto}
+.qz-wrap .qz-fb .fcard .dg-v{width:120px}
 .qz-prompt{display:flex; align-items:center; gap:14px}
 .qz-staff .staff{width:150px}
 .qz-name{font:800 56px/1 var(--f-display); margin:0}
@@ -455,7 +461,7 @@ footer a{color:var(--brass)}
 .qz-card:hover .qz-face{border-color:color-mix(in srgb, var(--ink) 30%, var(--line))}
 @media (prefers-reduced-motion: reduce){ .qz-inner{transition:none} }
 .qz-cardbtns{margin-top:12px}
-@media (max-width: 820px){ .qz-wrap{grid-template-columns:1fr} .qz-wrap .xp-dg{order:-1} }
+@media (max-width: 820px){ .qz-wrap{grid-template-columns:1fr} .qz-wrap > .xp-res{order:-1; border-left:0; border-bottom:1px solid var(--line)} }
 
 /* Audition drill & checklist */
 .sc-subtabs{margin:0 0 14px; flex-wrap:wrap}
@@ -3002,16 +3008,16 @@ function renderQuiz(){
   const q = QZ.q;
   if(!q){ box.innerHTML = h + `<p class="empty">No notes match these settings.</p>`; qzSync(); return; }
   if(QZ.mode==='build'){
-    h += `<div class="qz-wrap"><div class="xp-res">${qzNoteHead(q.m)}<p class="qz-ask">${ins.brass ? (ins.brass.type==='slide'?'Set the slide position (and trigger, if needed) for this note, then check.':'Press the valves for this note, then check.') : 'Press the keys for this note on the diagram, then check.'}</p>
+    h += `<div class="qz-wrap"><div class="xp-dg" id="qz-dg">${xpDiagram(ins, QZ.X)}${xpControls(ins, QZ.X, 'qz')}</div>
+      <div class="xp-res">${qzNoteHead(q.m)}<p class="qz-ask">${ins.brass ? (ins.brass.type==='slide'?'Set the slide position (and trigger, if needed) for this note, then check.':'Press the valves for this note, then check.') : 'Press the keys for this note on the diagram, then check.'}</p>
       <div class="row">${QZ.answered?`<button class="btn primary" id="qz-next">Next note →</button>`:`<button class="btn primary" id="qz-check">Check</button><button class="btn" id="qz-clear">Clear</button>`}<button class="btn" id="qz-hear">▶ Hear it</button></div>
-      <div class="qz-fb">${QZ.feedback||''}</div></div>
-      <div class="xp-dg" id="qz-dg">${xpDiagram(ins, QZ.X)}${xpControls(ins, QZ.X, 'qz')}</div></div>`;
+      <div class="qz-fb">${QZ.feedback||''}</div></div></div>`;
   } else if(QZ.mode==='choose'){
     const next = QZ.answered?`<div class="row"><button class="btn primary" id="qz-next">Next →</button><button class="btn" id="qz-hear">▶ Hear it</button></div>`:'';
     if(!ins.brass){
-      h += `<div class="qz-wrap"><div class="xp-res"><p class="qz-ask">What note does this fingering play?</p><div class="qz-opts">${q.opts.map(n=>`<button class="qz-opt ${QZ.answered ? (n===q.m?'ok':n===q.pick?'bad':'') : ''}" data-n="${n}" ${QZ.answered?'disabled':''}>${nm(n)}</button>`).join('')}</div>
-        <div class="qz-fb">${QZ.feedback||''}</div>${next}</div>
-        <div class="xp-dg">${svgWW(ins.layout, q.f, ins.exclude)}</div></div>`;
+      h += `<div class="qz-wrap"><div class="xp-dg">${svgWW(ins.layout, q.f, ins.exclude)}</div>
+        <div class="xp-res"><p class="qz-ask">What note does this fingering play?</p><div class="qz-opts">${q.opts.map(n=>`<button class="qz-opt ${QZ.answered ? (n===q.m?'ok':n===q.pick?'bad':'') : ''}" data-n="${n}" ${QZ.answered?'disabled':''}>${nm(n)}</button>`).join('')}</div>
+        <div class="qz-fb">${QZ.feedback||''}</div>${next}</div></div>`;
     } else {
       h += `<div class="qz-wrap one"><div class="xp-res">${qzNoteHead(q.m)}<p class="qz-ask">Which fingering plays this note?</p><div class="qz-opts dg-opts">${q.opts.map((o,i)=>`<button class="qz-opt qz-dopt ${QZ.answered ? (o.ok?'ok':i===q.pick?'bad':'') : ''}" data-i="${i}" ${QZ.answered?'disabled':''}>${qzMini(ins,o.X)}<span>${esc(qzSetName(ins,o.X))}</span></button>`).join('')}</div>
         <div class="qz-fb">${QZ.feedback||''}</div>${next}</div></div>`;
