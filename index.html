@@ -201,7 +201,8 @@ main{min-width:0}
 .acc-b{border:0; background:none; border-radius:999px; padding:5px 11px; font-size:13px; font-weight:600; cursor:pointer; color:var(--muted); white-space:nowrap}
 .acc-b:hover{color:var(--ink)}
 .acc-b.is-on{background:var(--ink); color:var(--bg)}
-.vtabs{display:inline-flex; align-self:flex-start; border-bottom:2px solid var(--line); gap:4px; margin-top:4px}
+.vtabs{display:flex; align-self:stretch; max-width:100%; overflow-x:auto; scrollbar-width:none; border-bottom:2px solid var(--line); gap:4px; margin-top:4px}
+.vt{white-space:nowrap}
 .vt{border:0; background:none; padding:8px 14px; font:700 14px var(--f-body); color:var(--muted); cursor:pointer; margin-bottom:-2px; border-bottom:3px solid transparent}
 .vt:hover{color:var(--ink)}
 .vt.is-on{color:var(--ink); border-bottom-color:var(--brass)}
@@ -366,6 +367,89 @@ footer a{color:var(--brass)}
 .ov-grid.sc-rows.ov-hv{--minc:100px}
 .xp-dg .dg-hv{width:190px; max-width:190px}
 .grid:has(.dg-hv){grid-template-columns:repeat(auto-fill, minmax(250px,1fr))}
+
+/* Practice tools */
+.tl-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr)); gap:18px}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:18px; display:flex; flex-direction:column; gap:12px; min-width:0}
+.panel.wide{grid-column:1 / -1}
+.panel-h{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 12px}
+.panel-h h3{margin:0; font:800 22px var(--f-display); text-transform:uppercase; letter-spacing:.02em}
+.panel-h .ct{color:var(--muted); font-size:13px}
+.row{display:flex; flex-wrap:wrap; gap:10px 14px; align-items:flex-end}
+.fld.inl{flex-direction:column}
+.chk{display:inline-flex; align-items:center; gap:6px; font-size:13.5px; color:var(--muted); padding-bottom:7px}
+.chk input{accent-color:var(--brass)}
+.fine{font-size:12.5px; color:var(--muted); margin:0}
+.pill-sel{height:36px; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px; padding:0 14px; font:600 14px var(--f-body)}
+.tn-read{text-align:center}
+.tn-dial{width:100%; max-width:320px; display:block; margin:0 auto}
+.tn-arc{fill:none; stroke:var(--line); stroke-width:10; stroke-linecap:round}
+.tn-ok{fill:none; stroke:#3E9B5A; stroke-width:10}
+.tn-ticks line{stroke:var(--muted); stroke-width:1.5}
+.tn-lab{font:600 11px var(--f-mono); fill:var(--muted)}
+#tn-needle line{stroke:var(--ink); stroke-width:3; stroke-linecap:round}
+#tn-needle circle{fill:var(--ink)}
+#tn-needle{transition:transform .12s ease-out}
+#tn-needle.idle{opacity:.25}
+.tn-note{font:800 64px/1 var(--f-display); margin:4px 0 0}
+.tn-note .o{font-size:.45em; color:var(--brass)}
+.tn-read.idle .tn-note{color:var(--muted)}
+.tn-cents{font-weight:700; margin:6px 0 2px; min-height:1.5em}
+.tn-cents.ok{color:#2F8A4C} .tn-cents.near{color:var(--brass)} .tn-cents.off{color:var(--trill)}
+.mt-top{display:flex; align-items:center; justify-content:center; gap:18px}
+.mt-bpm{margin:0; text-align:center; line-height:1}
+.mt-bpm b{font:800 64px var(--f-display); display:block}
+.mt-bpm span{font:700 11px var(--f-body); letter-spacing:.12em; color:var(--muted)}
+.mt-step{width:44px; height:44px; padding:0; font-size:22px}
+.mt-range{width:100%; accent-color:var(--brass)}
+.mt-dots{display:flex; justify-content:center; gap:12px; min-height:22px}
+.mt-dot{width:18px; height:18px; border-radius:50%; border:2px solid var(--line); transition:background .05s}
+.mt-dot.acc{border-color:var(--brass)}
+.mt-dot.on{background:var(--ink); border-color:var(--ink)}
+.mt-dot.acc.on{background:var(--brass); border-color:var(--brass)}
+.tt-wrap{overflow-x:auto}
+.tt{width:100%; border-collapse:collapse; font-size:14px}
+.tt th{text-align:left; font:700 11px var(--f-body); letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding:6px 10px; border-bottom:1px solid var(--line)}
+.tt td{padding:7px 10px; border-bottom:1px solid var(--line)}
+.tt td.big{font:800 18px var(--f-display)}
+.tt tr.me td{background:var(--brass-soft)}
+
+/* Quiz */
+.qz-controls{margin-bottom:12px}
+.qz-score{display:flex; flex-wrap:wrap; gap:8px 22px; align-items:center; margin:0 0 14px; color:var(--muted); font-size:14px}
+.qz-score b{color:var(--ink); font-size:18px}
+.qz-wrap{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,auto); gap:20px; align-items:start}
+.qz-wrap.one{grid-template-columns:1fr}
+.qz-prompt{display:flex; align-items:center; gap:14px}
+.qz-staff .staff{width:150px}
+.qz-name{font:800 56px/1 var(--f-display); margin:0}
+.qz-name .o{font-size:.45em; color:var(--brass)}
+.qz-name.hid{color:var(--muted)}
+.qz-ask{font-weight:600; margin:10px 0}
+.qz-fb{margin-top:10px}
+.qz-fb .good{color:#2F8A4C; font-weight:700; margin:0 0 6px}
+.qz-fb .bad{color:var(--trill); font-weight:700; margin:0 0 6px}
+.qz-fb .fcard{margin-top:8px}
+.qz-opts{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; max-width:420px}
+.qz-opt{border:1px solid var(--line); background:var(--bg); color:var(--ink); border-radius:12px; padding:14px; font:800 24px var(--f-display); cursor:pointer}
+.qz-opt:hover:not(:disabled){border-color:var(--ink)}
+.qz-opt:disabled{cursor:default}
+.qz-opt.ok{background:#E2F3E7; border-color:#2F8A4C; color:#1E6B37}
+.qz-opt.bad{background:var(--trill-soft); border-color:var(--trill); color:var(--trill)}
+:root[data-theme="dark"] .qz-opt.ok{background:#173323; color:#7FD49A}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .qz-opt.ok{background:#173323; color:#7FD49A} }
+.dg-opts{grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); max-width:none}
+.qz-dopt{display:flex; flex-direction:column; align-items:center; gap:6px; font:700 14px var(--f-mono); padding:10px}
+.qz-mini .dg{width:100%; max-width:200px; pointer-events:none}
+.qz-mini .dg-vb{max-width:70px}
+.qz-mini .dg-hv{max-width:100px}
+.qz-card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:22px; min-height:260px; display:flex; align-items:center; justify-content:center; cursor:pointer; max-width:760px}
+.qz-card.flip{cursor:default; border-color:var(--brass); align-items:stretch}
+.qz-front{display:flex; flex-direction:column; align-items:center; gap:10px}
+.qz-back{width:100%; display:flex; flex-direction:column; gap:10px}
+.qz-back .fcard{border:0; padding:0}
+.qz-cardbtns{margin-top:12px}
+@media (max-width: 820px){ .qz-wrap{grid-template-columns:1fr} .qz-wrap .xp-dg{order:-1} }
 </style>
 </head>
 <body>
@@ -402,7 +486,7 @@ footer a{color:var(--brass)}
       <p id="inst-blurb"></p>
       <p id="persp"></p>
       <div class="vtabs" role="group" aria-label="View">
-        <button class="vt is-on" data-v="note" aria-pressed="true">One note</button><button class="vt" data-v="range" aria-pressed="false">Full range chart</button><button class="vt" data-v="scale" aria-pressed="false">Scales</button><button class="vt" data-v="explore" aria-pressed="false">Explore</button>
+        <button class="vt is-on" data-v="note" aria-pressed="true">One note</button><button class="vt" data-v="range" aria-pressed="false">Full range chart</button><button class="vt" data-v="scale" aria-pressed="false">Scales</button><button class="vt" data-v="explore" aria-pressed="false">Explore</button><button class="vt" data-v="quiz" aria-pressed="false">Quiz</button><button class="vt" data-v="tools" aria-pressed="false">Practice tools</button><button class="vt" data-v="learn" aria-pressed="false">Learn</button>
       </div>
     </div>
     <section id="scales" hidden>
@@ -432,6 +516,55 @@ footer a{color:var(--brass)}
       </div>
       <p class="sc-note">Results come from the same standard and alternate charts used everywhere else on the site. A combination that isn't in them may still squeak out a pitch on a real instrument, but it isn't one players use.</p>
     </section>
+    <section id="tools" hidden>
+      <div class="tl-grid">
+        <div class="panel" id="tn-panel">
+          <div class="panel-h"><h3>Tuner</h3><span class="ct" id="tn-ins"></span></div>
+          <div class="tn-read idle" id="tn-read">
+            <svg class="tn-dial" viewBox="0 0 300 170" aria-hidden="true">
+              <path class="tn-arc" d="M30 150 A120 120 0 0 1 270 150"/>
+              <path class="tn-ok" d="M141 31 A120 120 0 0 1 159 31"/>
+              <g class="tn-ticks"><line x1="65.1" y1="65.1" x2="76.5" y2="76.5"/><line x1="79.5" y1="52.9" x2="86.5" y2="62.6"/><line x1="95.5" y1="43.1" x2="101.0" y2="53.8"/><line x1="112.9" y1="35.9" x2="116.6" y2="47.3"/><line x1="131.2" y1="31.5" x2="133.1" y2="43.3"/><line x1="150.0" y1="30.0" x2="150.0" y2="46.0"/><line x1="168.8" y1="31.5" x2="166.9" y2="43.3"/><line x1="187.1" y1="35.9" x2="183.4" y2="47.3"/><line x1="204.5" y1="43.1" x2="199.0" y2="53.8"/><line x1="220.5" y1="52.9" x2="213.5" y2="62.6"/><line x1="234.9" y1="65.1" x2="223.5" y2="76.5"/></g>
+              <text class="tn-lab" x="38" y="166">−50</text><text class="tn-lab" x="150" y="22" text-anchor="middle">0</text><text class="tn-lab" x="262" y="166" text-anchor="end">+50</text>
+              <g id="tn-needle" class="idle"><line x1="150" y1="150" x2="150" y2="42"/><circle cx="150" cy="150" r="7"/></g>
+            </svg>
+            <p class="tn-note" id="tn-note">—</p>
+            <p class="tn-cents" id="tn-cents"></p>
+            <p class="nsub" id="tn-sub"></p>
+          </div>
+          <div class="row"><button class="btn primary" id="tn-go">🎤 Start tuner</button><label class="fld inl"><span>A = <b id="tn-a4v">440</b> Hz</span><input id="tn-a4" type="range" min="436" max="446" step="1" value="440"></label></div>
+          <p class="fine" id="tn-msg">The tuner only listens while it is on. Nothing is recorded or sent anywhere.</p>
+        </div>
+        <div class="panel">
+          <div class="panel-h"><h3>Drone</h3><span class="ct">a steady reference pitch to tune and play scales against</span></div>
+          <div class="row">
+            <label class="fld"><span>Pitch</span><select id="dr-note"></select></label>
+            <label class="fld"><span>Octave</span><select id="dr-oct"><option value="2">Low</option><option value="3" selected>Middle</option><option value="4">High</option></select></label>
+            <label class="fld"><span>Sound</span><select id="dr-voice"><option value="ins" id="dr-ins">Your instrument</option><option value="pure">Pure tone</option><option value="horn">Horn</option><option value="clarinet">Clarinet</option></select></label>
+          </div>
+          <p class="nsub" id="dr-written"></p>
+          <div class="row"><button class="btn primary" id="dr-go">▶ Start drone</button><button class="btn" id="tl-drone-bb">Concert B♭ tuning note</button><label class="chk"><input type="checkbox" id="dr-fifth"> Add the 5th</label></div>
+        </div>
+        <div class="panel">
+          <div class="panel-h"><h3>Metronome</h3><span class="ct" id="mt-word"></span></div>
+          <div class="mt-top"><button class="btn mt-step" data-d="-1" aria-label="Slower by 1">−</button><p class="mt-bpm"><b id="mt-bpm">90</b><span>BPM</span></p><button class="btn mt-step" data-d="1" aria-label="Faster by 1">+</button></div>
+          <input id="mt-tempo" class="mt-range" type="range" min="30" max="240" value="90" aria-label="Tempo">
+          <div class="mt-dots" id="mt-dots" aria-hidden="true"></div>
+          <div class="row">
+            <div class="fld"><span>Beats</span><div class="seg"><button class="mt-b" data-b="2">2</button><button class="mt-b" data-b="3">3</button><button class="mt-b" data-b="4">4</button><button class="mt-b" data-b="6">6</button></div></div>
+            <div class="fld"><span>Clicks per beat</span><div class="seg"><button class="mt-s" data-s="1">♩</button><button class="mt-s" data-s="2">♫ 2</button><button class="mt-s" data-s="3">3</button><button class="mt-s" data-s="4">4</button></div></div>
+          </div>
+          <div class="row"><button class="btn primary" id="mt-go">▶ Start</button><button class="btn" id="mt-tap">Tap tempo</button><label class="chk"><input type="checkbox" id="mt-acc" checked> Accent beat 1</label></div>
+        </div>
+        <div class="panel wide">
+          <div class="panel-h"><h3>Whole-band transposition</h3><span class="ct">what each section reads when the director calls a concert key or pitch</span></div>
+          <div class="row"><div class="seg"><button class="tl-tm" data-m="key">Concert key</button><button class="tl-tm" data-m="note">Concert pitch</button></div><select id="tl-trans-key" class="pill-sel" aria-label="Concert key"></select><select id="tl-trans-note" class="pill-sel" aria-label="Concert pitch"></select><button class="btn" onclick="window.print()">🖨 Print</button></div>
+          <div id="tl-table" class="tt-wrap"></div>
+        </div>
+      </div>
+    </section>
+    <section id="quiz" hidden></section>
+    <section id="learn" hidden></section>
     <section id="overview" hidden>
       <div class="sec-h"><h3 id="ov-title">Full range</h3><span class="ct">Standard fingering for every written note. Select one for alternates and trills.</span></div>
       <div id="ov-grid" class="ov-grid"></div>
@@ -1622,23 +1755,37 @@ function renderOverview(){
   store.set({ins:ins.id});
   $('#ov-title').textContent = `${ins.name}: every note, ${nm(ins.min)} to ${nm(ins.max)}`;
 }
+const VIEWS = {
+  note:{sec:'#note'}, range:{sec:'#overview', h:'range'}, scale:{sec:'#scales', h:'scales'},
+  explore:{sec:'#explore', h:'explore'}, quiz:{sec:'#quiz', h:'quiz'}, tools:{sec:'#tools', h:'tools'}, learn:{sec:'#learn', h:'learn'}
+};
+const HASHV = Object.fromEntries(Object.entries(VIEWS).filter(([k,v])=>v.h).map(([k,v])=>[v.h,k]));
+function renderView(fresh){
+  const v = S.view;
+  if(v==='range') renderOverview();
+  else if(v==='scale'){ if(fresh){ SC.start = null; if(SC.playing) stopScale(); } renderScale(); }
+  else if(v==='explore') renderExplore();
+  else if(v==='quiz') renderQuiz(fresh);
+  else if(v==='tools') renderTools();
+  else if(v==='learn') renderLearn();
+  else { renderNote(); requestAnimationFrame(scrollStrip); }
+}
 function setView(v){
+  const prev = S.view;
   if(v!=='scale' && typeof stopScale==='function' && SC.playing) stopScale();
+  if(prev!==v && typeof leaveView==='function') leaveView(prev, v);
   S.view = v; store.set({view:v});
   document.querySelectorAll('.vt').forEach(b => { const on = b.dataset.v===v; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
-  $('#note').hidden = v!=='note';
-  $('#overview').hidden = v!=='range';
-  $('#scales').hidden = v!=='scale';
-  $('#explore').hidden = v!=='explore';
+  for(const [k,o] of Object.entries(VIEWS)) $(o.sec).hidden = k!==v;
   $('.strip-wrap').hidden = v!=='note';
-  if(v==='range') renderOverview(); else if(v==='scale') renderScale(); else if(v==='explore') renderExplore(); else { renderNote(); scrollStrip(); }
+  renderView(prev!==v);
 }
 function setAcc(a){
   S.acc = a; PCN = SPELL[a]; store.set({acc:a});
   document.querySelectorAll('.acc-b').forEach(b => { const on = b.dataset.a===a; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
   if(!S.ins) return;
   renderInst();
-  if(S.view==='range') renderOverview(); else if(S.view==='scale') renderScale(); else if(S.view==='explore') renderExplore(); else { renderNote(); scrollStrip(); }
+  renderView(false);
   const q = $('#q'); if(q.value.trim() && !$('#results').hidden) renderResults(search(q.value));
 }
 /* ===== Scales ===== */
@@ -1958,7 +2105,7 @@ function selectInst(id, note){
   }
   S.note = m;
   renderSidebar(); renderInst();
-  if(S.view==='range') renderOverview(); else if(S.view==='explore') renderExplore(); else if(S.view==='scale'){ SC.start = null; if(SC.playing) stopScale(); renderScale(); } else { renderNote(); requestAnimationFrame(scrollStrip); }
+  renderView(true);
 }
 function selectNote(m){ S.note = m; if(S.view!=='note') setView('note'); else { renderNote(); scrollStrip(); } }
 
@@ -1975,12 +2122,15 @@ function setHash(h){
 function restoreFromHash(){
   const h = location.hash.replace('#','');
   if(!h) return;
-  const [a,b] = h.split('-');
+  const [a,b,...rest] = h.split('-');
   if(!INSTRUMENTS.some(i=>i.id===a)) return;
   PUSH_NEXT = false;
   if(SC.playing) stopScale();
-  S.view = b==='range' ? 'range' : b==='scales' ? 'scale' : b==='explore' ? 'explore' : 'note';
-  const note = (b && !['range','scales','explore'].includes(b)) ? parseNote(b) : S.note;
+  const v = HASHV[b] || 'note';
+  S.hargs = rest;
+  const note = (b && !HASHV[b]) ? parseNote(b) : S.note;
+  if(S.view!==v && typeof leaveView==='function') leaveView(S.view, v);
+  S.view = v;
   selectInst(a, note);
   setView(S.view);
 }
@@ -2060,16 +2210,13 @@ function init(){
   S.labels = saved.labels !== false; S.anim = saved.anim !== false;
   S.acc = SPELL[saved.acc] ? saved.acc : 'mixed'; PCN = SPELL[S.acc];
   document.querySelectorAll('.acc-b').forEach(b => { const on = b.dataset.a===S.acc; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
-  S.view = ['range','scale','explore'].includes(saved.view) ? saved.view : 'note';
+  S.view = VIEWS[saved.view] && !['quiz'].includes(saved.view) ? saved.view : 'note';
   initScales();
   $('#opt-labels').checked = S.labels; $('#opt-anim').checked = S.anim;
   document.documentElement.classList.toggle('no-anim', !S.anim);
   let id = saved.ins, note = saved.note;
   const h = location.hash.replace('#','');
-  if(h){ const [a,b] = h.split('-'); if(INSTRUMENTS.some(i=>i.id===a)){ id = a; note = (b && !['range','scales','explore'].includes(b)) ? parseNote(b) : null; } }
-  if(/-range$/.test(h)) S.view = 'range';
-  if(/-scales$/.test(h)) S.view = 'scale';
-  if(/-explore$/.test(h)) S.view = 'explore';
+  if(h){ const [a,b,...rest] = h.split('-'); if(INSTRUMENTS.some(i=>i.id===a)){ id = a; S.view = HASHV[b] || 'note'; S.hargs = rest; note = (b && !HASHV[b]) ? parseNote(b) : null; } }
   selectInst(id || 'clarinet', note);
   setView(S.view);
   document.querySelectorAll('.vt').forEach(b => b.onclick = () => { if(S.view!==b.dataset.v){ markPush(); setView(b.dataset.v); } });
@@ -2131,19 +2278,19 @@ function xpKeyName(ins, id){
   const k = LAYOUTS[ins.layout].keys.find(k=>k.id===id);
   return k ? shortName(k) : id;
 }
-function xpReset(){ XP.keys = {}; XP.valves = new Set(); XP.thumb = false; XP.pos = 1; XP.atts = new Set(); }
-const xpCombo = () => XP.valves.size ? [...XP.valves].sort().join('-') : '0';
+function xpReset(X=XP){ X.keys = {}; X.valves = new Set(); X.thumb = false; X.pos = 1; X.atts = new Set(); }
+const xpCombo = (X=XP) => X.valves.size ? [...X.valves].sort().join('-') : '0';
 
 /* every pitch a brass setting can produce, with how it's normally used */
-function xpBrassNotes(ins){
+function xpBrassNotes(ins, X=XP){
   const B = ins.brass, out = [];
   const tag = (m, match) => { const fs = fingerings(ins, m); const i = fs.findIndex(match); return i===0 ? 'usual' : i>0 ? 'alternate' : 'rare'; };
   if(B.type==='valve' || B.type==='horn'){
-    const c = xpCombo(), combos = B.valves===4 ? V4 : V3, ent = combos.find(x=>x[0]===c);
+    const c = xpCombo(X), combos = B.valves===4 ? V4 : V3, ent = combos.find(x=>x[0]===c);
     if(!ent) return {notes:[], why:`Valves ${c} isn't a fingering on this instrument.`};
     const low = ent[1];
     const sets = B.type==='horn'
-      ? (XP.thumb ? [[41,[2,3,4,5,6,8,9,10,12],'B♭']] : [[36,[2,3,4,5,6,8,9,10,12,15,16],'F']])
+      ? (X.thumb ? [[41,[2,3,4,5,6,8,9,10,12],'B♭']] : [[36,[2,3,4,5,6,8,9,10,12,15,16],'F']])
       : [[B.fund, B.partials, null]];
     for(const [fund, parts, side] of sets) for(const p of parts){
       const m = fund + OFF[p] - low;
@@ -2155,35 +2302,35 @@ function xpBrassNotes(ins){
   // slide
   const atts = B.atts || [];
   let att = null;
-  if(XP.atts.size===2) att = atts.find(a=>a.tag==='D');
-  else if(XP.atts.size===1) att = atts.find(a=>a.tag===[...XP.atts][0]);
+  if(X.atts.size===2) att = atts.find(a=>a.tag==='D');
+  else if(X.atts.size===1) att = atts.find(a=>a.tag===[...X.atts][0]);
   const low = att ? att.low : 0, maxPos = att ? att.max : 7;
-  if(XP.pos > maxPos) return {notes:[], att, why:`With the ${att.name} engaged the slide runs out after ${maxPos}th position, so ${XP.pos}th position doesn't exist.`};
+  if(X.pos > maxPos) return {notes:[], att, why:`With the ${att.name} engaged the slide runs out after ${maxPos}th position, so ${X.pos}th position doesn't exist.`};
   const parts = att ? [2,3,4,5,6] : [2,3,4,5,6,7,8,9,10,12];
   if(B.pedal && !att) parts.unshift(1);
   for(const p of parts){
-    const m = 34 - low + OFF[p] - (XP.pos-1);
+    const m = 34 - low + OFF[p] - (X.pos-1);
     if(m<ins.min || m>ins.max) continue;
-    out.push({m, p, t:tag(m, o => o.pos===XP.pos && (o.att||0)===low)});
+    out.push({m, p, t:tag(m, o => o.pos===X.pos && (o.att||0)===low)});
   }
   return {notes:out, att};
 }
 
-function xpDiagram(ins){
-  if(!ins.brass) return svgWW(ins.layout, {keys:XP.keys, trill:new Set()}, ins.exclude);
+function xpDiagram(ins, X=XP){
+  if(!ins.brass) return svgWW(ins.layout, {keys:X.keys, trill:new Set()}, ins.exclude);
   const B = ins.brass;
-  if(B.type==='horn') return svgHorn({c:xpCombo(), side:XP.thumb?'B♭':'F'});
-  if(B.type==='valve') return svgValves({c:xpCombo()}, ins);
-  const r = xpBrassNotes(ins), att = r.att;
-  const pos = Math.min(XP.pos, att ? att.max : 7);
+  if(B.type==='horn') return svgHorn({c:xpCombo(X), side:X.thumb?'B♭':'F'});
+  if(B.type==='valve') return svgValves({c:xpCombo(X)}, ins);
+  const r = xpBrassNotes(ins, X), att = r.att;
+  const pos = Math.min(X.pos, att ? att.max : 7);
   return svgSlide({pos, att:att?att.low:0, attName:att&&att.name, attTag:att&&att.tag});
 }
-function xpControls(ins){
+function xpControls(ins, X=XP, pre='xp'){
   const B = ins.brass;
   if(!B || B.type!=='slide') return '';
-  let h = `<div class="fld"><span>Slide position</span><div class="seg" id="xp-pos">${[1,2,3,4,5,6,7].map(p=>`<button data-p="${p}" class="${p===XP.pos?'is-on':''}" aria-pressed="${p===XP.pos}">${p}</button>`).join('')}</div></div>`;
+  let h = `<div class="fld"><span>Slide position</span><div class="seg" id="${pre}-pos">${[1,2,3,4,5,6,7].map(p=>`<button data-p="${p}" class="${p===X.pos?'is-on':''}" aria-pressed="${p===X.pos}">${p}</button>`).join('')}</div></div>`;
   const trig = (B.atts||[]).filter(a=>a.tag!=='D');
-  if(trig.length) h += `<div class="fld"><span>${trig.length>1?'Valves (thumb)':'Trigger (thumb)'}</span><div class="seg" id="xp-att">${trig.map(a=>{ const on = XP.atts.has(a.tag); return `<button data-a="${a.tag}" class="${on?'is-on':''}" aria-pressed="${on}">${esc(a.name)}</button>`; }).join('')}</div></div>`;
+  if(trig.length) h += `<div class="fld"><span>${trig.length>1?'Valves (thumb)':'Trigger (thumb)'}</span><div class="seg" id="${pre}-att">${trig.map(a=>{ const on = X.atts.has(a.tag); return `<button data-a="${a.tag}" class="${on?'is-on':''}" aria-pressed="${on}">${esc(a.name)}</button>`; }).join('')}</div></div>`;
   return `<div class="xp-ctl">${h}</div>`;
 }
 function xpNoteLine(ins, m){ return `${nm(m)}${enh(m)?` <span class="xp-enh">/ ${enh(m)}</span>`:''}`; }
@@ -2257,19 +2404,18 @@ function renderExplore(){
   setHash(ins.id+'-explore');
   store.set({ins:ins.id});
 }
-function xpToggle(id){
-  const ins = S.ins;
+function xpToggleState(ins, X, id){
   if(ins.brass){
-    if(id==='T') XP.thumb = !XP.thumb;
-    else XP.valves.has(id) ? XP.valves.delete(id) : XP.valves.add(id);
+    if(id==='T') X.thumb = !X.thumb;
+    else X.valves.has(id) ? X.valves.delete(id) : X.valves.add(id);
   } else {
     const st = xpIndex(ins).states[id] || new Set(['c']);
     const cycle = [''].concat(['c','h','q','t'].filter(s => s==='c' || st.has(s)));
-    const nx = cycle[(cycle.indexOf(XP.keys[id]||'')+1) % cycle.length];
-    if(nx) XP.keys[id] = nx; else delete XP.keys[id];
+    const nx = cycle[(cycle.indexOf(X.keys[id]||'')+1) % cycle.length];
+    if(nx) X.keys[id] = nx; else delete X.keys[id];
   }
-  renderExplore();
 }
+function xpToggle(id){ xpToggleState(S.ins, XP, id); renderExplore(); }
 function xpLoad(m){
   const ins = S.ins, f = fingerings(ins, m)[0]; if(!f) return;
   xpReset();
@@ -2295,7 +2441,380 @@ function initExplore(){
   $('#xp-clear').onclick = () => { xpReset(); renderExplore(); };
   $('#xp-load').onchange = e => { if(e.target.value) xpLoad(+e.target.value); };
 }
+
+/* ===== Practice tools: tuner, drone, metronome, whole-band transposition ===== */
+const TL = { a4:440, drone:null, droneMidi:58, droneOct:3, droneVoice:'ins', met:null, bpm:90, beats:4, sub:1, accent:true, taps:[], tuner:false, trans:'key', transKey:[6,-1], transNote:10 };
+
+/* --- microphone + pitch detection (shared with scale play-along) --- */
+const MIC = { stream:null, an:null, buf:null, users:0 };
+async function micStart(){
+  if(MIC.stream){ MIC.users++; return true; }
+  const ac = ctx();
+  const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, noiseSuppression:false, autoGainControl:false}});
+  const src = ac.createMediaStreamSource(stream), an = ac.createAnalyser();
+  an.fftSize = 4096; src.connect(an);
+  Object.assign(MIC, {stream, an, src, buf:new Float32Array(an.fftSize), users:1});
+  return true;
+}
+function micStop(force){
+  if(!MIC.stream) return;
+  MIC.users = force ? 0 : Math.max(0, MIC.users-1);
+  if(MIC.users) return;
+  MIC.stream.getTracks().forEach(t=>t.stop()); try{ MIC.src.disconnect(); }catch(e){}
+  MIC.stream = null; MIC.an = null;
+}
+// YIN pitch estimate; returns Hz or 0 when there's no clear pitch
+function micPitch(){
+  if(!MIC.an) return 0;
+  const x = MIC.buf; MIC.an.getFloatTimeDomainData(x);
+  let rms = 0; for(let i=0;i<x.length;i++) rms += x[i]*x[i];
+  rms = Math.sqrt(rms/x.length); if(rms < .008) return 0;
+  const sr = AC.sampleRate, W = 2048, tMax = Math.min(2047, Math.floor(sr/26)), tMin = Math.floor(sr/2200);
+  const d = new Float32Array(tMax+1);
+  for(let t=1;t<=tMax;t++){ let s = 0; for(let j=0;j<W;j++){ const v = x[j]-x[j+t]; s += v*v; } d[t] = s; }
+  let run = 0; d[0] = 1;
+  for(let t=1;t<=tMax;t++){ run += d[t]; d[t] = run ? d[t]*t/run : 1; }
+  let tau = -1;
+  for(let t=tMin;t<=tMax;t++){ if(d[t] < .12){ while(t+1<=tMax && d[t+1] < d[t]) t++; tau = t; break; } }
+  if(tau < 0) return 0;
+  const a = d[tau-1]||d[tau], b = d[tau], c = d[tau+1]||d[tau], den = a - 2*b + c;
+  const shift = den ? (a - c)/(2*den) : 0;
+  return sr/(tau + shift);
+}
+const hzToMidi = f => 69 + 12*Math.log2(f/TL.a4);
+
+/* --- tuner --- */
+let TUNE_T = null, TUNE_H = [];
+async function tunerToggle(){
+  if(TL.tuner){ tunerStop(); return; }
+  try{ await micStart(); }catch(e){ $('#tn-msg').textContent = 'Microphone access was blocked. Allow the microphone for this site in your browser settings, then try again.'; return; }
+  TL.tuner = true; $('#tn-go').textContent = '■ Stop tuner'; $('#tn-msg').textContent = 'Listening… play a long, steady note.';
+  TUNE_H = [];
+  TUNE_T = setInterval(()=>{
+    const f = micPitch();
+    if(!f){ TUNE_H = []; tunerShow(null); return; }
+    TUNE_H.push(f); if(TUNE_H.length > 5) TUNE_H.shift();
+    const med = TUNE_H.slice().sort((a,b)=>a-b)[Math.floor(TUNE_H.length/2)];
+    tunerShow(med);
+  }, 60);
+}
+function tunerStop(){ if(!TL.tuner) return; clearInterval(TUNE_T); TL.tuner = false; micStop(); const b = $('#tn-go'); if(b) b.textContent = '🎤 Start tuner'; tunerShow(null); const m = $('#tn-msg'); if(m) m.textContent = 'The tuner only listens while it is on.'; }
+function tunerShow(f){
+  const box = $('#tn-read'); if(!box) return;
+  if(!f){ box.classList.add('idle'); $('#tn-note').innerHTML = '—'; $('#tn-sub').textContent = TL.tuner ? 'No steady pitch yet' : ''; $('#tn-cents').textContent = ''; tunerNeedle(0, true); return; }
+  box.classList.remove('idle');
+  const mf = hzToMidi(f), m = Math.round(mf), c = Math.round((mf - m)*100), ins = S.ins;
+  const written = m - ins.tr;
+  $('#tn-note').innerHTML = ins.tr ? `${PCN[((written%12)+12)%12]}<span class="o">${oct(written)}</span>` : `${PCN[((m%12)+12)%12]}<span class="o">${oct(m)}</span>`;
+  $('#tn-sub').textContent = ins.tr ? `Written for ${ins.name} · concert ${nm(m)} · ${f.toFixed(1)} Hz` : `Concert pitch · ${f.toFixed(1)} Hz`;
+  $('#tn-cents').textContent = Math.abs(c) <= 4 ? 'In tune' : c > 0 ? `${c} cents sharp — pull out / relax` : `${-c} cents flat — push in / more air`;
+  $('#tn-cents').className = 'tn-cents ' + (Math.abs(c) <= 4 ? 'ok' : Math.abs(c) <= 15 ? 'near' : 'off');
+  tunerNeedle(c);
+}
+function tunerNeedle(c, idle){
+  const n = $('#tn-needle'); if(!n) return;
+  n.setAttribute('transform', `rotate(${Math.max(-50,Math.min(50,c))*0.9} 150 150)`);
+  n.classList.toggle('idle', !!idle);
+}
+
+/* --- drone --- */
+function droneStop(){
+  if(!TL.drone) return;
+  const g = TL.drone, t = AC.currentTime;
+  g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(0, t+.25);
+  setTimeout(()=>{ try{ g.disconnect(); }catch(e){} }, 400);
+  TL.drone = null; const b = $('#dr-go'); if(b) b.textContent = '▶ Start drone';
+}
+function droneStart(){
+  droneStop();
+  const ac = ctx(), bus = ac.createGain(); bus.gain.value = 1; bus.connect(ac.destination);
+  const m = TL.droneMidi % 12 + 12*(TL.droneOct+1), cents = 1200*Math.log2(TL.a4/440);
+  if(TL.droneVoice==='pure'){
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'triangle'; o.frequency.value = TL.a4*Math.pow(2,(m-69)/12);
+    g.gain.setValueAtTime(0, ac.currentTime); g.gain.linearRampToValueAtTime(.18, ac.currentTime+.3);
+    o.connect(g); g.connect(bus); o.start();
+    const o5 = ac.createOscillator(), g5 = ac.createGain(); o5.type='sine'; o5.frequency.value = o.frequency.value*1.5; g5.gain.value = TL.fifth ? .07 : 0; o5.connect(g5); g5.connect(bus); o5.start();
+  } else {
+    const v = TL.droneVoice==='ins' ? voice() : TL.droneVoice;
+    tone(m + cents/100, 0, 900, v, bus);
+    if(TL.fifth) tone(m + 7 + cents/100, 0, 900, v, bus);
+  }
+  TL.drone = bus; $('#dr-go').textContent = '■ Stop drone';
+}
+
+/* --- metronome (look-ahead scheduler) --- */
+const MET = { next:0, beat:0, timer:null };
+function click(t, strong, sub){
+  const ac = AC, o = ac.createOscillator(), g = ac.createGain();
+  o.type = 'square'; o.frequency.value = sub ? 900 : strong ? 1760 : 1180;
+  const lvl = sub ? .05 : strong ? .22 : .14;
+  g.gain.setValueAtTime(lvl, t); g.gain.exponentialRampToValueAtTime(.0001, t + .045);
+  o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+.06);
+}
+function metTick(){
+  const ac = AC, spb = 60/TL.bpm, step = spb/TL.sub;
+  while(MET.next < ac.currentTime + .12){
+    const pos = MET.beat, beatIdx = Math.floor(pos/TL.sub) % TL.beats, isBeat = pos % TL.sub === 0;
+    click(MET.next, isBeat && beatIdx===0 && TL.accent, !isBeat);
+    if(isBeat){ const d = (MET.next - ac.currentTime)*1000; setTimeout(()=>metFlash(beatIdx), Math.max(0,d)); }
+    MET.next += step; MET.beat = (MET.beat+1) % (TL.beats*TL.sub);
+  }
+}
+function metFlash(i){ document.querySelectorAll('.mt-dot').forEach((d,k)=>d.classList.toggle('on', k===i)); }
+function metStart(){ const ac = ctx(); MET.next = ac.currentTime + .08; MET.beat = 0; clearInterval(MET.timer); MET.timer = setInterval(metTick, 25); TL.met = true; $('#mt-go').textContent = '■ Stop'; }
+function metStop(){ clearInterval(MET.timer); MET.timer = null; TL.met = false; const b = $('#mt-go'); if(b) b.textContent = '▶ Start'; metFlash(-1); }
+function metRestartIfOn(){ if(TL.met){ metStop(); metStart(); } }
+const TEMPO_WORDS = [[40,'Grave'],[50,'Largo'],[60,'Larghetto'],[66,'Adagio'],[76,'Andante'],[108,'Moderato'],[120,'Allegro'],[168,'Vivace'],[176,'Presto'],[200,'Prestissimo']];
+const tempoWord = b => { let w = TEMPO_WORDS[0][1]; for(const [x,n] of TEMPO_WORDS) if(b>=x) w = n; return w; };
+
+/* --- whole-band transposition --- */
+const BAND_ORDER = ['flute','piccolo','oboe','englishhorn','bassoon','ebclarinet','clarinet','bassclarinet','contraalto','contrabass','altosax','tenorsax','barisax','trumpet','mellophone','horn','trombone','basstrombone','euphonium','baritonetc','tuba'];
+const sigTxt = (L,a) => { const f = fifthsOf(L,a); return f===0 ? 'no sharps or flats' : f>0 ? `${f} sharp${f>1?'s':''}` : `${-f} flat${f<-1?'s':''}`; };
+function transTable(){
+  const rows = [], list = BAND_ORDER.map(id=>INSTRUMENTS.find(i=>i.id===id)).filter(Boolean).concat(INSTRUMENTS.filter(i=>!BAND_ORDER.includes(i.id)));
+  if(TL.trans==='key'){
+    const [L,a] = TL.transKey;
+    for(const ins of list){ const [wL,wA] = writtenTonic(L,a,ins,false); rows.push(`<tr class="${ins===S.ins?'me':''}"><td>${esc(ins.name)}</td><td>${ins.key}</td><td class="big">${tonicName(wL,wA)} major</td><td>${sigTxt(wL,wA)}</td></tr>`); }
+    return `<table class="tt"><thead><tr><th>Instrument</th><th>Pitched in</th><th>Written key</th><th>Key signature</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+  }
+  const pc = TL.transNote;
+  for(const ins of list){ const w = ((pc - ins.tr)%12+12)%12; rows.push(`<tr class="${ins===S.ins?'me':''}"><td>${esc(ins.name)}</td><td>${ins.key}</td><td class="big">${PCN[w]}</td><td>${ins.tr ? (ins.tr>0?'sounds higher than written':'sounds lower than written') : 'concert pitch'}</td></tr>`); }
+  return `<table class="tt"><thead><tr><th>Instrument</th><th>Pitched in</th><th>Written note</th><th></th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+}
+
+function renderTools(){
+  const ins = S.ins;
+  $('#tl-trans-key').innerHTML = MAJOR_KEYS.slice().sort((p,q)=>fifthsOf(...p)-fifthsOf(...q)).map(k=>`<option value="${k[0]},${k[1]}" ${k[0]===TL.transKey[0]&&k[1]===TL.transKey[1]?'selected':''}>${tonicName(k[0],k[1])} major</option>`).join('');
+  $('#tl-trans-note').innerHTML = PCN.map((n,i)=>`<option value="${i}" ${i===TL.transNote?'selected':''}>${n}</option>`).join('');
+  $('#tl-trans-key').hidden = TL.trans!=='key'; $('#tl-trans-note').hidden = TL.trans!=='note';
+  document.querySelectorAll('.tl-tm').forEach(b=>{ const on = b.dataset.m===TL.trans; b.classList.toggle('is-on',on); b.setAttribute('aria-pressed',on); });
+  $('#tl-table').innerHTML = transTable();
+  $('#dr-note').innerHTML = PCN.map((n,i)=>`<option value="${i}" ${i===TL.droneMidi%12?'selected':''}>${n} (concert)</option>`).join('');
+  $('#dr-written').textContent = ins.tr ? `= ${PCN[((TL.droneMidi - ins.tr)%12+12)%12]} written for ${ins.name}` : '';
+  $('#dr-ins').textContent = `${shortName(ins)} tone`;
+  $('#tn-ins').textContent = ins.tr ? `Shows written pitch for ${ins.name}. Switch instruments at the top to change it.` : `Shows concert pitch.`;
+  $('#mt-bpm').textContent = TL.bpm; $('#mt-word').textContent = tempoWord(TL.bpm); $('#mt-tempo').value = TL.bpm;
+  $('#mt-dots').innerHTML = Array.from({length:TL.beats},(_, i)=>`<span class="mt-dot ${i===0&&TL.accent?'acc':''}"></span>`).join('');
+  document.querySelectorAll('.mt-b').forEach(b=>{ const on = +b.dataset.b===TL.beats; b.classList.toggle('is-on',on); b.setAttribute('aria-pressed',on); });
+  document.querySelectorAll('.mt-s').forEach(b=>{ const on = +b.dataset.s===TL.sub; b.classList.toggle('is-on',on); b.setAttribute('aria-pressed',on); });
+  $('#tn-a4').value = TL.a4; $('#tn-a4v').textContent = TL.a4;
+  setHash(ins.id+'-tools'); store.set({ins:ins.id});
+}
+function leaveView(prev, next){ if(prev==='tools'){ tunerStop(); } if(prev==='scale' && typeof paStop==='function') paStop(); }
+function initTools(){
+  $('#tn-go').onclick = tunerToggle;
+  $('#tn-a4').oninput = e => { TL.a4 = +e.target.value; $('#tn-a4v').textContent = TL.a4; if(TL.drone) droneStart(); };
+  $('#dr-go').onclick = () => TL.drone ? droneStop() : droneStart();
+  $('#dr-note').onchange = e => { TL.droneMidi = +e.target.value; renderTools(); if(TL.drone) droneStart(); };
+  $('#dr-oct').onchange = e => { TL.droneOct = +e.target.value; if(TL.drone) droneStart(); };
+  $('#dr-voice').onchange = e => { TL.droneVoice = e.target.value; if(TL.drone) droneStart(); };
+  $('#dr-fifth').onchange = e => { TL.fifth = e.target.checked; if(TL.drone) droneStart(); };
+  $('#mt-go').onclick = () => TL.met ? metStop() : metStart();
+  $('#mt-tempo').oninput = e => { TL.bpm = +e.target.value; $('#mt-bpm').textContent = TL.bpm; $('#mt-word').textContent = tempoWord(TL.bpm); };
+  document.querySelectorAll('.mt-step').forEach(b => b.onclick = () => { TL.bpm = Math.max(30, Math.min(240, TL.bpm + +b.dataset.d)); renderTools(); });
+  document.querySelectorAll('.mt-b').forEach(b => b.onclick = () => { TL.beats = +b.dataset.b; renderTools(); metRestartIfOn(); });
+  document.querySelectorAll('.mt-s').forEach(b => b.onclick = () => { TL.sub = +b.dataset.s; renderTools(); metRestartIfOn(); });
+  $('#mt-acc').onchange = e => { TL.accent = e.target.checked; renderTools(); };
+  $('#mt-tap').onclick = () => {
+    const now = performance.now(); TL.taps = TL.taps.filter(t => now - t < 2500); TL.taps.push(now);
+    if(TL.taps.length >= 2){ const iv = []; for(let i=1;i<TL.taps.length;i++) iv.push(TL.taps[i]-TL.taps[i-1]); const avg = iv.slice(-4).reduce((a,b)=>a+b,0)/Math.min(4,iv.length); TL.bpm = Math.max(30, Math.min(240, Math.round(60000/avg))); renderTools(); }
+  };
+  document.querySelectorAll('.tl-tm').forEach(b => b.onclick = () => { TL.trans = b.dataset.m; renderTools(); });
+  $('#tl-trans-key').onchange = e => { TL.transKey = e.target.value.split(',').map(Number); renderTools(); };
+  $('#tl-trans-note').onchange = e => { TL.transNote = +e.target.value; renderTools(); };
+  $('#tl-drone-bb').onclick = () => { TL.droneMidi = 10; renderTools(); droneStart(); };
+}
+
+/* ===== Quiz & flashcards ===== */
+const QZ = { mode:'build', range:'va', key:'all', showName:true, ins:null, q:null, answered:false, right:0, total:0, streak:0, missed:[], reviewing:false, flipped:false, X:null };
+const qzBest = id => (store.get().qzBest||{})[id] || 0;
+function qzSaveBest(){ const b = store.get().qzBest || {}; if(QZ.streak > (b[S.ins.id]||0)){ b[S.ins.id] = QZ.streak; store.set({qzBest:b}); } }
+function qzPool(){
+  const ins = S.ins, R = VA[ins.id];
+  let lo = ins.min, hi = ins.max;
+  if(QZ.range==='va' && R){ lo = R.chrom[0]; hi = R.chrom[1]; }
+  if(QZ.range==='low'){ lo = R ? R.chrom[0] : ins.min; hi = lo + 19; }
+  let pcs = null;
+  if(QZ.key!=='all'){ const [L,a] = QZ.key.split(',').map(Number), t = NAT[L]+a; pcs = new Set(SCALE_TYPES.major.up.map(s => ((t+s)%12+12)%12)); }
+  const out = [];
+  for(let m=lo; m<=hi; m++) if(fingerings(ins,m).length && (!pcs || pcs.has(m%12))) out.push(m);
+  return out;
+}
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; };
+function qzNewState(){ return {keys:{}, valves:new Set(), thumb:false, pos:1, atts:new Set()}; }
+function qzStateFrom(ins, f){
+  const X = qzNewState();
+  if(!ins.brass) X.keys = {...f.keys};
+  else if(ins.brass.type==='slide'){ X.pos = f.pos; if(f.att){ if(f.attTag==='D') (ins.brass.atts||[]).filter(a=>a.tag!=='D').forEach(a=>X.atts.add(a.tag)); else X.atts.add(f.attTag); } }
+  else { if(f.c!=='0') f.c.split('-').forEach(v=>X.valves.add(v)); X.thumb = f.side==='B♭'; }
+  return X;
+}
+// which written notes does a setting produce?
+function qzPlays(ins, X){
+  if(ins.brass) return xpBrassNotes(ins, X).notes.map(o=>o.m);
+  return (xpIndex(ins).map.get(xpCanon(X.keys)) || []).map(e=>e.m);
+}
+function qzBrassCandidates(ins){
+  const B = ins.brass, out = [];
+  if(B.type==='slide'){
+    const trig = (B.atts||[]).filter(a=>a.tag!=='D');
+    const sets = [[]].concat(trig.map(a=>[a.tag]));
+    for(const s of sets) for(let p=1;p<=7;p++){ const X = qzNewState(); X.pos = p; s.forEach(t=>X.atts.add(t)); if(!xpBrassNotes(ins,X).why) out.push(X); }
+  } else {
+    const combos = (B.valves===4 ? V4 : V3).map(c=>c[0]);
+    for(const th of B.type==='horn' ? [false,true] : [false]) for(const c of combos){ const X = qzNewState(); if(c!=='0') c.split('-').forEach(v=>X.valves.add(v)); X.thumb = th; out.push(X); }
+  }
+  return out;
+}
+function qzNext(){
+  const ins = S.ins;
+  let pool = QZ.reviewing && QZ.missed.length ? QZ.missed.slice() : qzPool();
+  if(!pool.length){ QZ.q = null; return; }
+  if(QZ.q && pool.length > 1) pool = pool.filter(m => m!==QZ.q.m);
+  const m = pick(pool), q = {m};
+  if(QZ.mode==='choose'){
+    if(!ins.brass){
+      const fs = fingerings(ins, m); q.f = Math.random() < .8 ? fs[0] : pick(fs);
+      const same = new Set(qzPlays(ins, qzStateFrom(ins, q.f)));
+      let cands = shuffle(qzPool().filter(n => !same.has(n) && Math.abs(n-m) <= 7));
+      if(cands.length < 3) cands = shuffle(qzPool().filter(n => !same.has(n)));
+      q.opts = shuffle([m, ...cands.slice(0,3)]);
+    } else {
+      const good = fingerings(ins, m)[0];
+      const all = qzBrassCandidates(ins).filter(X => !qzPlays(ins, X).includes(m));
+      q.opts = shuffle([{X:qzStateFrom(ins, good), ok:true}, ...shuffle(all).slice(0,3).map(X=>({X, ok:false}))]);
+    }
+  }
+  QZ.q = q; QZ.answered = false; QZ.flipped = false; QZ.X = qzNewState(); QZ.feedback = '';
+}
+function qzMini(ins, X){ return `<span class="qz-mini">${xpDiagram(ins, X)}</span>`; }
+function qzNoteHead(m){
+  const ins = S.ins;
+  return `<div class="qz-prompt"><div class="qz-staff">${svgStaff(m, ins.clef)}</div>${QZ.showName || QZ.answered ? `<p class="qz-name">${PCN[m%12]}<span class="o">${oct(m)}</span></p>` : `<p class="qz-name hid">?</p>`}</div>`;
+}
+function qzScore(){
+  return `<div class="qz-score"><span><b>${QZ.right}</b> / ${QZ.total} right</span><span>Streak <b>${QZ.streak}</b></span><span>Best streak <b>${qzBest(S.ins.id)}</b></span>${QZ.missed.length||QZ.reviewing?`<button class="btn" id="qz-review">${QZ.reviewing?'Back to all notes':`Practice the ${QZ.missed.length} I missed`}</button>`:''}</div>`;
+}
+function qzMark(ok, m){
+  QZ.total++; QZ.answered = true;
+  if(ok){ QZ.right++; QZ.streak++; qzSaveBest(); if(QZ.reviewing) QZ.missed = QZ.missed.filter(x=>x!==m); }
+  else { QZ.streak = 0; if(!QZ.missed.includes(m)) QZ.missed.push(m); }
+  try{ playNote(m); }catch(e){}
+}
+function qzSetName(ins, X){
+  const B = ins.brass, c = xpCombo(X);
+  if(B.type==='slide'){ const t = [...X.atts]; return `Position ${X.pos}${t.length ? ' + '+(t.length===2?'both valves':((B.atts||[]).find(a=>a.tag===t[0])||{}).name) : ''}`; }
+  if(B.type==='horn') return `${X.thumb?'T ':''}${c==='0'?'0':c}`;
+  return c==='0' ? 'Open' : c;
+}
+function renderQuiz(){
+  const ins = S.ins;
+  if(QZ.ins !== ins){ QZ.ins = ins; QZ.right = QZ.total = QZ.streak = 0; QZ.missed = []; QZ.reviewing = false; QZ.q = null; }
+  if(!QZ.q) qzNext();
+  const box = $('#quiz');
+  const keys = sortKeys(MAJOR_KEYS).map(k=>`<option value="${k[0]},${k[1]}">${tonicName(k[0],k[1])} major (written)</option>`).join('');
+  const chooseLabel = ins.brass ? 'Pick the fingering' : 'Name the note';
+  let h = `<div class="sc-controls qz-controls">
+    <div class="fld"><span>Mode</span><div class="seg"><button class="qz-m" data-m="build">Build the fingering</button><button class="qz-m" data-m="choose">${chooseLabel}</button><button class="qz-m" data-m="cards">Flashcards</button></div></div>
+    <label class="fld"><span>Notes</span><select id="qz-range"><option value="va">${VA[ins.id]?'All-Virginia range':'Full range'}</option><option value="low">Lower 1½ octaves</option><option value="full">Full range</option></select></label>
+    <label class="fld"><span>Only notes in</span><select id="qz-key"><option value="all">Any key (all notes)</option>${keys}</select></label>
+    <label class="chk"><input type="checkbox" id="qz-name" ${QZ.showName?'checked':''}> Show note names</label>
+  </div>`;
+  h += qzScore();
+  const q = QZ.q;
+  if(!q){ box.innerHTML = h + `<p class="empty">No notes match these settings.</p>`; qzSync(); return; }
+  if(QZ.mode==='build'){
+    h += `<div class="qz-wrap"><div class="xp-res">${qzNoteHead(q.m)}<p class="qz-ask">${ins.brass ? (ins.brass.type==='slide'?'Set the slide position (and trigger, if needed) for this note, then check.':'Press the valves for this note, then check.') : 'Press the keys for this note on the diagram, then check.'}</p>
+      <div class="row">${QZ.answered?`<button class="btn primary" id="qz-next">Next note →</button>`:`<button class="btn primary" id="qz-check">Check</button><button class="btn" id="qz-clear">Clear</button>`}<button class="btn" id="qz-hear">▶ Hear it</button></div>
+      <div class="qz-fb">${QZ.feedback||''}</div></div>
+      <div class="xp-dg" id="qz-dg">${xpDiagram(ins, QZ.X)}${xpControls(ins, QZ.X, 'qz')}</div></div>`;
+  } else if(QZ.mode==='choose'){
+    const next = QZ.answered?`<div class="row"><button class="btn primary" id="qz-next">Next →</button><button class="btn" id="qz-hear">▶ Hear it</button></div>`:'';
+    if(!ins.brass){
+      h += `<div class="qz-wrap"><div class="xp-res"><p class="qz-ask">What note does this fingering play?</p><div class="qz-opts">${q.opts.map(n=>`<button class="qz-opt ${QZ.answered ? (n===q.m?'ok':n===q.pick?'bad':'') : ''}" data-n="${n}" ${QZ.answered?'disabled':''}>${nm(n)}</button>`).join('')}</div>
+        <div class="qz-fb">${QZ.feedback||''}</div>${next}</div>
+        <div class="xp-dg">${svgWW(ins.layout, q.f, ins.exclude)}</div></div>`;
+    } else {
+      h += `<div class="qz-wrap one"><div class="xp-res">${qzNoteHead(q.m)}<p class="qz-ask">Which fingering plays this note?</p><div class="qz-opts dg-opts">${q.opts.map((o,i)=>`<button class="qz-opt qz-dopt ${QZ.answered ? (o.ok?'ok':i===q.pick?'bad':'') : ''}" data-i="${i}" ${QZ.answered?'disabled':''}>${qzMini(ins,o.X)}<span>${esc(qzSetName(ins,o.X))}</span></button>`).join('')}</div>
+        <div class="qz-fb">${QZ.feedback||''}</div>${next}</div></div>`;
+    }
+  } else {
+    const fs = fingerings(ins, q.m);
+    h += `<div class="qz-card ${QZ.flipped?'flip':''}" id="qz-card" tabindex="0" role="button" aria-label="Flashcard: select to flip">
+      ${QZ.flipped ? `<div class="qz-back">${qzNoteHead(q.m)}${ins.brass ? brassCard(fs[0], ins, true) : wwCard(fs[0], ins, true)}${fs.length>1?`<p class="fine">${fs.length-1} alternate fingering${fs.length>2?'s':''} on the note page.</p>`:''}</div>`
+      : `<div class="qz-front">${qzNoteHead(q.m)}<p class="fine">Think of the fingering, then tap the card to check.</p></div>`}
+    </div>
+    <div class="row qz-cardbtns">${QZ.flipped?`<button class="btn" id="qz-miss">Still learning</button><button class="btn primary" id="qz-got">Got it ✓</button>`:`<button class="btn primary" id="qz-flip">Flip card</button>`}<button class="btn" id="qz-hear">▶ Hear it</button></div>`;
+  }
+  box.innerHTML = h;
+  qzSync();
+}
+function qzSync(){
+  const ins = S.ins;
+  document.querySelectorAll('.qz-m').forEach(b=>{ const on = b.dataset.m===QZ.mode; b.classList.toggle('is-on',on); b.setAttribute('aria-pressed',on); });
+  $('#qz-range').value = QZ.range; $('#qz-key').value = QZ.key;
+  document.querySelectorAll('#qz-dg svg [data-k]').forEach(g => { g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('aria-pressed', g.classList.contains('on')); });
+  setHash(ins.id+'-quiz'); store.set({ins:ins.id});
+}
+function qzCheckBuild(){
+  const ins = S.ins, m = QZ.q.m, plays = qzPlays(ins, QZ.X), ok = plays.includes(m);
+  let fb;
+  if(ok){
+    let how = 'standard';
+    if(ins.brass){ const o = xpBrassNotes(ins, QZ.X).notes.find(o=>o.m===m); how = o.t==='usual' ? 'standard' : o.t==='alternate' ? 'alternate' : 'unusual'; }
+    else { const e = (xpIndex(ins).map.get(xpCanon(QZ.X.keys))||[]).find(e=>e.m===m); how = e && e.std ? 'standard' : 'alternate'; }
+    fb = `<p class="good">✓ Correct${how!=='standard'?` — that's an ${how} fingering for ${nm(m)}`:''}.</p>`;
+  } else {
+    const what = !plays.length ? `That combination doesn't play a standard note.` : ins.brass ? `That setting plays ${plays.map(nm).join(', ')}, not ${nm(m)}.` : `That fingering plays ${plays.map(nm).join(' or ')}.`;
+    const f = fingerings(ins, m)[0];
+    fb = `<p class="bad">✗ ${what}</p><p class="fine">The standard fingering for ${nm(m)}:</p>${ins.brass ? brassCard(f, ins) : wwCard(f, ins)}`;
+  }
+  qzMark(ok, m); QZ.feedback = fb; renderQuiz();
+}
+function initQuiz(){
+  const box = $('#quiz');
+  box.addEventListener('click', e => {
+    const t = e.target;
+    const md = t.closest('.qz-m'); if(md){ QZ.mode = md.dataset.m; QZ.q = null; renderQuiz(); return; }
+    const k = t.closest('#qz-dg svg [data-k]'); if(k){ if(!QZ.answered){ xpToggleState(S.ins, QZ.X, k.dataset.k); renderQuiz(); } return; }
+    const p = t.closest('#qz-pos button'); if(p){ if(!QZ.answered){ QZ.X.pos = +p.dataset.p; renderQuiz(); } return; }
+    const a = t.closest('#qz-att button'); if(a){ if(!QZ.answered){ QZ.X.atts.has(a.dataset.a) ? QZ.X.atts.delete(a.dataset.a) : QZ.X.atts.add(a.dataset.a); renderQuiz(); } return; }
+    if(t.closest('#qz-check')){ qzCheckBuild(); return; }
+    if(t.closest('#qz-clear')){ QZ.X = qzNewState(); renderQuiz(); return; }
+    if(t.closest('#qz-next')){ qzNext(); renderQuiz(); return; }
+    if(t.closest('#qz-hear')){ playNote(QZ.q.m); return; }
+    if(t.closest('#qz-review')){ QZ.reviewing = !QZ.reviewing && QZ.missed.length>0; QZ.q = null; renderQuiz(); return; }
+    const o = t.closest('.qz-opt'); if(o){
+      if(QZ.answered) return;
+      const q = QZ.q, ins = S.ins;
+      if(o.dataset.n!=null){ q.pick = +o.dataset.n; const ok = q.pick===q.m; qzMark(ok, q.m); QZ.feedback = ok ? `<p class="good">✓ Correct: ${nm(q.m)}.</p>` : `<p class="bad">✗ That fingering plays ${nm(q.m)}, not ${nm(q.pick)}.</p>`; }
+      else { q.pick = +o.dataset.i; const ok = q.opts[q.pick].ok; qzMark(ok, q.m); const pl = xpBrassNotes(ins, q.opts[q.pick].X).notes.map(o=>nm(o.m)); QZ.feedback = ok ? `<p class="good">✓ Correct.</p>` : `<p class="bad">✗ Not that one: ${esc(qzSetName(ins, q.opts[q.pick].X))} plays ${pl.length?pl.join(', '):'no note in range'}. The green one plays ${nm(q.m)}.</p>`; }
+      renderQuiz(); return;
+    }
+    if(t.closest('#qz-got')){ qzMark(true, QZ.q.m); qzNext(); renderQuiz(); return; }
+    if(t.closest('#qz-miss')){ qzMark(false, QZ.q.m); qzNext(); renderQuiz(); return; }
+    if(t.closest('#qz-card') || t.closest('#qz-flip')){ if(!QZ.flipped){ QZ.flipped = true; renderQuiz(); } return; }
+  });
+  box.addEventListener('change', e => {
+    if(e.target.id==='qz-range'){ QZ.range = e.target.value; QZ.q = null; renderQuiz(); }
+    if(e.target.id==='qz-key'){ QZ.key = e.target.value; QZ.q = null; renderQuiz(); }
+    if(e.target.id==='qz-name'){ QZ.showName = e.target.checked; renderQuiz(); }
+  });
+  box.addEventListener('keydown', e => {
+    const k = e.target.closest('#qz-dg svg [data-k]');
+    if(k && (e.key==='Enter' || e.key===' ')){ e.preventDefault(); const id = k.dataset.k; if(!QZ.answered){ xpToggleState(S.ins, QZ.X, id); renderQuiz(); } const again = $(`#qz-dg svg [data-k="${CSS.escape(id)}"]`); if(again) again.focus(); return; }
+    if(e.target.id==='qz-card' && (e.key==='Enter' || e.key===' ')){ e.preventDefault(); if(!QZ.flipped){ QZ.flipped = true; renderQuiz(); $('#qz-got')?.focus(); } }
+  });
+}
+
+function renderLearn(){}
+
 initExplore();
+initTools();
+if(typeof initQuiz==='function') initQuiz();
+if(typeof initLearn==='function') initLearn();
 init();
 
 </script>
