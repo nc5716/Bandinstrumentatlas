@@ -570,6 +570,18 @@ footer a{color:var(--brass)}
 .stk-bar{width:1px; align-self:stretch; background:var(--line); margin:0 4px}
 .stk-key{display:flex; flex-wrap:wrap; gap:4px 16px; margin:6px 0 4px}
 .stk-k{font-family:var(--f-mono)} .stk-k.hl{color:var(--brass)}
+.rud-nt{overflow-x:auto}
+.rud-card.wide{grid-column:span 2}
+@media (max-width: 700px){ .rud-card.wide{grid-column:auto} }
+.rud-svg{width:100%; height:auto; display:block}
+.rh-s.thin{stroke-width:1}
+.rd-h{font:700 11px var(--f-mono); fill:var(--ink)}
+.rd-h.l{fill:var(--brass)}
+.rd-g{font:600 8px var(--f-mono); fill:var(--muted)}
+.rd-z{font:800 11px var(--f-body); fill:var(--ink)}
+.rn.on .rh-h,.rn.on .rh-b,.rn.on .rh-f,.rn.on .rd-z{fill:var(--brass)}
+.rn.on .rh-s,.rn.on .rh-ho{stroke:var(--brass)}
+.rn.on .rd-h{fill:var(--trill)}
 </style>
 </head>
 <body>
@@ -3385,7 +3397,7 @@ function rudStop(){
   if(!PC.play) return;
   PC.play.timers.forEach(clearTimeout);
   const bus = PC.play.bus; try{ bus.gain.setValueAtTime(0, AC.currentTime); }catch(e){} setTimeout(()=>{ try{ bus.disconnect(); }catch(e){} }, 60);
-  document.querySelectorAll('.stk-n.on').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.rn.on').forEach(e=>e.classList.remove('on'));
   document.querySelectorAll('.rud-play.is-on').forEach(b=>{ b.classList.remove('is-on'); b.textContent = '▶ Play'; });
   PC.play = null;
 }
@@ -3408,7 +3420,7 @@ function rudPlay(ri){
     if(e.buzz){ for(let b=0;b<5;b++) hitAt(t + b*Math.min(.022, slot/5), .35*(1-b*.13), bus); }
     else if(e.hand.length===2){ hitAt(t, vel, bus); hitAt(t + slot*e.len/2, vel*.85, bus); }
     else hitAt(t, vel, bus);
-    timers.push(setTimeout(()=>{ document.querySelectorAll('.stk-n.on').forEach(x=>x.classList.remove('on')); document.querySelector(`.stk-n[data-r="${ri}"][data-i="${i}"]`)?.classList.add('on'); }, (t - ac.currentTime)*1000));
+    timers.push(setTimeout(()=>{ document.querySelectorAll('.rn.on').forEach(x=>x.classList.remove('on')); document.querySelectorAll(`.rn[data-r="${ri}"][data-i="${i}"]`).forEach(x=>x.classList.add('on')); }, (t - ac.currentTime)*1000));
   });
   for(let b=0;b<Math.round(r.total/r.g)*reps;b++) click(t0 + b*60/PC.bpm, false, true);
   timers.push(setTimeout(rudStop, (.15 + reps*barLen + .3)*1000));
@@ -3418,18 +3430,18 @@ function rudPlay(ri){
 function rudimentsHtml(){
   const cats = ['all','Roll','Diddle','Flam','Drag'];
   const list = RUDS.map((r,i)=>({r,i})).filter(x => PC.filter==='all' || x.r.cat===PC.filter);
-  let h = `<p class="ln-p">The 40 PAS International Drum Rudiments in <b>Dr. John Wooton's four-tier learning sequence</b>, as presented on Vic Firth's <a href="${VF}40-essential-rudiments/" target="_blank" rel="noopener">40 Essential Rudiments</a> page. Each card shows the sticking and plays it on a synthesized snare. Follow the link on any card for Dr. Wooton's video lesson and the written notation.</p>
+  let h = `<p class="ln-p">The 40 PAS International Drum Rudiments in <b>Dr. John Wooton's four-tier learning sequence</b>, as presented on Vic Firth's <a href="${VF}40-essential-rudiments/" target="_blank" rel="noopener">40 Essential Rudiments</a> page. Each card shows the rudiment on a snare staff with the sticking underneath, and plays it on a synthesized snare. Follow the link on any card for Dr. Wooton's video lesson.</p>
   <div class="row rh-opts"><div class="seg" role="group" aria-label="Rudiment family">${cats.map(c=>`<button class="pc-f ${PC.filter===c?'is-on':''}" data-f="${c}" aria-pressed="${PC.filter===c}">${c==='all'?'All 40':c}</button>`).join('')}</div>
   <label class="fld inl"><span>Tempo <b id="pc-bpmv">${PC.bpm}</b> beats/min</span><input id="pc-bpm" type="range" min="40" max="160" value="${PC.bpm}"></label>
   <label class="chk"><input type="checkbox" id="pc-loop" ${PC.loop?'checked':''}> Repeat 4 times</label></div>
-  <div class="stk-key fine"><span><b class="stk-k hr">R</b> right</span><span><b class="stk-k hl">L</b> left</span><span><b>&gt;</b> accent</span><span><small>L</small>R flam (one grace note)</span><span><small>LL</small>R drag (two grace notes)</span><span><u>RR</u> diddle</span><span>R<sup>z</sup> buzz</span><span>| beat</span></div>`;
+  <div class="stk-key fine"><span><b class="stk-k">R</b> right hand</span><span><b class="stk-k hl">L</b> left hand</span><span><b>&gt;</b> accent</span><span>one small slashed note = flam</span><span>two small notes = drag</span><span><b>z</b> on the stem = buzz</span><span>sticking is written under each note</span></div>`;
   for(const tier of [1,2,3,4]){
     const items = list.filter(x=>x.r.tier===tier); if(!items.length) continue;
     h += `<div class="sec-h rh-sec"><h3>Tier ${tier}</h3><span class="ct">${['','start here','building on tier 1','longer rolls and drag/flam combinations','advanced combinations'][tier]}</span></div><div class="rud-grid">`;
-    h += items.map(({r,i}) => `<div class="rud-card" id="rud-${i}"><div class="rh-top"><b>${RUDS.indexOf(r)+1}. ${esc(r.n)}</b><span class="bdg">${r.cat}</span><button class="mini rud-play" data-r="${i}">▶ Play</button></div>${stickHtml(r,i)}<p class="fine">Pulse: ${GRID_NAME[r.g]}. <a href="${VF}${r.u}" target="_blank" rel="noopener">Video lesson &amp; notation on Vic Firth ↗</a></p></div>`).join('');
+    h += items.map(({r,i}) => { const nt = svgRud(r,i); return `<div class="rud-card ${r.wide?'wide':''}" id="rud-${i}"><div class="rh-top"><b>${RUDS.indexOf(r)+1}. ${esc(r.n)}</b><span class="bdg">${r.cat}</span><button class="mini rud-play" data-r="${i}">▶ Play</button></div><div class="rud-nt">${nt}</div><p class="fine">Pulse: ${GRID_NAME[r.g]}. <a href="${VF}${r.u}" target="_blank" rel="noopener">Dr. Wooton's video lesson on Vic Firth ↗</a></p></div>`; }).join('');
     h += `</div>`;
   }
-  h += `<p class="fine" style="margin-top:14px">Playback is a practice guide for sticking and accents; roll rhythms can be interpreted several ways, so check the written notation on each Vic Firth page. Practice slow–fast–slow: start well under tempo, speed up only while every stroke stays even, then come back down.</p>`;
+  h += `<p class="fine" style="margin-top:14px">Playback is a practice guide for sticking and accents; roll rhythms can be interpreted several ways, so compare with Dr. Wooton's lesson on each Vic Firth page. Practice slow–fast–slow: start well under tempo, speed up only while every stroke stays even, then come back down.</p>`;
   return h;
 }
 function percHtml(){
@@ -3477,6 +3489,76 @@ function initPerc(){
     if(e.target.id==='pc-loop') PC.loop = e.target.checked;
     if(e.target.id==='tp-note'){ LN.timp = +e.target.value; renderPercPage(); }
   });
+}
+
+/* --- rudiment notation: one-line snare staff drawn from the sticking data --- */
+const REG = {4:[4,0], 3:[2,1], 2:[2,0], 1.5:[4,1], 1:[4,0], .75:[8,1], .5:[8,0], .375:[16,1], .25:[16,0], .125:[32,0], .0625:[64,0]};
+function rudNotes(r){
+  const ev = rudParse(r), out = [];
+  ev.forEach((e,i) => {
+    const parts = e.hand.length===2 ? [[e.t, e.len/2, e.hand[0], e.acc, e.grace], [e.t+e.len/2, e.len/2, e.hand[1], false, '']] : [[e.t, e.len, e.hand, e.acc, e.grace]];
+    for(const [t,len,h,acc,grace] of parts){
+      const d = len/r.g, tup = REG[+d.toFixed(4)] == null || (r.g % 3 === 0 && len % (r.g/2) !== 0 && len*2 % r.g !== 0 && !REG[+d.toFixed(4)]);
+      const key = tup ? +(d*1.5).toFixed(4) : +d.toFixed(4), [v, dot] = REG[key] || [16,0];
+      out.push({i, t, len, d, h, acc, grace, buzz:e.buzz, v, dot, tup, beat:Math.floor(t/r.g + 1e-6)});
+    }
+  });
+  return out;
+}
+function svgRud(r, ri){
+  const ns = rudNotes(r), ly = 60, stemH = 28, BW = 70;
+  let x = 14; const xs = [];
+  ns.forEach(n => { x += n.grace ? n.grace.length*8 + 4 : 0; xs.push(x); x += Math.max(17, n.d*BW); });
+  const W = x + 18;
+  const lvl = n => n.v===8 ? 1 : n.v===16 ? 2 : n.v===32 ? 3 : n.v===64 ? 4 : 0;
+  let s = `<svg class="rud-svg" viewBox="0 0 ${W} 104" role="img" aria-label="${esc(r.n)} notation" style="max-width:${W*1.25}px"><line class="rh-l" x1="4" x2="${W-4}" y1="${ly}" y2="${ly}"/>`;
+  // repeat sign at the end
+  s += `<line class="rh-bar" x1="${W-9}" x2="${W-9}" y1="${ly-12}" y2="${ly+12}"/><rect class="rh-b" x="${W-6}" y="${ly-12}" width="2.6" height="24"/><circle class="rh-dot" cx="${W-14}" cy="${ly-4}" r="1.6"/><circle class="rh-dot" cx="${W-14}" cy="${ly+4}" r="1.6"/>`;
+  const groups = []; let cur = null;
+  ns.forEach((n,k) => { if(lvl(n)>0){ if(cur && cur.beat===n.beat && cur.last===k-1){ cur.idx.push(k); cur.last = k; } else { cur = {beat:n.beat, idx:[k], last:k}; groups.push(cur); } } else cur = null; });
+  const beamed = new Set(groups.filter(g=>g.idx.length>1).flatMap(g=>g.idx));
+  ns.forEach((n,k) => {
+    const nx = xs[k], sx = nx+5, top = ly-stemH;
+    s += `<g class="rn" data-r="${ri}" data-i="${n.i}">`;
+    // grace notes: one = flam (slashed eighth), two = drag (beamed sixteenths)
+    if(n.grace){
+      const gx = n.grace.split('').map((_,j,a) => nx - 8*(a.length-j) - 2), gy = ly - 4, gt = gy - 17;
+      gx.forEach(g => { s += `<ellipse class="rh-h" cx="${g}" cy="${gy}" rx="3.3" ry="2.4" transform="rotate(-20 ${g} ${gy})"/><line class="rh-s thin" x1="${g+3}" x2="${g+3}" y1="${gy}" y2="${gt}"/>`; });
+      if(gx.length===1) s += `<path class="rh-f" d="M${gx[0]+3} ${gt} c 1 3 6 4 5 9 c -1 -3 -3 -4 -5 -5 z"/><line class="rh-s thin" x1="${gx[0]-1}" x2="${gx[0]+8}" y1="${gt+11}" y2="${gt+4}"/>`;
+      else { s += `<rect class="rh-b" x="${gx[0]+2.6}" y="${gt}" width="${gx[gx.length-1]-gx[0]+1}" height="2"/><rect class="rh-b" x="${gx[0]+2.6}" y="${gt+4}" width="${gx[gx.length-1]-gx[0]+1}" height="2"/>`; }
+      s += `<text class="rd-g" x="${(gx[0]+gx[gx.length-1])/2}" y="${ly+19}" text-anchor="middle">${n.grace.split('').join('')}</text>`;
+    }
+    s += `<ellipse class="${n.v<=2?'rh-ho':'rh-h'}" cx="${nx}" cy="${ly}" rx="5.4" ry="3.9" transform="rotate(-20 ${nx} ${ly})"/>`;
+    if(n.v>1) s += `<line class="rh-s" x1="${sx}" x2="${sx}" y1="${ly-1}" y2="${top}"/>`;
+    if(!beamed.has(k)) for(let q=0;q<lvl(n);q++) s += `<path class="rh-f" d="M${sx} ${top+q*6} C ${sx+1} ${top+q*6+5} ${sx+9} ${top+q*6+8} ${sx+7} ${top+q*6+17} C ${sx+6} ${top+q*6+11} ${sx+3} ${top+q*6+9} ${sx} ${top+q*6+7} Z"/>`;
+    if(n.dot) s += `<circle class="rh-dot" cx="${nx+10}" cy="${ly-2}" r="1.6"/>`;
+    if(n.buzz) s += `<text class="rd-z" x="${sx}" y="${ly-11}" text-anchor="middle">z</text>`;
+    if(n.acc) s += `<path class="rh-art" d="M${nx-3} ${top-14} L${nx+7} ${top-11} L${nx-3} ${top-8}"/>`;
+    s += `<text class="rd-h ${n.h==='L'?'l':''}" x="${nx}" y="${ly+19}" text-anchor="middle">${n.h}</text></g>`;
+  });
+  for(const g of groups.filter(g=>g.idx.length>1)){
+    const a = g.idx[0], z = g.idx[g.idx.length-1], y = ly-stemH;
+    s += `<rect class="rh-b" x="${xs[a]+4.2}" y="${y-1}" width="${xs[z]-xs[a]+1.6}" height="3.6"/>`;
+    for(const L of [2,3,4]) for(let k=0;k<g.idx.length;k++){
+      const i = g.idx[k]; if(lvl(ns[i]) < L) continue;
+      const nx2 = g.idx[k+1], pv = g.idx[k-1], yy = y - 1 + (L-1)*5.5;
+      if(nx2!=null && lvl(ns[nx2])>=L) s += `<rect class="rh-b" x="${xs[i]+4.2}" y="${yy}" width="${xs[nx2]-xs[i]+1.6}" height="3.6"/>`;
+      else if(!(pv!=null && lvl(ns[pv])>=L)){ const back = nx2==null || (pv!=null && ns[pv].dot); s += `<rect class="rh-b" x="${back?xs[i]-3.6:xs[i]+4.2}" y="${yy}" width="8" height="3.6"/>`; }
+    }
+  }
+  // tuplet brackets over runs of tuplet notes within a beat
+  let k = 0;
+  while(k < ns.length){
+    if(!ns[k].tup){ k++; continue; }
+    let j = k; while(j+1 < ns.length && ns[j+1].tup && ns[j+1].beat===ns[k].beat) j++;
+    const cnt = j-k+1, sixes = cnt===6 && ns.slice(k,j+1).every(n=>n.len===ns[k].len) && r.g===6;
+    const num = sixes ? 6 : 3, mid = (xs[k]+xs[j])/2 + 5, y = ly - stemH - 22;
+    s += `<text class="rh-3" x="${mid}" y="${y+3}" text-anchor="middle">${num}</text>`;
+    if(ns.slice(k,j+1).some(n=>!beamed.has(ns.indexOf(n))) ) s += `<path class="rh-br" d="M${xs[k]} ${y+4} V${y} H${mid-6} M${mid+6} ${y} H${xs[j]+6} V${y+4}"/>`;
+    k = j+1;
+  }
+  r.wide = W > 430;
+  return s + `</svg>`;
 }
 
 /* ===== Audition drill, checklist, play-along and shareable scale links ===== */
