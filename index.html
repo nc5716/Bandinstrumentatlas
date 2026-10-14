@@ -667,6 +667,10 @@ main > .vtabs{margin-bottom:16px}
 .strip-wrap{margin-top:0}
 .foot .copy{border:0; padding:0; margin:0}
 .foot .copy{border:0; padding:0; margin:0}
+.dg .ring{fill:none; stroke:var(--tube-line); stroke-width:1.8}
+.dg .mpc-body{fill:color-mix(in srgb, var(--tube) 60%, var(--surface)); stroke:var(--tube-line); stroke-width:1.1; stroke-linejoin:round}
+.dg .mpc-rim{fill:none; stroke:var(--tube-line); stroke-width:1}
+.dg .mpc-ring{stroke:var(--tube-line); stroke-width:1}
 </style>
 </head>
 <body>
@@ -1748,10 +1752,14 @@ function svgValves(o, ins){
   const nv = ins.brass.valves || 3, on = new Set(o.c==='0' ? [] : o.c.split('-'));
   if(ins.brass.vert){
     // trumpet/mellophone, seen from the player: valve 1 at the bottom, nearest your mouthpiece
-    const ys = [176,128,80], H = 236;
+    const ys = [176,128,80], H = 250;
     let s = `<svg class="dg dg-vb" viewBox="0 0 120 ${H}" role="img" aria-label="${esc(o.c==='0'?'Open, no valves':'Valves '+o.c)}">`;
     s += `<rect class="tube" x="38" y="${ys[2]-27}" width="44" height="${ys[0]-ys[2]+54}" rx="22"/>`;
-    s += `<path class="lead" d="M60 ${ys[0]+27} V${H-24}"/><circle class="mpc" cx="60" cy="${H-20}" r="6"/><text class="grp" x="60" y="${H-4}" text-anchor="middle">YOU</text>`;
+    // leadpipe and mouthpiece seen from above: tapered shank, then the cup flaring out to a rounded rim
+    s += `<path class="lead" d="M60 ${ys[0]+27} V212"/>`;
+    s += `<path class="mpc-body" d="M57.6 210 L62.4 210 L63.4 224 C63.6 228 67 231 70.5 233.5 Q72 235 70.5 236.6 L49.5 236.6 Q48 235 49.5 233.5 C53 231 56.4 228 56.6 224 Z"/>`;
+    s += `<path class="mpc-rim" d="M49.6 234.4 Q60 232.6 70.4 234.4"/><line class="mpc-ring" x1="56.9" x2="63.1" y1="218" y2="218"/>`;
+    s += `<text class="grp" x="60" y="${H-2}" text-anchor="middle">YOU</text>`;
     ys.forEach((y,i)=>{ const v = String(i+1), p = on.has(v);
       s += `<g class="key ${p?'on':''}" data-k="${v}"><title>Valve ${v}${p?' — pressed':' — up'}</title><circle class="cap" cx="60" cy="${y}" r="21"/><circle class="kshape" cx="60" cy="${y}" r="15"/><text class="vnum" x="60" y="${y+5}" text-anchor="middle">${v}</text></g>`; });
     return s + `</svg>`;
