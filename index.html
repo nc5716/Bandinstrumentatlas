@@ -76,7 +76,7 @@ header.top{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; backgr
 
 main{min-width:0}
 .ihead{display:flex; flex-direction:column; gap:10px; margin-bottom:18px}
-#inst-name{font:800 clamp(40px,6vw,68px)/.9 var(--f-display); text-transform:uppercase; letter-spacing:.01em; margin:0; text-wrap:balance}
+#inst-name,.pc-title{font:800 clamp(40px,6vw,68px)/.9 var(--f-display); text-transform:uppercase; letter-spacing:.01em; margin:0; text-wrap:balance}
 #inst-meta{display:flex; flex-wrap:wrap; gap:6px}
 .chip{font-size:12.5px; padding:3px 10px; border-radius:999px; background:var(--surface); border:1px solid var(--line); color:var(--muted); font-variant-numeric:tabular-nums}
 #inst-blurb{margin:0; max-width:68ch; color:var(--muted)}
@@ -543,6 +543,33 @@ footer a{color:var(--brass)}
 .dr-c{border-radius:50%; border:3px solid var(--tube-line); background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--ink)}
 .drum.on .dr-c{border-color:var(--brass); background:var(--brass-soft)}
 .drum.on{color:var(--ink)}
+
+/* Percussion */
+#perc .ihead{margin-bottom:6px}
+.chips-row{display:flex; flex-wrap:wrap; gap:6px}
+.pc-blurb{margin:0; color:var(--muted); max-width:70ch}
+.rh-sec{margin-top:18px}
+.rh-opts{margin:8px 0 4px}
+.rh-rest{fill:var(--ink)}
+.rh-n.on .rh-rest{fill:var(--brass)}
+.rh-br{fill:none; stroke:var(--muted); stroke-width:1}
+.rud-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(320px,1fr)); gap:12px}
+.rud-card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; display:flex; flex-direction:column; gap:8px; transition:box-shadow .3s}
+.rud-card.flash{box-shadow:0 0 0 3px var(--brass)}
+.rud-card .bdg{margin-left:auto}
+.rud-card .mini{margin-left:0}
+.rud-card .fine a, #perc .ln-p a{color:var(--brass)}
+.stk-key small{font-size:10px; color:var(--muted)}
+.stk{display:flex; flex-wrap:wrap; align-items:flex-end; gap:2px 3px; font:700 17px var(--f-mono)}
+.stk-n{display:flex; flex-direction:column; align-items:center; min-width:20px; padding:0 2px 2px; border-radius:5px}
+.stk-a{font-size:12px; height:13px; color:var(--trill)}
+.stk-m small{font-size:10px; color:var(--muted); margin-right:1px; vertical-align:top}
+.stk-m sup{font-size:10px; color:var(--muted)}
+.stk-n.hl .stk-m{color:var(--brass)}
+.stk-n.on{background:var(--ink)} .stk-n.on .stk-m, .stk-n.on .stk-m small{color:var(--bg)}
+.stk-bar{width:1px; align-self:stretch; background:var(--line); margin:0 4px}
+.stk-key{display:flex; flex-wrap:wrap; gap:4px 16px; margin:6px 0 4px}
+.stk-k{font-family:var(--f-mono)} .stk-k.hl{color:var(--brass)}
 </style>
 </head>
 <body>
@@ -617,6 +644,7 @@ footer a{color:var(--brass)}
       </div>
       <p class="sc-note">Results come from the same standard and alternate charts used everywhere else on the site. A combination that isn't in them may still squeak out a pitch on a real instrument, but it isn't one players use.</p>
     </section>
+    <section id="perc" hidden></section>
     <section id="tools" hidden>
       <div class="tl-grid">
         <div class="panel" id="tn-panel">
@@ -1781,9 +1809,10 @@ function renderSidebar(){
   for(const fam of ['Woodwinds','Brass']){
     h += `<optgroup label="${fam}">`;
     for(const ins of INSTRUMENTS.filter(i=>i.fam===fam && !i.variantOf))
-      h += `<option value="${ins.id}" ${S.ins===ins || S.ins.variantOf===ins.id?'selected':''}>${esc(ins.name)}${ins.key!=='C' && !ins.name.includes(ins.key) && !ins.name.includes('in F')?' ('+ins.key+')':''}</option>`;
+      h += `<option value="${ins.id}" ${!S.perc && (S.ins===ins || S.ins.variantOf===ins.id)?'selected':''}>${esc(ins.name)}${ins.key!=='C' && !ins.name.includes(ins.key) && !ins.name.includes('in F')?' ('+ins.key+')':''}</option>`;
     h += `</optgroup>`;
   }
+  h += `<optgroup label="Percussion"><option value="percussion" ${S.perc?'selected':''}>Percussion</option></optgroup>`;
   $('#inst-sel').innerHTML = h;
 }
 function transText(ins){
@@ -2217,6 +2246,7 @@ function findStep(dir){
   return null;
 }
 function selectInst(id, note){
+  if(S.perc) hidePerc();
   const ins = INSTRUMENTS.find(i=>i.id===id) || INSTRUMENTS[4];
   S.ins = ins;
   let m = note;
@@ -2244,6 +2274,7 @@ function restoreFromHash(){
   const h = location.hash.replace('#','');
   if(!h) return;
   const [a,b,...rest] = h.split('-');
+  if(a==='percussion'){ PUSH_NEXT = false; showPerc(b); PUSH_NEXT = false; return; }
   if(!INSTRUMENTS.some(i=>i.id===a)) return;
   PUSH_NEXT = false;
   if(SC.playing) stopScale();
@@ -2271,6 +2302,11 @@ function buildIndex(){
 const STOP = new Set(['the','a','for','on','in','to','of','fingering','fingerings','chart','note','notes','how','play','what','is','and','with','alt','alternate','alternates','trill','trills','written','high','low','from','up']);
 function search(q){
   if(!INDEX) buildIndex();
+  const rq = q.toLowerCase().trim();
+  if(rq.length >= 3){
+    const rud = RUDS.map((r,i)=>({r,i})).filter(({r}) => r.n.toLowerCase().includes(rq) || (/rudiment|snare|drum|percussion/.test(rq) && rq.split(/\s+/).every(w => /rudiments?|snare|drums?|percussion/.test(w) || r.n.toLowerCase().includes(w))));
+    if(rud.length || /^(percussion|rudiments?|snare|drums?|timpani|marimba|xylophone|bells|vibraphone|mallets?)$/.test(rq)) return [{kind:'perc', sub: /timpani|marimba|xylophone|bells|vibraphone|mallet/.test(rq) ? 'mallets' : 'rudiments'}].concat(rud.slice(0,12).map(({r,i})=>({kind:'rud', r, i})));
+  }
   q = ' '+q.toLowerCase().replace(/[♯]/g,'#').replace(/[♭]/g,'b').replace(/\s+/g,' ')+' ';
   // instruments (longest alias wins)
   let insHits = [];
@@ -2308,6 +2344,8 @@ function renderResults(list){
   box.hidden = false;
   if(!list.length){ box.innerHTML = `<p class="empty">No matches. Try an instrument and a note, like “tenor sax F♯5”, “trill A B flute”, or a key name like “side key”.</p>`; return; }
   box.innerHTML = list.map((e,i) => {
+    if(e.kind==='perc') return `<button class="res" role="option" data-i="${i}"><span class="r-main">Percussion</span><span class="r-sub">Open ${e.sub==='mallets'?'mallets &amp; timpani':'the 40 rudiments'}</span></button>`;
+    if(e.kind==='rud') return `<button class="res" role="option" data-i="${i}"><span class="r-main">${esc(e.r.n)} <span class="r-tag">rudiment</span></span><span class="r-sub">Percussion · ${e.r.cat} · tier ${e.r.tier}</span></button>`;
     if(e.kind==='inst') return `<button class="res" role="option" data-i="${i}"><span class="r-main">${esc(e.ins.name)}</span><span class="r-sub">Open instrument · ${nm(e.ins.min)}–${nm(e.ins.max)}</span></button>`;
     if(e.kind==='trill') return `<button class="res" role="option" data-i="${i}"><span class="r-main">${nm(e.m)} ⇄ ${nm(e.hi)} <span class="r-tag tr">trill</span></span><span class="r-sub">${esc(e.ins.name)}</span></button>`;
     return `<button class="res" role="option" data-i="${i}"><span class="r-main">${nm(e.m)}${enh(e.m)?' / '+enh(e.m):''}</span><span class="r-sub">${esc(e.ins.name)} · ${e.n} fingering${e.n>1?'s':''}</span></button>`;
@@ -2317,6 +2355,8 @@ function renderResults(list){
 function goResult(e){
   markPush();
   $('#results').hidden = true;
+  if(e.kind==='perc'){ showPerc(e.sub); return; }
+  if(e.kind==='rud'){ PC.filter = 'all'; showPerc('rudiments'); const c = $('#rud-'+e.i); if(c){ c.classList.add('flash'); c.scrollIntoView({block:'center'}); setTimeout(()=>c.classList.remove('flash'), 1600); } return; }
   if(e.kind==='inst') selectInst(e.ins.id);
   else {
     if(S.ins!==e.ins) selectInst(e.ins.id, e.m); else selectNote(e.m);
@@ -2338,13 +2378,16 @@ function init(){
   let id = saved.ins, note = saved.note;
   const h = location.hash.replace('#','');
   if(h){ const [a,b,...rest] = h.split('-'); if(INSTRUMENTS.some(i=>i.id===a)){ id = a; S.view = HASHV[b] || 'note'; S.hargs = rest; note = (b && !HASHV[b]) ? parseNote(b) : null; } }
+  const percStart = /^percussion/.test(h) || (!h && id==='percussion');
+  if(id==='percussion') id = null;
   selectInst(id || 'clarinet', note);
   setView(S.view);
+  if(percStart) showPerc(h.split('-')[1]);
   document.querySelectorAll('.vt').forEach(b => b.onclick = () => { if(S.view!==b.dataset.v){ markPush(); setView(b.dataset.v); } });
   document.querySelectorAll('.acc-b').forEach(b => b.onclick = () => setAcc(b.dataset.a));
   $('#ov-grid').addEventListener('click', e => { const b = e.target.closest('.ov'); if(b){ markPush(); S.note = +b.dataset.n; setView('note'); window.scrollTo({top: $('.ihead').offsetTop - 70}); } });
 
-  $('#inst-sel').addEventListener('change', e => { markPush(); selectInst(e.target.value, S.note); });
+  $('#inst-sel').addEventListener('change', e => { markPush(); if(e.target.value==='percussion') showPerc(); else selectInst(e.target.value, S.note); });
   $('#inst-meta').addEventListener('click', e => { const b = e.target.closest('.var-b'); if(b && b.dataset.id!==S.ins.id){ markPush(); selectInst(b.dataset.id, S.note); } });
   window.addEventListener('popstate', restoreFromHash);
   $('#strip').addEventListener('click', e => { const b = e.target.closest('.nk'); if(b && !b.disabled) selectNote(+b.dataset.n); });
@@ -2729,7 +2772,7 @@ function renderTools(){
   $('#tn-a4').value = TL.a4; $('#tn-a4v').textContent = TL.a4;
   setHash(ins.id+'-tools'); store.set({ins:ins.id});
 }
-function leaveView(prev, next){ if(prev==='tools'){ tunerStop(); } if(prev==='learn' && typeof stopRhythm==='function') stopRhythm(); if(prev==='scale' && typeof paStop==='function') paStop(); }
+function leaveView(prev, next){ if(prev==='tools'){ tunerStop(); } if(prev==='learn' && typeof rhStop==='function') rhStop(); if(prev==='scale' && typeof paStop==='function') paStop(); }
 function initTools(){
   $('#tn-go').onclick = tunerToggle;
   $('#tn-a4').oninput = e => { TL.a4 = +e.target.value; $('#tn-a4v').textContent = TL.a4; if(TL.drone) droneStart(); };
@@ -2937,6 +2980,184 @@ function initQuiz(){
   });
 }
 
+const RESTG={"rw": "M370 548H297V465H84V548H12V572H370Z", "rh": "M12.0 382.0H85.0V465.0H298.0V382.0H370.0V358.0H12.0Z", "rq": "M55 208Q55 242 77.5 260.0Q100 278 130 278Q150 278 178 267L65 415Q145 487 145 544Q145 589 91 658H136L264 502Q181 404 181 356Q181 310 259 217L243 194Q203 217 176 217Q140 217 140.0 173.0Q140 129 179 84L165 62Q55 144 55 208Z", "r8": "M136 443Q152 443 175.0 466.5Q198 490 213 511H234L138 166H101L173 426Q126 402 97.0 402.0Q68 402 43.5 422.5Q19 443 19 473Q19 495 35.0 513.5Q51 532 79 532Q106 532 122.0 513.5Q138 495 138 473Q138 458 131 445Q135 443 136 443Z", "r16": "M189 443Q205 443 229.0 467.0Q253 491 265 511H287L138 -23H101L173 237Q126 213 97.0 213.0Q68 213 43.5 233.5Q19 254 19 284Q19 306 35.0 324.5Q51 343 79 343Q106 343 122.0 324.5Q138 306 138 284Q138 269 131 256Q135 254 136 254Q155 254 189 291L226 425Q181 402 149 402Q121 402 96.0 422.0Q71 442 71 472Q71 498 88.5 514.5Q106 531 130 531Q155 531 172.5 514.0Q190 497 190 472Q190 457 184 445Q188 443 189 443Z", "r32": "M240 631Q257 631 280.0 654.0Q303 677 317 699H339L138 -23H101L173 237Q126 213 97.0 213.0Q68 213 43.5 233.5Q19 254 19 284Q19 306 35.0 324.5Q51 343 79 343Q106 343 122.0 324.5Q138 306 138 284Q138 269 131 256Q135 254 136 254Q155 254 189 291L226 425Q181 402 149 402Q121 402 96.0 422.0Q71 442 71 472Q71 498 88.5 514.5Q106 531 130 531Q155 531 172.5 514.0Q190 497 190 472Q190 457 184 445Q188 443 189 443Q208 443 240 478L277 613Q229 590 202 590Q174 590 149.0 610.5Q124 631 124 661Q124 685 140.5 702.5Q157 720 183 720Q208 720 225.0 703.5Q242 687 242 661Q242 646 236 634Q239 631 240 631Z"};
+
+/* ===== Rhythm cards: every common subdivision, drawn and playable ===== */
+// tokens: 1 whole, 2 half, 4 quarter, 8 eighth, 16 sixteenth, 32 thirty-second; "." = dotted; "r" prefix = rest
+// tup: [n, inTimeOf] squeezes n notes into the time of inTimeOf; span = beats covered by one pattern repetition
+const RH_SECTIONS = [
+  {h:'Note values and beat divisions', cards:[
+    {t:'Whole note', ts:[4,4], pat:['1'], span:4, c:['1 (2 3 4)']},
+    {t:'Half notes', ts:[4,4], pat:['2','2'], span:4, c:['1 (2)','3 (4)']},
+    {t:'Dotted half + quarter', ts:[4,4], pat:['2.','4'], span:4, c:['1 (2 3)','4']},
+    {t:'Quarter notes', ts:[4,4], pat:['4'], c:['#']},
+    {t:'Eighth notes', ts:[4,4], pat:['8','8'], c:['#','&']},
+    {t:'Eighth-note triplets', ts:[4,4], pat:['8','8','8'], tup:[3,2], c:['#','trip','let']},
+    {t:'Sixteenth notes', ts:[4,4], pat:['16','16','16','16'], c:['#','e','&','a']},
+    {t:'Quintuplets (five per beat)', ts:[2,4], pat:['16','16','16','16','16'], tup:[5,4], c:['#','·','·','·','·']},
+    {t:'Sextuplets (sixteenth-note triplets)', ts:[2,4], pat:['16','16','16','16','16','16'], tup:[6,4], c:['#','la','li','&','la','li']},
+    {t:'Thirty-second notes', ts:[2,4], pat:['32','32','32','32','32','32','32','32'], c:['#','','e','','&','','a','']},
+    {t:'Quarter-note triplets', ts:[4,4], pat:['4','4','4'], tup:[3,2], span:2, c:['#','trip','let']},
+    {t:'Half-note triplets', ts:[4,4], pat:['2','2','2'], tup:[3,2], span:4, c:['1','trip','let']},
+  ]},
+  {h:'Sixteenth-note combinations (one beat)', cards:[
+    {t:'Eighth + two sixteenths', ts:[4,4], pat:['8','16','16'], c:['#','&','a']},
+    {t:'Two sixteenths + eighth', ts:[4,4], pat:['16','16','8'], c:['#','e','&']},
+    {t:'Sixteenth-eighth-sixteenth', ts:[4,4], pat:['16','8','16'], c:['#','e','a']},
+    {t:'Dotted eighth + sixteenth', ts:[4,4], pat:['8.','16'], c:['#','a']},
+    {t:'Sixteenth + dotted eighth', ts:[4,4], pat:['16','8.'], c:['#','e']},
+    {t:'Eighth rest + eighth', ts:[4,4], pat:['r8','8'], c:['(#)','&']},
+    {t:'Eighth rest + two sixteenths', ts:[4,4], pat:['r8','16','16'], c:['(#)','&','a']},
+    {t:'Sixteenth rest + three sixteenths', ts:[4,4], pat:['r16','16','16','16'], c:['(#)','e','&','a']},
+    {t:'Sixteenth rest, sixteenth, eighth', ts:[4,4], pat:['r16','16','8'], c:['(#)','e','&']},
+    {t:'Sixteenth rest, eighth, sixteenth', ts:[4,4], pat:['r16','8','16'], c:['(#)','e','a']},
+    {t:'Sixteenth rest + dotted eighth', ts:[4,4], pat:['r16','8.'], c:['(#)','e']},
+    {t:'Dotted eighth rest + sixteenth', ts:[4,4], pat:['r8.','16'], c:['(#)','a']},
+    {t:'Two sixteenths + eighth rest', ts:[4,4], pat:['16','16','r8'], c:['#','e','(&)']},
+  ]},
+  {h:'Triplet combinations (one beat)', cards:[
+    {t:'Quarter + eighth (triplet)', ts:[4,4], pat:['4','8'], tup:[3,2], c:['#','let']},
+    {t:'Eighth + quarter (triplet)', ts:[4,4], pat:['8','4'], tup:[3,2], c:['#','trip']},
+    {t:'Rest + two triplet eighths', ts:[4,4], pat:['r8','8','8'], tup:[3,2], c:['(#)','trip','let']},
+    {t:'Triplet with middle rest', ts:[4,4], pat:['8','r8','8'], tup:[3,2], c:['#','(trip)','let']},
+    {t:'Two triplet eighths + rest', ts:[4,4], pat:['8','8','r8'], tup:[3,2], c:['#','trip','(let)']},
+  ]},
+  {h:'Across the beat', cards:[
+    {t:'Dotted quarter + eighth', ts:[4,4], pat:['4.','8'], span:2, c:['# (#2)','&']},
+    {t:'Syncopation: eighth-quarter-eighth', ts:[4,4], pat:['8','4','8'], span:2, c:['#','& (#2)','&']},
+    {t:'Quarter rest + quarter', ts:[4,4], pat:['r4','4'], span:2, c:['(#)','#2']},
+  ]},
+  {h:'Compound meter (6/8)', cards:[
+    {t:'Dotted quarters', ts:[6,8], pat:['4.'], c:['#']},
+    {t:'Three eighths', ts:[6,8], pat:['8','8','8'], c:['#','la','li']},
+    {t:'Quarter + eighth', ts:[6,8], pat:['4','8'], c:['#','li']},
+    {t:'Eighth + quarter', ts:[6,8], pat:['8','4'], c:['#','la']},
+    {t:'Six sixteenths', ts:[6,8], pat:['16','16','16','16','16','16'], c:['#','ta','la','ta','li','ta']},
+    {t:'Dotted eighth, sixteenth, eighth', ts:[6,8], pat:['8.','16','8'], c:['#','ta','li']},
+    {t:'Dotted half', ts:[6,8], pat:['2.'], span:2, c:['1 (2)']},
+  ]},
+];
+const RH_ALL = RH_SECTIONS.flatMap(s => s.cards);
+function rhTok(tok){
+  const rest = tok[0]==='r', s = rest ? tok.slice(1) : tok, dot = s.endsWith('.'), v = +s.replace('.','');
+  return {rest, v, dot, q:(4/v)*(dot?1.5:1)};   // q = length in quarter notes
+}
+// expand a card into one full bar of events
+function rhBar(card){
+  const [num, den] = card.ts, beatQ = den===8 ? 1.5 : 4/den, beats = den===8 ? num/3 : num;
+  const span = card.span || 1, reps = Math.round(beats/span), f = card.tup ? card.tup[1]/card.tup[0] : 1;
+  const ev = []; let t = 0;
+  for(let r=0;r<reps;r++) card.pat.forEach((tok,i) => {
+    const k = rhTok(tok), d = k.q*f;
+    const c = (card.c[i]||'').replace('#2', String(r*span+2)).replace('#', String(r*span+1));
+    ev.push({...k, d, t, c, rep:r, beat:Math.floor(t/beatQ + 1e-6)}); t += d;
+  });
+  return {ev, beatQ, total:t, beats};
+}
+const restSvg = (k, x, ly) => {
+  const key = k.v===1?'rw':k.v===2?'rh':k.v===4?'rq':k.v===8?'r8':k.v===16?'r16':'r32', sc = 9.5/250;
+  const yb = {rw:572, rh:358, rq:360, r8:350, r16:250, r32:340}[key], dx = {rw:-6, rh:-6, rq:-4, r8:-4, r16:-5, r32:-6}[key];
+  return `<path class="rh-rest" d="${RESTG[key]}" transform="translate(${x+dx} ${ly + yb*sc}) scale(${sc} ${-sc})"/>`;
+};
+function svgRhythm(card, ri){
+  const {ev, total} = rhBar(card), W = 380, x0 = 40, usable = W - x0 - 16, ly = 50, stemH = 30;
+  const xs = ev.map(e => x0 + (e.t/total)*usable + 6);
+  let s = `<svg class="rh" viewBox="0 0 ${W} 96" role="img" aria-label="${esc(card.t)}"><line class="rh-l" x1="6" x2="${W-6}" y1="${ly}" y2="${ly}"/><line class="rh-bar" x1="${W-6}" x2="${W-6}" y1="${ly-12}" y2="${ly+12}"/>`;
+  s += `<text class="rh-ts" x="16" y="${ly-2}" text-anchor="middle">${card.ts[0]}</text><text class="rh-ts" x="16" y="${ly+14}" text-anchor="middle">${card.ts[1]}</text>`;
+  const lvl = k => k.v===8 ? 1 : k.v===16 ? 2 : k.v===32 ? 3 : 0;
+  // beam groups: consecutive beamable notes in the same beat (rests break beams)
+  const groups = []; let cur = null;
+  ev.forEach((e,i) => { if(!e.rest && lvl(e)>0){ if(cur && cur.beat===e.beat && cur.last===i-1){ cur.idx.push(i); cur.last = i; } else { cur = {beat:e.beat, idx:[i], last:i}; groups.push(cur); } } else cur = null; });
+  const beamed = new Set(groups.filter(g=>g.idx.length>1).flatMap(g=>g.idx));
+  ev.forEach((e,i) => {
+    const x = xs[i];
+    s += `<g class="rh-n" data-r="${ri}" data-i="${i}">`;
+    if(e.rest) s += restSvg(e, x, ly);
+    else {
+      const sx = x+5.2, top = ly-stemH;
+      s += `<ellipse class="${e.v<=2?'rh-ho':'rh-h'}" cx="${x}" cy="${ly}" rx="6" ry="4.3" transform="rotate(-20 ${x} ${ly})"/>`;
+      if(e.v>1) s += `<line class="rh-s" x1="${sx}" x2="${sx}" y1="${ly-1}" y2="${top}"/>`;
+      if(!beamed.has(i)) for(let k=0;k<lvl(e);k++) s += `<path class="rh-f" d="M${sx} ${top+k*7} C ${sx+1} ${top+k*7+6} ${sx+10} ${top+k*7+9} ${sx+8} ${top+k*7+19} C ${sx+7} ${top+k*7+13} ${sx+3} ${top+k*7+10} ${sx} ${top+k*7+8} Z"/>`;
+    }
+    if(e.dot) s += `<circle class="rh-dot" cx="${x+11}" cy="${ly-2}" r="1.8"/>`;
+    s += `</g><text class="rh-c" x="${x}" y="${ly+30}" text-anchor="middle">${esc(e.c)}</text>`;
+  });
+  for(const g of groups.filter(g=>g.idx.length>1)){
+    const a = g.idx[0], z = g.idx[g.idx.length-1], y = ly-stemH;
+    s += `<rect class="rh-b" x="${xs[a]+4.4}" y="${y-1}" width="${xs[z]-xs[a]+1.6}" height="4"/>`;
+    for(const L of [2,3]) for(let k=0;k<g.idx.length;k++){
+      const i = g.idx[k]; if(lvl(ev[i]) < L) continue;
+      const nx = g.idx[k+1], pv = g.idx[k-1], yy = y - 1 + (L-1)*6;
+      if(nx!=null && lvl(ev[nx])>=L) s += `<rect class="rh-b" x="${xs[i]+4.4}" y="${yy}" width="${xs[nx]-xs[i]+1.6}" height="4"/>`;
+      else if(!(pv!=null && lvl(ev[pv])>=L)){ const back = nx==null || (pv!=null && ev[pv].dot); s += `<rect class="rh-b" x="${back?xs[i]-3.8:xs[i]+4.4}" y="${yy}" width="9" height="4"/>`; }
+    }
+  }
+  // tuplet numbers / brackets
+  if(card.tup){
+    const n = card.tup[0], per = card.pat.length;
+    for(let r=0; r*per < ev.length; r++){
+      const a = r*per, z = a+per-1, mid = (xs[a]+xs[z])/2 + 5, y = ly-stemH-8;
+      const allBeamed = card.pat.every((tk,j)=>beamed.has(a+j));
+      if(!allBeamed) s += `<path class="rh-br" d="M${xs[a]} ${y+4} V${y} H${mid-7} M${mid+7} ${y} H${xs[z]+6} V${y+4}"/>`;
+      s += `<text class="rh-3" x="${mid}" y="${y+3}" text-anchor="middle">${n}</text>`;
+    }
+  }
+  return s + `</svg>`;
+}
+/* --- playback --- */
+let RHP = null;
+function snareHit(t, vel){
+  const ac = AC, n = ac.createBufferSource(), hp = ac.createBiquadFilter(), g = ac.createGain();
+  n.buffer = noiseBuf(); hp.type = 'highpass'; hp.frequency.value = 1500;
+  g.gain.setValueAtTime(.55*vel, t); g.gain.exponentialRampToValueAtTime(.001, t + .14);
+  n.connect(hp); hp.connect(g); g.connect(RHP ? RHP.bus : ac.destination); n.start(t, Math.random()*.5); n.stop(t+.16);
+  const o = ac.createOscillator(), og = ac.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(220, t); o.frequency.exponentialRampToValueAtTime(140, t+.06);
+  og.gain.setValueAtTime(.35*vel, t); og.gain.exponentialRampToValueAtTime(.001, t+.09);
+  o.connect(og); og.connect(RHP ? RHP.bus : ac.destination); o.start(t); o.stop(t+.1);
+}
+function rhStop(){
+  if(!RHP) return;
+  RHP.timers.forEach(clearTimeout);
+  const bus = RHP.bus; try{ bus.gain.setValueAtTime(0, AC.currentTime); }catch(e){} setTimeout(()=>{ try{ bus.disconnect(); }catch(e){} }, 60);
+  document.querySelectorAll('.rh-n.on').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.rh-play.is-on').forEach(e=>{ e.classList.remove('is-on'); e.textContent = '▶ Play'; });
+  RHP = null;
+}
+function rhPlay(ri, opts){
+  rhStop();
+  const card = RH_ALL[ri], {ev, beatQ, beats, total} = rhBar(card);
+  const bpm = opts.bpm || 80, beatS = 60/bpm, qs = beatS/beatQ;   // tempo is beats per minute (dotted quarter in 6/8)
+  const ac = ctx(), bus = ac.createGain(); bus.connect(ac.destination);
+  RHP = {bus, timers:[], ri};
+  const t0 = ac.currentTime + .1, lead = beats*beatS;
+  for(let b=0;b<beats*2;b++) click(t0 + b*beatS, b%beats===0, false);   // a count-in bar, then clicks under the rhythm
+  ev.forEach((e,i) => {
+    const at = lead + e.t*qs;
+    if(!e.rest){
+      if(opts.drum) snareHit(t0 + at, i===0 ? 1 : .8);
+      else tone(opts.pitch, .1 + at, Math.max(.07, e.d*qs*.85), opts.voice, bus);
+    }
+    RHP.timers.push(setTimeout(()=>{ document.querySelectorAll('.rh-n.on').forEach(x=>x.classList.remove('on')); document.querySelector(`.rh-n[data-r="${ri}"][data-i="${i}"]`)?.classList.add('on'); }, (.1+at)*1000));
+  });
+  RHP.timers.push(setTimeout(rhStop, (.1 + lead + total*qs + .4)*1000));
+  const b = document.querySelector(`.rh-play[data-r="${ri}"]`); if(b){ b.classList.add('is-on'); b.textContent = '■ Stop'; }
+}
+function rhythmsHtml(drum){
+  return `<p class="ln-p">Count out loud, tap your foot on the beat, then play. Each card plays a one-bar count-in, then the rhythm ${drum?'on snare':'in your instrument\'s sound'} with clicks on the beat. Counts in parentheses are held or rested.</p>
+  <div class="row rh-opts"><label class="fld inl"><span>Tempo <b id="rh-bpmv">${RH_BPM}</b></span><input id="rh-bpm" type="range" min="40" max="160" value="${RH_BPM}"></label></div>
+  ${RH_SECTIONS.map(sec => `<div class="sec-h rh-sec"><h3>${esc(sec.h)}</h3></div><div class="rh-grid">${sec.cards.map(card => { const i = RH_ALL.indexOf(card); return `<div class="rh-card"><div class="rh-top"><b>${esc(card.t)}</b><button class="mini rh-play" data-r="${i}">▶ Play</button></div>${svgRhythm(card,i)}</div>`; }).join('')}</div>`).join('')}`;
+}
+let RH_BPM = 80;
+function rhBind(box, drum){
+  box.addEventListener('click', e => {
+    const rp = e.target.closest('.rh-play'); if(!rp) return;
+    const ri = +rp.dataset.r;
+    if(RHP && RHP.ri===ri){ rhStop(); return; }
+    rhPlay(ri, drum() ? {drum:true, bpm:RH_BPM} : {pitch:learnPitch(), voice:voice(), bpm:RH_BPM});
+  });
+  box.addEventListener('input', e => { if(e.target.id==='rh-bpm'){ RH_BPM = +e.target.value; const v = box.querySelector('#rh-bpmv'); if(v) v.textContent = RH_BPM; } });
+}
+
 /* ===== Learn: how it works, trouble notes, rhythms, articulations, percussion ===== */
 const LN = { sub:'inst', rplay:null, timp:null };
 const GROUP_OF = {clarinet:'clar', ebclarinet:'clar', altoclarinet:'clar', bassclarinet:'clar', contraalto:'clar', contrabass:'clar',
@@ -3051,121 +3272,92 @@ function renderLearnInst(){
   return h;
 }
 
-/* --- rhythm cards: a tiny notation renderer --- */
-const RHYTHMS = [
-  {t:'Whole note', d:[4], c:['1 2 3 4']},
-  {t:'Half notes', d:[2,2], c:['1 (2)','3 (4)']},
-  {t:'Quarter notes', d:[1,1,1,1], c:['1','2','3','4']},
-  {t:'Eighth notes', d:Array(8).fill(.5), c:['1','&','2','&','3','&','4','&']},
-  {t:'Dotted quarter + eighth', d:[1.5,.5,1.5,.5], c:['1 (2)','&','3 (4)','&']},
-  {t:'Syncopation', d:[.5,1,.5,1,1], c:['1','& (2)','&','3','4']},
-  {t:'Eighth-note triplets', d:Array(12).fill(1/3), c:['1','trip','let','2','trip','let','3','trip','let','4','trip','let']},
-  {t:'Sixteenth notes', d:Array(16).fill(.25), c:['1','e','&','a','2','e','&','a','3','e','&','a','4','e','&','a']},
-  {t:'Eighth + two sixteenths', d:[.5,.25,.25,.5,.25,.25,.5,.25,.25,.5,.25,.25], c:['1','&','a','2','&','a','3','&','a','4','&','a']},
-  {t:'Two sixteenths + eighth', d:[.25,.25,.5,.25,.25,.5,.25,.25,.5,.25,.25,.5], c:['1','e','&','2','e','&','3','e','&','4','e','&']},
-  {t:'Dotted eighth + sixteenth', d:[.75,.25,.75,.25,.75,.25,.75,.25], c:['1','a','2','a','3','a','4','a']},
-];
-function svgRhythm(r, ri){
-  const W = 360, x0 = 30, bw = (W-x0-14)/4, ly = 46, stemH = 30;
-  const xs = [], starts = []; let t = 0;
-  r.d.forEach(d => { starts.push(t); xs.push(x0 + t*bw + 8); t += d; });
-  let s = `<svg class="rh" viewBox="0 0 ${W} 92" role="img" aria-label="${esc(r.t)}"><line class="rh-l" x1="6" x2="${W-6}" y1="${ly}" y2="${ly}"/><line class="rh-bar" x1="${W-6}" x2="${W-6}" y1="${ly-12}" y2="${ly+12}"/>`;
-  s += `<text class="rh-ts" x="12" y="${ly-2}" text-anchor="middle">4</text><text class="rh-ts" x="12" y="${ly+14}" text-anchor="middle">4</text>`;
-  const base = d => Math.abs(d-1/3)<1e-6 ? .5 : d===1.5 ? 1 : d===.75 ? .5 : d===3 ? 2 : d;
-  const dotted = d => d===1.5 || d===.75 || d===3;
-  const groups = []; let cur = null;
-  r.d.forEach((d,i) => { const b = base(d), beat = Math.floor(starts[i]+1e-6);
-    if(b < 1){ if(cur && cur.beat===beat) cur.idx.push(i); else { cur = {beat, idx:[i]}; groups.push(cur); } } else cur = null; });
-  const inGroup = new Set(groups.filter(g=>g.idx.length>1).flatMap(g=>g.idx));
-  r.d.forEach((d,i) => {
-    const x = xs[i], b = base(d), hollow = b>=2, sx = x+5.2;
-    s += `<g class="rh-n" data-r="${ri}" data-i="${i}"><ellipse class="${hollow?'rh-ho':'rh-h'}" cx="${x}" cy="${ly}" rx="6" ry="4.3" transform="rotate(-20 ${x} ${ly})"/>`;
-    if(b < 4) s += `<line class="rh-s" x1="${sx}" x2="${sx}" y1="${ly-1}" y2="${ly-stemH}"/>`;
-    if(dotted(d)) s += `<circle class="rh-dot" cx="${x+11}" cy="${ly-2}" r="1.8"/>`;
-    const flag = top => `<path class="rh-f" d="M${sx} ${top} C ${sx+1} ${top+6} ${sx+10} ${top+9} ${sx+8} ${top+19} C ${sx+7} ${top+13} ${sx+3} ${top+10} ${sx} ${top+8} Z"/>`;
-    if(b < 1 && !inGroup.has(i)){ s += flag(ly-stemH); if(b<=.25) s += flag(ly-stemH+7); }
-    s += `</g><text class="rh-c" x="${x}" y="${ly+28}" text-anchor="middle">${esc(r.c[i]||'')}</text>`;
-  });
-  for(const g of groups.filter(g=>g.idx.length>1)){
-    const a = g.idx[0], z = g.idx[g.idx.length-1], y = ly-stemH;
-    s += `<rect class="rh-b" x="${xs[a]+4.4}" y="${y-1}" width="${xs[z]-xs[a]+1.6}" height="4"/>`;
-    for(let k=0;k<g.idx.length;k++){
-      const i = g.idx[k]; if(base(r.d[i]) > .25) continue;
-      const nx = g.idx[k+1], pv = g.idx[k-1];
-      if(nx!=null && base(r.d[nx])<=.25) s += `<rect class="rh-b" x="${xs[i]+4.4}" y="${y+6}" width="${xs[nx]-xs[i]+1.6}" height="4"/>`;
-      else if(!(pv!=null && base(r.d[pv])<=.25)){ const fwd = nx!=null; s += `<rect class="rh-b" x="${fwd?xs[i]+4.4:xs[i]-3.8}" y="${y+6}" width="9" height="4"/>`; }
-    }
-    if(Math.abs(r.d[a]-1/3)<1e-6) s += `<text class="rh-3" x="${(xs[a]+xs[z])/2+5}" y="${y-6}" text-anchor="middle">3</text>`;
-  }
-  return s + `</svg>`;
-}
 const learnPitch = () => { const ins = S.ins, R = VA[ins.id]; let m = (R ? R.chrom[0] : ins.min) + 7; while(m < ins.max && !fingerings(ins,m).length) m++; return m + ins.tr; };
-function playRhythm(ri){
-  stopRhythm();
-  const r = RHYTHMS[ri], beat = 60/80, ac = ctx(), bus = ac.createGain(); bus.connect(ac.destination);
-  const pitch = learnPitch(), lead = .1, t0 = ac.currentTime + lead, timers = [];
-  for(let b=0;b<8;b++) click(t0 + b*beat, b%4===0, false);
-  let t = 4*beat;
-  r.d.forEach((d,i) => {
-    tone(pitch, lead + t, Math.max(.08, d*beat*.85), voice(), bus);
-    timers.push(setTimeout(()=>{ document.querySelectorAll('.rh-n.on').forEach(e=>e.classList.remove('on')); document.querySelector(`.rh-n[data-r="${ri}"][data-i="${i}"]`)?.classList.add('on'); }, (lead+t)*1000));
-    t += d*beat;
-  });
-  timers.push(setTimeout(stopRhythm, (lead+t+.4)*1000));
-  LN.rplay = {bus, timers, ri};
-  document.querySelector(`.rh-play[data-r="${ri}"]`)?.classList.add('is-on');
+function renderLearn(){
+  const ins = S.ins, box = $('#learn');
+  if(!['inst','rhythm'].includes(LN.sub)) LN.sub = 'inst';
+  let h = `<div class="seg sc-subtabs" role="group" aria-label="Learn topics"><button class="ln-sub" data-s="inst">${esc(shortName(ins))}</button><button class="ln-sub" data-s="rhythm">Rhythms</button></div>`;
+  h += LN.sub==='inst' ? `<div class="ln-stack">${renderLearnInst()}</div>` : rhythmsHtml(false);
+  box.innerHTML = h;
+  document.querySelectorAll('.ln-sub').forEach(b=>{ const on = b.dataset.s===LN.sub; b.classList.toggle('is-on',on); b.setAttribute('aria-pressed',on); });
+  setHash(ins.id+'-learn'); store.set({ins:ins.id});
 }
-function stopRhythm(){
-  if(!LN.rplay) return;
-  LN.rplay.timers.forEach(clearTimeout);
-  try{ LN.rplay.bus.gain.setValueAtTime(0, AC.currentTime); }catch(e){}
-  const bus = LN.rplay.bus; setTimeout(()=>{ try{ bus.disconnect(); }catch(e){} }, 50);
-  document.querySelectorAll('.rh-n.on').forEach(e=>e.classList.remove('on'));
-  document.querySelectorAll('.rh-play.is-on').forEach(e=>e.classList.remove('is-on'));
-  LN.rplay = null;
+function initLearn(){
+  const box = $('#learn');
+  rhBind(box, () => false);
+  box.addEventListener('click', e => {
+    const t = e.target;
+    const sb = t.closest('.ln-sub'); if(sb){ rhStop(); LN.sub = sb.dataset.s; renderLearn(); return; }
+    const ch = t.closest('.ln-chip, .ln-hear'); if(ch){ playNote(+ch.dataset.n); return; }
+    if(t.closest('#ln-series-play')){ seriesList(S.ins).forEach((o,i)=>{ try{ tone(o.m + S.ins.tr, i*.45, .42, voice()); }catch(e){} }); return; }
+    const go = t.closest('.ln-go'); if(go){ markPush(); S.note = +go.dataset.n; setView('note'); window.scrollTo({top: $('.ihead').offsetTop - 70}); return; }
+  });
 }
 
-/* --- articulations --- */
-const ARTS = [
-  {id:'none', t:'Plain', sym:'', d:'Tongue each note with full length and a normal start.'},
-  {id:'stacc', t:'Staccato', sym:'dot', d:'A dot over or under the note: play it short and separated, about half its written length. Lighter, not louder.'},
-  {id:'ten', t:'Tenuto', sym:'line', d:'A short line: hold the note for its full value with a gentle "dah" tongue. Notes connect but are still tongued.'},
-  {id:'acc', t:'Accent', sym:'acc', d:'A sideways wedge (>): start the note with more weight and energy, then back off.'},
-  {id:'marc', t:'Marcato', sym:'marc', d:'An upright wedge (^): strongly accented and slightly separated, heavier than a regular accent.'},
-  {id:'slur', t:'Slur', sym:'slur', d:'A curved line over different pitches: tongue only the first note and keep the air going while you change notes.'},
-  {id:'ferm', t:'Fermata', sym:'ferm', d:'A "bird\'s eye": hold the note longer than written, as long as the conductor decides.'},
+/* ===== Percussion: rudiments (Dr. John Wooton's four-tier order, Vic Firth), rhythms, mallets & timpani ===== */
+const VF = 'https://ae.vicfirth.com/education/';
+// sticking tokens: lowercase prefix = grace notes (l = flam, ll = drag), RR/LL in one token = diddle in one slot,
+// ">" accent, "z" buzz, ":n" = slots held (default 1). g = slots per beat.
+const RUDS = [
+  {n:'Single Stroke Roll', cat:'Roll', tier:1, g:4, s:'R L R L R L R L', u:'40-essential-rudiments/essential-rudiments-single-stroke-roll-2/'},
+  {n:'Multiple Bounce Roll', cat:'Roll', tier:1, g:4, s:'Rz Lz Rz Lz Rz Lz Rz Lz', u:'40-essential-rudiments/40-essential-rudiments-multiple-bounce-roll/'},
+  {n:'Double Stroke Open Roll', cat:'Roll', tier:1, g:4, s:'R R L L R R L L', u:'40-essential-rudiments-double-stroke-open-roll/'},
+  {n:'Single Paradiddle', cat:'Diddle', tier:1, g:4, s:'R> L R R L> R L L', u:'40-essential-rudiments-single-paradiddle/'},
+  {n:'Flam', cat:'Flam', tier:1, g:4, s:'lR:2 rL:2 lR:2 rL:2', u:'40-essential-rudiments-flam/'},
+  {n:'Drag', cat:'Drag', tier:1, g:4, s:'llR:2 rrL:2 llR:2 rrL:2', u:'40-essential-rudiments-drag/'},
+  {n:'Single Stroke Four', cat:'Roll', tier:2, g:6, s:'R L R L>:3 L R L R>:3', u:'40-essential-rudiments/essential-snare-drum-rudiments-02-single-stroke-4/'},
+  {n:'Single Stroke Seven', cat:'Roll', tier:2, g:6, s:'R L R L R L R>:6 L R L R L R L>:6', u:'40-essential-rudiments/40-essential-rudiments-single-stroke-7/'},
+  {n:'Double Paradiddle', cat:'Diddle', tier:2, g:6, s:'R> L R L R R L> R L R L L', u:'40-essential-rudiments-double-paradiddle/'},
+  {n:'Triple Paradiddle', cat:'Diddle', tier:2, g:4, s:'R> L R L R L R R L> R L R L R L L', u:'40-essential-rudiments-triple-paradiddle/'},
+  {n:'Paradiddle-Diddle', cat:'Diddle', tier:2, g:6, s:'R> L R R L L R> L R R L L', u:'40-essential-rudiments-paradiddle-diddle/'},
+  {n:'Five Stroke Roll', cat:'Roll', tier:2, g:8, s:'R R L L R>:4 L L R R L>:4', u:'40-essential-rudiments-five-stroke-roll/'},
+  {n:'Nine Stroke Roll', cat:'Roll', tier:2, g:8, s:'R R L L R R L L R>:8 L L R R L L R R L>:8', u:'40-essential-rudiments-nine-stroke-roll/'},
+  {n:'Seven Stroke Roll', cat:'Roll', tier:2, g:8, s:'L L R R L L R>:2 R R L L R R L>:2', u:'40-essential-rudiments-seven-stroke-roll/'},
+  {n:'Flam Tap', cat:'Flam', tier:2, g:4, s:'lR R rL L lR R rL L', u:'40-essential-rudiments-flam-tap/'},
+  {n:'Flam Accent', cat:'Flam', tier:2, g:3, s:'lR> L R rL> R L', u:'40-essential-rudiments-flam-accent/'},
+  {n:'Lesson 25', cat:'Drag', tier:2, g:4, s:'llR L R>:2 rrL R L>:2', u:'40-essential-rudiments-lesson-25/'},
+  {n:'Single Drag Tap', cat:'Drag', tier:2, g:4, s:'llR:2 L>:2 rrL:2 R>:2', u:'40-essential-rudiments-single-drag-tap/'},
+  {n:'Thirteen Stroke Roll', cat:'Roll', tier:3, g:8, s:'R R L L R R L L R R L L R>:4 L L R R L L R R L L R R L>:4', u:'40-essential-rudiments-thirteen-stroke-roll/'},
+  {n:'Fifteen Stroke Roll', cat:'Roll', tier:3, g:8, s:'R R L L R R L L R R L L R R L>:2 L L R R L L R R L L R R L L R>:2', u:'40-essential-rudiments-fifteen-stroke-roll/'},
+  {n:'Seventeen Stroke Roll', cat:'Roll', tier:3, g:8, s:'R R L L R R L L R R L L R R L L R>:8', u:'40-essential-rudiments-seventeen-stroke-roll/'},
+  {n:'Six Stroke Roll', cat:'Roll', tier:3, g:8, s:'R>:2 L L R R L>:2 R>:2 L L R R L>:2', u:'40-essential-rudiments-six-stroke-roll/'},
+  {n:'Ten Stroke Roll', cat:'Roll', tier:3, g:8, s:'R R L L R R L L R>:4 L>:4 L L R R L L R R L>:4 R>:4', u:'40-essential-rudiments-ten-stroke-roll/'},
+  {n:'Eleven Stroke Roll', cat:'Roll', tier:3, g:8, s:'R R L L R R L L R R L>:6 L L R R L L R R L L R>:6', u:'40-essential-rudiments-eleven-stroke-roll/'},
+  {n:'Single Dragadiddle', cat:'Drag', tier:3, g:4, s:'llR> L R R rrL> R L L', u:'40-essential-rudiments-single-dragadiddle/'},
+  {n:'Drag Paradiddle #1', cat:'Drag', tier:3, g:4, s:'R>:2 llR L R R L>:2 rrL R L L', u:'40-essential-rudiments-drag-paradiddle1/'},
+  {n:'Drag Paradiddle #2', cat:'Drag', tier:3, g:4, s:'R>:2 llR>:2 llR L R R L>:2 rrL>:2 rrL R L L', u:'40-essential-rudiments-drag-paradiddle2/'},
+  {n:'Single Flammed Mill', cat:'Flam', tier:3, g:4, s:'lR> R L R rL> L R L', u:'40-essential-rudiments-flammed-mill/'},
+  {n:'Swiss Army Triplet', cat:'Flam', tier:3, g:3, s:'lR R L lR R L', u:'40-essential-rudiments-swiss-army-triplet/'},
+  {n:'Flamacue', cat:'Flam', tier:3, g:4, s:'lR L> R L lR:4 rL R> L R rL:4', u:'40-essential-rudiments-flamacue/'},
+  {n:'Triple Stroke Roll', cat:'Roll', tier:4, g:6, s:'R R R L L L R R R L L L', u:'40-essential-rudiments-triple-stroke-roll/'},
+  {n:'Flam Paradiddle', cat:'Flam', tier:4, g:4, s:'lR> L R R rL> R L L', u:'40-essential-rudiments-flam-paradiddle/'},
+  {n:'Pataflafla', cat:'Flam', tier:4, g:4, s:'lR L R rL lR L R rL', u:'40-essential-rudiments-patafla-fla/'},
+  {n:'Double Drag Tap', cat:'Drag', tier:4, g:4, s:'llR llR L>:2 rrL rrL R>:2', u:'40-essential-rudiments-double-drag/'},
+  {n:'Flam Paradiddle-Diddle', cat:'Flam', tier:4, g:6, s:'lR L R R L L rL R L L R R', u:'40-essential-rudiments-flam-paradiddle-diddle/'},
+  {n:'Single Ratamacue', cat:'Drag', tier:4, g:6, s:'llR L R L>:3 rrL R L R>:3', u:'40-essential-rudiments-single-ratamacue/'},
+  {n:'Double Ratamacue', cat:'Drag', tier:4, g:6, s:'llR:3 llR L R L>:3 rrL:3 rrL R L R>:3', u:'40-essential-rudiments-double-ratamacue/'},
+  {n:'Triple Ratamacue', cat:'Drag', tier:4, g:6, s:'llR:3 llR:3 llR L R L>:3 rrL:3 rrL:3 rrL R L R>:3', u:'40-essential-rudiments-triple-ratamacue/'},
+  {n:'Inverted Flam Tap', cat:'Flam', tier:4, g:4, s:'lR L rL R lR L rL R', u:'40-essential-rudiments-inverted-flam-tap/'},
+  {n:'Flam Drag', cat:'Flam', tier:4, g:3, s:'lR> LL R rL> RR L', u:'40-essential-rudiments-flam-drag/'},
 ];
-function svgArt(a){
-  const W = 150, ly = 50; let s = `<svg class="rh art" viewBox="0 0 ${W} 80" aria-hidden="true"><line class="rh-l" x1="6" x2="${W-6}" y1="${ly}" y2="${ly}"/>`;
-  const xs = a.sym==='slur' ? [40, 75, 110] : [75];
-  xs.forEach((x,i) => { const y = a.sym==='slur' ? ly - i*5 : ly; s += `<ellipse class="rh-h" cx="${x}" cy="${y}" rx="6" ry="4.3" transform="rotate(-20 ${x} ${y})"/><line class="rh-s" x1="${x+5.2}" x2="${x+5.2}" y1="${y-1}" y2="${y-28}"/>`; });
-  const x = 75, top = ly - 38;
-  if(a.sym==='dot') s += `<circle class="rh-dot" cx="${x}" cy="${ly+12}" r="2.4"/>`;
-  if(a.sym==='line') s += `<rect class="rh-b" x="${x-7}" y="${ly+11}" width="14" height="2.4"/>`;
-  if(a.sym==='acc') s += `<path class="rh-art" d="M${x-8} ${ly+9} L${x+8} ${ly+13} L${x-8} ${ly+17}"/>`;
-  if(a.sym==='marc') s += `<path class="rh-art" d="M${x-6} ${top+4} L${x} ${top-6} L${x+6} ${top+4}"/>`;
-  if(a.sym==='slur') s += `<path class="rh-art" d="M38 ${ly+10} Q75 ${ly+26} 112 ${ly+2}"/>`;
-  if(a.sym==='ferm') s += `<path class="rh-art" d="M${x-11} ${top+2} A11 10 0 0 1 ${x+11} ${top+2}"/><circle class="rh-dot" cx="${x}" cy="${top-1}" r="2"/>`;
-  return s + `</svg>`;
+const GRID_NAME = {3:'eighth-note triplets', 4:'sixteenth notes', 6:'sixteenth-note triplets', 8:'thirty-second notes'};
+function rudParse(r){
+  if(r.ev) return r.ev;
+  let t = 0; const ev = [];
+  for(const tok of r.s.split(' ')){
+    const m = /^([lr]*)([RL]{1,2})(>?)(z?)(?::(\d+))?$/.exec(tok); if(!m) continue;
+    const len = m[5] ? +m[5] : 1;
+    ev.push({t, len, grace:m[1].toUpperCase(), hand:m[2], acc:!!m[3], buzz:!!m[4]}); t += len;
+  }
+  r.total = t; return r.ev = ev;
 }
-function playArt(id){
-  const ac = ctx(), beat = 60/96, base = learnPitch(), v = voice();
-  const seq = id==='slur' ? [0,2,4,5] : [0,0,0,0];
-  seq.forEach((st,i) => {
-    const t = .05 + i*beat, m = base + st;
-    let dur = beat*.88, gain = 1;
-    if(id==='stacc') dur = beat*.38;
-    if(id==='ten') dur = beat*.97;
-    if(id==='acc') gain = 1.9;
-    if(id==='marc'){ gain = 2.2; dur = beat*.6; }
-    if(id==='slur') dur = beat*1.04;
-    if(id==='ferm' && i===3) dur = beat*3.2;
-    const g = ac.createGain(); g.connect(ac.destination);
-    if(gain!==1){ g.gain.setValueAtTime(gain, ac.currentTime+t); g.gain.linearRampToValueAtTime(1, ac.currentTime+t+.18); }
-    tone(m, t, dur, v, g);
-  });
+function stickHtml(r, ri){
+  const ev = rudParse(r);
+  return `<div class="stk">${ev.map((e,i) => {
+    const newBeat = i>0 && Math.floor(e.t/r.g) !== Math.floor(ev[i-1].t/r.g);
+    return `${newBeat?'<span class="stk-bar"></span>':''}<span class="stk-n ${e.hand[0]==='R'?'hr':'hl'} ${e.acc?'ac':''}" data-r="${ri}" data-i="${i}"><span class="stk-a">${e.acc?'>':''}</span><span class="stk-m">${e.grace?`<small>${e.grace}</small>`:''}${e.hand.length>1?`<u>${e.hand}</u>`:e.hand}${e.buzz?'<sup>z</sup>':''}</span></span>`;
+  }).join('')}</div>`;
 }
-
 /* --- percussion reference --- */
 const MALLETS = [
   {n:'Orchestra bells (glockenspiel)', w:'G3–C6', s:'two octaves higher than written', tip:'Use hard plastic or brass mallets; let notes ring unless marked.'},
@@ -3187,30 +3379,104 @@ function renderPerc(){
     <p class="fine">Hum the reference pitch, tap the head lightly 3–4 inches from the edge, and move the pedal until the drum matches.</p></div>`;
 }
 
-function renderLearn(){
-  const ins = S.ins, box = $('#learn');
-  let h = `<div class="seg sc-subtabs" role="group" aria-label="Learn topics"><button class="ln-sub" data-s="inst">${esc(shortName(ins))}</button><button class="ln-sub" data-s="rhythm">Rhythms</button><button class="ln-sub" data-s="art">Articulations</button><button class="ln-sub" data-s="perc">Percussion</button></div>`;
-  if(LN.sub==='inst') h += `<div class="ln-stack">${renderLearnInst()}</div>`;
-  else if(LN.sub==='rhythm') h += `<p class="ln-p">Count out loud, tap your foot on the beat, then play. Each card plays a one-bar count-in, then the rhythm in your instrument's sound with clicks on the beat.</p><div class="rh-grid">${RHYTHMS.map((r,i)=>`<div class="rh-card"><div class="rh-top"><b>${esc(r.t)}</b><button class="mini rh-play" data-r="${i}">▶ Play</button></div>${svgRhythm(r,i)}</div>`).join('')}</div>`;
-  else if(LN.sub==='art') h += `<p class="ln-p">Articulation markings tell you how to start, shape and connect notes. Select Hear to compare each one with the plain version.</p><div class="rh-grid art-grid">${ARTS.map(a=>`<div class="rh-card"><div class="rh-top"><b>${esc(a.t)}</b><button class="mini art-play" data-a="${a.id}">▶ Hear</button></div>${svgArt(a)}<p class="fine">${esc(a.d)}</p></div>`).join('')}</div>`;
-  else h += `<div class="ln-stack">${renderPerc()}</div>`;
-  box.innerHTML = h;
-  document.querySelectorAll('.ln-sub').forEach(b=>{ const on = b.dataset.s===LN.sub; b.classList.toggle('is-on',on); b.setAttribute('aria-pressed',on); });
-  setHash(ins.id+'-learn'); store.set({ins:ins.id});
+/* --- rudiment playback --- */
+const PC = { sub:'rudiments', bpm:70, filter:'all', loop:true, play:null };
+function rudStop(){
+  if(!PC.play) return;
+  PC.play.timers.forEach(clearTimeout);
+  const bus = PC.play.bus; try{ bus.gain.setValueAtTime(0, AC.currentTime); }catch(e){} setTimeout(()=>{ try{ bus.disconnect(); }catch(e){} }, 60);
+  document.querySelectorAll('.stk-n.on').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.rud-play.is-on').forEach(b=>{ b.classList.remove('is-on'); b.textContent = '▶ Play'; });
+  PC.play = null;
 }
-function initLearn(){
-  const box = $('#learn');
+function hitAt(t, vel, out){
+  const ac = AC, n = ac.createBufferSource(), hp = ac.createBiquadFilter(), g = ac.createGain();
+  n.buffer = noiseBuf(); hp.type = 'highpass'; hp.frequency.value = 1400;
+  g.gain.setValueAtTime(.6*vel, t); g.gain.exponentialRampToValueAtTime(.001, t + .12);
+  n.connect(hp); hp.connect(g); g.connect(out); n.start(t, Math.random()*.5); n.stop(t+.14);
+  const o = ac.createOscillator(), og = ac.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(230, t); o.frequency.exponentialRampToValueAtTime(150, t+.05);
+  og.gain.setValueAtTime(.35*vel, t); og.gain.exponentialRampToValueAtTime(.001, t+.08);
+  o.connect(og); og.connect(out); o.start(t); o.stop(t+.09);
+}
+function rudPlay(ri){
+  rudStop();
+  const r = RUDS[ri], ev = rudParse(r), ac = ctx(), bus = ac.createGain(); bus.connect(ac.destination);
+  const slot = 60/PC.bpm/r.g, reps = PC.loop ? 4 : 1, barLen = r.total*slot, t0 = ac.currentTime + .15, timers = [];
+  for(let k=0;k<reps;k++) ev.forEach((e,i) => {
+    const t = t0 + k*barLen + e.t*slot, vel = e.acc ? 1 : .55;
+    if(e.grace) [...e.grace].forEach((h,j,arr) => hitAt(t - (arr.length - j)*Math.min(.035, slot*.4), .22, bus));
+    if(e.buzz){ for(let b=0;b<5;b++) hitAt(t + b*Math.min(.022, slot/5), .35*(1-b*.13), bus); }
+    else if(e.hand.length===2){ hitAt(t, vel, bus); hitAt(t + slot*e.len/2, vel*.85, bus); }
+    else hitAt(t, vel, bus);
+    timers.push(setTimeout(()=>{ document.querySelectorAll('.stk-n.on').forEach(x=>x.classList.remove('on')); document.querySelector(`.stk-n[data-r="${ri}"][data-i="${i}"]`)?.classList.add('on'); }, (t - ac.currentTime)*1000));
+  });
+  for(let b=0;b<Math.round(r.total/r.g)*reps;b++) click(t0 + b*60/PC.bpm, false, true);
+  timers.push(setTimeout(rudStop, (.15 + reps*barLen + .3)*1000));
+  PC.play = {bus, timers, ri};
+  const btn = document.querySelector(`.rud-play[data-r="${ri}"]`); if(btn){ btn.classList.add('is-on'); btn.textContent = '■ Stop'; }
+}
+function rudimentsHtml(){
+  const cats = ['all','Roll','Diddle','Flam','Drag'];
+  const list = RUDS.map((r,i)=>({r,i})).filter(x => PC.filter==='all' || x.r.cat===PC.filter);
+  let h = `<p class="ln-p">The 40 PAS International Drum Rudiments in <b>Dr. John Wooton's four-tier learning sequence</b>, as presented on Vic Firth's <a href="${VF}40-essential-rudiments/" target="_blank" rel="noopener">40 Essential Rudiments</a> page. Each card shows the sticking and plays it on a synthesized snare. Follow the link on any card for Dr. Wooton's video lesson and the written notation.</p>
+  <div class="row rh-opts"><div class="seg" role="group" aria-label="Rudiment family">${cats.map(c=>`<button class="pc-f ${PC.filter===c?'is-on':''}" data-f="${c}" aria-pressed="${PC.filter===c}">${c==='all'?'All 40':c}</button>`).join('')}</div>
+  <label class="fld inl"><span>Tempo <b id="pc-bpmv">${PC.bpm}</b> beats/min</span><input id="pc-bpm" type="range" min="40" max="160" value="${PC.bpm}"></label>
+  <label class="chk"><input type="checkbox" id="pc-loop" ${PC.loop?'checked':''}> Repeat 4 times</label></div>
+  <div class="stk-key fine"><span><b class="stk-k hr">R</b> right</span><span><b class="stk-k hl">L</b> left</span><span><b>&gt;</b> accent</span><span><small>L</small>R flam (one grace note)</span><span><small>LL</small>R drag (two grace notes)</span><span><u>RR</u> diddle</span><span>R<sup>z</sup> buzz</span><span>| beat</span></div>`;
+  for(const tier of [1,2,3,4]){
+    const items = list.filter(x=>x.r.tier===tier); if(!items.length) continue;
+    h += `<div class="sec-h rh-sec"><h3>Tier ${tier}</h3><span class="ct">${['','start here','building on tier 1','longer rolls and drag/flam combinations','advanced combinations'][tier]}</span></div><div class="rud-grid">`;
+    h += items.map(({r,i}) => `<div class="rud-card" id="rud-${i}"><div class="rh-top"><b>${RUDS.indexOf(r)+1}. ${esc(r.n)}</b><span class="bdg">${r.cat}</span><button class="mini rud-play" data-r="${i}">▶ Play</button></div>${stickHtml(r,i)}<p class="fine">Pulse: ${GRID_NAME[r.g]}. <a href="${VF}${r.u}" target="_blank" rel="noopener">Video lesson &amp; notation on Vic Firth ↗</a></p></div>`).join('');
+    h += `</div>`;
+  }
+  h += `<p class="fine" style="margin-top:14px">Playback is a practice guide for sticking and accents; roll rhythms can be interpreted several ways, so check the written notation on each Vic Firth page. Practice slow–fast–slow: start well under tempo, speed up only while every stroke stays even, then come back down.</p>`;
+  return h;
+}
+function percHtml(){
+  const subs = [['rudiments','Rudiments'],['rhythms','Rhythms'],['mallets','Mallets & timpani']];
+  let h = `<div class="ihead"><h2 class="pc-title">Percussion</h2><div class="chips-row"><span class="chip">40 PAS rudiments</span><span class="chip">Rhythm reading</span><span class="chip">Mallet &amp; timpani ranges</span></div>
+    <p id="perc-blurb" class="pc-blurb">Snare rudiments in Dr. John Wooton's tier order, rhythm cards with snare playback, and reference charts for mallet percussion and timpani.</p></div>
+    <div class="seg sc-subtabs" role="group" aria-label="Percussion topics">${subs.map(([k,l])=>`<button class="pc-sub ${PC.sub===k?'is-on':''}" data-s="${k}" aria-pressed="${PC.sub===k}">${l}</button>`).join('')}</div>`;
+  if(PC.sub==='rudiments') h += rudimentsHtml();
+  else if(PC.sub==='rhythms') h += rhythmsHtml(true);
+  else h += `<div class="ln-stack">${renderPerc()}</div>`;
+  return h;
+}
+function renderPercPage(){ $('#perc').innerHTML = percHtml(); }
+function showPerc(sub){
+  if(sub && ['rudiments','rhythms','mallets'].includes(sub)) PC.sub = sub;
+  if(!S.perc){ if(typeof leaveView==='function') leaveView(S.view, 'perc'); if(SC.playing) stopScale(); }
+  S.perc = true;
+  document.querySelector('main > .ihead').hidden = true;
+  for(const o of Object.values(VIEWS)) $(o.sec).hidden = true;
+  $('.strip-wrap').hidden = true;
+  $('#perc').hidden = false;
+  renderPercPage(); renderSidebar();
+  setHash('percussion-'+PC.sub); store.set({ins:'percussion'});
+}
+function hidePerc(){
+  if(!S.perc) return;
+  rudStop(); rhStop();
+  S.perc = false; $('#perc').hidden = true;
+  document.querySelector('main > .ihead').hidden = false;
+  for(const [k,o] of Object.entries(VIEWS)) $(o.sec).hidden = k!==S.view;
+  $('.strip-wrap').hidden = S.view!=='note';
+}
+function initPerc(){
+  const box = $('#perc');
+  rhBind(box, () => true);
   box.addEventListener('click', e => {
     const t = e.target;
-    const sb = t.closest('.ln-sub'); if(sb){ stopRhythm(); LN.sub = sb.dataset.s; renderLearn(); return; }
-    const ch = t.closest('.ln-chip, .ln-hear'); if(ch){ playNote(+ch.dataset.n); return; }
-    if(t.closest('#ln-series-play')){ seriesList(S.ins).forEach((o,i)=>{ try{ tone(o.m + S.ins.tr, i*.45, .42, voice()); }catch(e){} }); return; }
-    const go = t.closest('.ln-go'); if(go){ markPush(); S.note = +go.dataset.n; setView('note'); window.scrollTo({top: $('.ihead').offsetTop - 70}); return; }
-    const rp = t.closest('.rh-play'); if(rp){ const ri = +rp.dataset.r; if(LN.rplay && LN.rplay.ri===ri) stopRhythm(); else playRhythm(ri); return; }
-    const ap = t.closest('.art-play'); if(ap){ playArt(ap.dataset.a); return; }
+    const sb = t.closest('.pc-sub'); if(sb){ rudStop(); rhStop(); markPush(); showPerc(sb.dataset.s); return; }
+    const f = t.closest('.pc-f'); if(f){ rudStop(); PC.filter = f.dataset.f; renderPercPage(); return; }
+    const p = t.closest('.rud-play'); if(p){ const ri = +p.dataset.r; if(PC.play && PC.play.ri===ri) rudStop(); else rudPlay(ri); return; }
     if(t.closest('#tp-hear')){ try{ tone(LN.timp ?? n_('F2'), 0, 2.5, 'tuba'); }catch(e){} return; }
   });
-  box.addEventListener('change', e => { if(e.target.id==='tp-note'){ LN.timp = +e.target.value; renderLearn(); } });
+  box.addEventListener('input', e => { if(e.target.id==='pc-bpm'){ PC.bpm = +e.target.value; $('#pc-bpmv').textContent = PC.bpm; } });
+  box.addEventListener('change', e => {
+    if(e.target.id==='pc-loop') PC.loop = e.target.checked;
+    if(e.target.id==='tp-note'){ LN.timp = +e.target.value; renderPercPage(); }
+  });
 }
 
 /* ===== Audition drill, checklist, play-along and shareable scale links ===== */
@@ -3371,6 +3637,7 @@ initTools();
 initDrill();
 if(typeof initQuiz==='function') initQuiz();
 if(typeof initLearn==='function') initLearn();
+initPerc();
 init();
 
 </script>
