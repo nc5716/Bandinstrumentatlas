@@ -450,6 +450,55 @@ footer a{color:var(--brass)}
 .qz-back .fcard{border:0; padding:0}
 .qz-cardbtns{margin-top:12px}
 @media (max-width: 820px){ .qz-wrap{grid-template-columns:1fr} .qz-wrap .xp-dg{order:-1} }
+
+/* Audition drill & checklist */
+.sc-subtabs{margin:0 0 14px; flex-wrap:wrap}
+.drill-card{margin-bottom:14px; border-color:color-mix(in srgb, var(--brass) 50%, var(--line))}
+.drill-top{display:flex; justify-content:space-between; align-items:center}
+.drill-top .eyebrow{margin:0}
+.drill-clock{font:700 20px var(--f-mono); margin:0; color:var(--muted)}
+.drill-name{font:800 clamp(30px,5vw,48px)/1.05 var(--f-display); margin:0; text-transform:uppercase}
+.drill-foot{align-items:center}
+.pill{font:700 12px var(--f-body); padding:3px 10px; border-radius:999px; background:var(--surface-2); color:var(--muted)}
+.pill.st1{background:var(--brass-soft); color:var(--brass)}
+.pill.st2{background:#E2F3E7; color:#1E6B37}
+.prog-bar{height:12px; border-radius:999px; background:var(--surface-2); overflow:hidden; display:flex}
+.prog-bar span{background:#3E9B5A} .prog-bar span.w{background:var(--brass)}
+.prog .fine{margin-top:6px}
+.ck-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:8px}
+.ck{display:flex; align-items:center; gap:10px; border:1px solid var(--line); border-radius:10px; padding:8px 10px}
+.ck-st{width:30px; height:30px; flex:none; border-radius:50%; border:2px solid var(--line); background:none; cursor:pointer; font-weight:800; color:#fff}
+.ck.st1 .ck-st{border-color:var(--brass); background:var(--brass)}
+.ck.st2 .ck-st{border-color:#3E9B5A; background:#3E9B5A}
+.ck-txt{display:flex; flex-direction:column; min-width:0; flex:1}
+.ck-txt span{font-size:12px; color:var(--muted)}
+.ck .mini{margin-left:0}
+.pa-bar{margin:0 0 12px; padding:10px 14px; border-radius:10px; background:var(--surface); border:1px solid var(--brass); font-size:14.5px}
+.pa-bar .mini{margin-left:8px}
+.sc-card.hit{background:#E2F3E7; border-color:#3E9B5A}
+:root[data-theme="dark"] .sc-card.hit{background:#173323}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .sc-card.hit{background:#173323} :root:not([data-theme="light"]) .pill.st2{background:#173323; color:#7FD49A} }
+.staff-wide .sn.hit .head{fill:#3E9B5A}
+
+.sh-btns{display:inline-flex; gap:6px; margin-left:auto}
+.sh-btns .mini{margin-left:0}
+.print-only{display:none}
+@media print{
+  :root, :root[data-theme="dark"]{--bg:#fff; --surface:#fff; --surface-2:#eee; --ink:#000; --muted:#333; --line:#bbb; --tube:#eef0f3; --tube-line:#666; --k-off:#fff; --k-line:#222; --k-on:#000; --brass:#7a5208; --brass-soft:#f3e7cc}
+  body{background:#fff}
+  header.top, footer, .vtabs, .sc-controls, .sc-subtabs, .strip-wrap, .no-print, #inst-blurb, #persp, .sc-note, .pa-bar, #drill, .xp-bar, .qz-controls, .ck-st + .ck-txt + .ck-go, .ck-go, .panel .row .btn, .btn, .mini{display:none !important}
+  .print-only{display:block}
+  .ihead h2{font-size:28pt}
+  .ov, .sc-card, .fcard, .ck, .tt tr{break-inside:avoid}
+  .ov-grid{gap:6px}
+  .sc-scroll{overflow:visible}
+  .ov-grid.sc-rows{grid-template-columns:repeat(var(--cols,7), minmax(0, 1fr))}
+  .ov.is-on, .sc-card.is-play, .tt tr.me td{background:none}
+  .panel{border:0; padding:0}
+  .tl-grid > .panel:not(.wide), .panel .seg{display:none !important}
+  .pill-sel{border:0; font-weight:800; font-size:14pt; padding:0; appearance:none}
+  a{color:#000}
+}
 </style>
 </head>
 <body>
@@ -490,6 +539,8 @@ footer a{color:var(--brass)}
       </div>
     </div>
     <section id="scales" hidden>
+      <div class="seg sc-subtabs" role="group" aria-label="Scale tools"><button class="sc-subb" data-s="practice">Scale practice</button><button class="sc-subb" data-s="drill">Audition drill</button><button class="sc-subb" data-s="list">Audition checklist</button></div>
+      <div class="va-only" id="drill" hidden></div>
       <div class="sc-controls">
         <label class="fld pr-only nc"><span>Key</span><select id="sc-key"></select></label>
         <label class="fld pr-only"><span>Scale</span><select id="sc-type"><option value="major">Major</option><option value="natural">Natural minor</option><option value="harmonic">Harmonic minor</option><option value="melodic">Melodic minor</option><option value="chromatic">Chromatic</option></select></label>
@@ -498,14 +549,20 @@ footer a{color:var(--brass)}
         <label class="fld pr-only nc"><span>Start on</span><select id="sc-start"></select></label>
         <label class="fld pr-only"><span>Tempo <b id="sc-bpm">90</b></span><input id="sc-tempo" type="range" min="50" max="160" value="90"></label>
         <button class="btn primary" id="sc-play">▶ Play scale</button>
+        <button class="btn" id="pa-go" title="Play the scale on your instrument; the site listens and lights up each note you hit">🎤 Play along</button>
+        <p class="va-info va-only" id="va-info"></p>
       </div>
-      <div class="sec-h sc-head"><h3 id="sc-title">Scale</h3></div>
+      <div id="pa-bar" class="pa-bar" hidden></div>
+      <div id="sc-checklist" hidden></div>
+      <div id="sc-body">
+      <div class="sec-h sc-head"><h3 id="sc-title">Scale</h3><span class="sh-btns no-print"><button class="mini" id="sc-share">🔗 Copy link</button><button class="mini" onclick="window.print()">🖨 Print</button></span></div>
       <p class="sc-sub" id="sc-sub"></p>
       <div class="sc-staff" id="sc-staff"></div>
       <div class="sc-scroll"><div id="sc-grid" class="ov-grid"></div></div>
       <div class="sec-h" id="sc-down-h" hidden style="margin-top:16px"><h3>On the way down</h3><span class="ct">melodic minor lowers the 6th and 7th when descending</span></div>
       <div class="sc-scroll"><div id="sc-grid-down" class="ov-grid"></div></div>
       <p class="sc-note">The cards show each note once; during playback they light up going up, then again in reverse coming down. Accidentals are written out on every note. Select any note to see its alternates and trills. Octave choices and starting notes cover every range in the All-Virginia (VBODA) audition requirements; choose “Written” to call scales by key name as auditions do.</p>
+      </div>
     </section>
     <section id="explore" hidden>
       <div class="sec-h"><h3>Explore: build a fingering</h3><span class="ct" id="xp-hint"></span></div>
@@ -566,7 +623,7 @@ footer a{color:var(--brass)}
     <section id="quiz" hidden></section>
     <section id="learn" hidden></section>
     <section id="overview" hidden>
-      <div class="sec-h"><h3 id="ov-title">Full range</h3><span class="ct">Standard fingering for every written note. Select one for alternates and trills.</span></div>
+      <div class="sec-h"><h3 id="ov-title">Full range</h3><span class="ct">Standard fingering for every written note. Select one for alternates and trills.</span><span class="sh-btns no-print"><button class="mini" onclick="window.print()">🖨 Print chart</button></span></div>
       <div id="ov-grid" class="ov-grid"></div>
     </section>
     <div class="strip-wrap">
@@ -1762,8 +1819,9 @@ const VIEWS = {
 const HASHV = Object.fromEntries(Object.entries(VIEWS).filter(([k,v])=>v.h).map(([k,v])=>[v.h,k]));
 function renderView(fresh){
   const v = S.view;
+  if(v!=='scale') S.hargs = null;
   if(v==='range') renderOverview();
-  else if(v==='scale'){ if(fresh){ SC.start = null; if(SC.playing) stopScale(); } renderScale(); }
+  else if(v==='scale'){ if(fresh){ SC.start = null; if(SC.playing) stopScale(); } if(S.hargs){ applyScaleArgs(S.hargs); } renderScale(); }
   else if(v==='explore') renderExplore();
   else if(v==='quiz') renderQuiz(fresh);
   else if(v==='tools') renderTools();
@@ -1895,16 +1953,19 @@ const SC = { mode:'practice', octsMax:3, type:'major', key:[6,-1], basis:'concer
 function scaleTonics(){ return SC.type==='major' ? MAJOR_KEYS : MINOR_KEYS; }
 const sortKeys = list => list.slice().sort((p,q)=> ((NAT[p[0]]+p[1]+12)%12) - ((NAT[q[0]]+q[1]+12)%12) || p[1]-q[1]);
 function renderScaleControls(){
-  SC.mode = 'practice';
-  const ins = S.ins, va = false;
-  document.querySelectorAll('.sc-mode').forEach(b => { const on = b.dataset.m===SC.mode; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
+  SC.sub = SC.sub || 'practice';
+  SC.mode = SC.sub==='practice' ? 'practice' : 'va';
+  const ins = S.ins, va = SC.mode==='va';
+  document.querySelectorAll('.sc-subb').forEach(b => { const on = b.dataset.s===SC.sub; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
   document.querySelectorAll('.pr-only').forEach(e => e.hidden = va);
   document.querySelectorAll('.va-only').forEach(e => e.hidden = !va);
-  document.querySelectorAll('.nc').forEach(e => e.hidden = SC.type==='chromatic');
-  if(va){
-    $('#va-key').innerHTML = VA_KEYS.map(k => `<option value="${k[0]},${k[1]}" ${!SC.vaChrom&&k[0]===SC.vaKey[0]&&k[1]===SC.vaKey[1]?'selected':''}>${tonicName(k[0],k[1])} major</option>`).join('') + `<option value="chrom" ${SC.vaChrom?'selected':''}>Chromatic</option>`;
-    return;
-  }
+  $('#drill').hidden = SC.sub!=='drill';
+  $('#sc-body').hidden = SC.sub==='list';
+  $('#sc-checklist').hidden = SC.sub!=='list';
+  $('.sc-controls').hidden = SC.sub==='list';
+  if(!va) document.querySelectorAll('.nc').forEach(e => e.hidden = SC.type==='chromatic');
+  if(SC.sub==='drill') renderDrill();
+  if(va) return;
   if(SC.type!=='chromatic'){
     const keys = sortKeys(scaleTonics());
     if(!keys.some(k=>k[0]===SC.key[0]&&k[1]===SC.key[1])){ const pc = (NAT[SC.key[0]]+SC.key[1]+12)%12; SC.key = keys.find(k=>(NAT[k[0]]+k[1]+12)%12===pc) || keys[0]; }
@@ -1955,10 +2016,13 @@ function currentScale(){
 }
 const noteLabel = n => LETTERS[n.letter] + ACC_TXT[n.acc] + (Math.floor((n.m-(NAT[n.letter]+n.acc))/12)-1);
 function renderScale(){
+  if(PA.on) paStop();
+  $('#pa-bar').hidden = true;
   renderScaleControls();
+  if(SC.sub==='list'){ renderChecklist(); setHash(S.ins.id+'-scales-checklist'); return; }
   const c = currentScale(), ins = c.ins, va = SC.mode==='va';
   const empty = msg => { $('#sc-staff').innerHTML = ''; $('#sc-grid').innerHTML = `<p class="empty">${msg}</p>`; SC.notes = null; };
-  if(va && c.none){ $('#sc-title').textContent = 'Not part of the All-Virginia wind auditions'; $('#sc-sub').textContent = `${ins.name} has no All-Virginia scale requirements. Switch to Practice to work on any scale.`; $('#va-info').textContent=''; empty('Choose another instrument, or switch to Practice.'); return; }
+  if(va && c.none){ $('#sc-title').textContent = 'Not part of the All-Virginia wind auditions'; $('#sc-sub').textContent = `${ins.name} has no All-Virginia scale requirements. Use Scale practice to work on any scale.`; $('#va-info').textContent=''; empty('Choose another instrument, or switch to Scale practice.'); return; }
   let notes, title, sub;
   if(va && c.chrom){
     notes = scaleNotes(c.start, 0, 'chromatic', 0, c.end);
@@ -2013,8 +2077,8 @@ function renderScale(){
   $('#sc-grid-down').className = $('#sc-grid').className;
   $('#sc-grid-down').style.setProperty('--cols', per);
   $('#sc-grid-down').innerHTML = downOnly.sort((a,b)=>b.m-a.m).map(n => card(n,0,true)).join('');
-  setHash(ins.id+'-scales');
-  store.set({ins:ins.id, sc:{mode:SC.mode, type:SC.type, key:SC.key, basis:SC.basis, octs:SC.octs, vaKey:SC.vaKey, vaChrom:SC.vaChrom}});
+  setHash(scaleHash());
+  store.set({ins:ins.id, sc:{sub:SC.sub, mode:SC.mode, type:SC.type, key:SC.key, basis:SC.basis, octs:SC.octs, vaKey:SC.vaKey, vaChrom:SC.vaChrom}});
 }
 let SC_TIMERS = [];
 function stopScale(){ SC_TIMERS.forEach(clearTimeout); SC_TIMERS = [];
@@ -2047,7 +2111,7 @@ function playScale(){
 }
 function initScales(){
   const sv = store.get().sc;
-  if(sv){ if(SCALE_TYPES[sv.type]) SC.type = sv.type; if(Array.isArray(sv.key)) SC.key = sv.key; if(sv.basis) SC.basis = sv.basis; if(sv.octs) SC.octs = sv.octs; if(Array.isArray(sv.vaKey)) SC.vaKey = sv.vaKey; SC.vaChrom = !!sv.vaChrom; }
+  if(sv){ if(SCALE_TYPES[sv.type]) SC.type = sv.type; if(Array.isArray(sv.key)) SC.key = sv.key; if(sv.basis) SC.basis = sv.basis; if(sv.octs) SC.octs = sv.octs; if(Array.isArray(sv.vaKey)) SC.vaKey = sv.vaKey; SC.vaChrom = !!sv.vaChrom; if(['practice','drill','list'].includes(sv.sub)) SC.sub = sv.sub; }
   const re = () => { SC.start = null; stopScale(); renderScale(); };
   $('#sc-key').onchange = e => { SC.key = e.target.value.split(',').map(Number); re(); };
   $('#sc-type').onchange = e => { SC.type = e.target.value; re(); };
@@ -2469,7 +2533,7 @@ function micPitch(){
   const x = MIC.buf; MIC.an.getFloatTimeDomainData(x);
   let rms = 0; for(let i=0;i<x.length;i++) rms += x[i]*x[i];
   rms = Math.sqrt(rms/x.length); if(rms < .008) return 0;
-  const sr = AC.sampleRate, W = 2048, tMax = Math.min(2047, Math.floor(sr/26)), tMin = Math.floor(sr/2200);
+  const sr = AC.sampleRate, W = 2048, tMax = Math.min(2047, Math.floor(sr/26)), tMin = Math.max(2, Math.floor(sr/4500));
   const d = new Float32Array(tMax+1);
   for(let t=1;t<=tMax;t++){ let s = 0; for(let j=0;j<W;j++){ const v = x[j]-x[j+t]; s += v*v; } d[t] = s; }
   let run = 0; d[0] = 1;
@@ -2811,8 +2875,162 @@ function initQuiz(){
 
 function renderLearn(){}
 
+/* ===== Audition drill, checklist, play-along and shareable scale links ===== */
+const DR = { cur:null, t0:0, timer:null, skip:true };
+const PROG_LBL = ['Not started','Working on it','Mastered'];
+const progKey = k => k==='chrom' ? 'chrom' : keyTxt(k[0],k[1]);
+function progGet(id){ return ((store.get().prog||{})[id]) || {}; }
+function progSet(id, k, v){ const all = store.get().prog || {}; const p = all[id] || {}; p[progKey(k)] = v; all[id] = p; store.set({prog:all}); }
+const vaItems = () => VA_KEYS.map(k=>k).concat(['chrom']);
+function vaItemName(ins, k){
+  if(k==='chrom'){ const R = VA[ins.id]; return `Chromatic, ${nm(R.chrom[0])}–${nm(R.chrom[1])}`; }
+  const o = vaOctaves(ins.id, k[0], k[1]);
+  return `${tonicName(k[0],k[1])} major, ${o} octave${o>1?'s':''}`;
+}
+function drillSet(k){
+  if(k==='chrom'){ SC.vaChrom = true; } else { SC.vaChrom = false; SC.vaKey = k; }
+  DR.cur = k;
+}
+function drillPick(){
+  const ins = S.ins, p = progGet(ins.id);
+  let items = vaItems();
+  if(DR.skip){ const left = items.filter(k => (p[progKey(k)]||0) < 2); if(left.length) items = left; }
+  if(DR.cur && items.length > 1) items = items.filter(k => progKey(k) !== progKey(DR.cur));
+  drillSet(pick(items));
+  DR.t0 = performance.now();
+  clearInterval(DR.timer); DR.timer = setInterval(drillClock, 250);
+}
+function drillClock(){
+  const el = $('#dr-clock'); if(!el){ clearInterval(DR.timer); return; }
+  const s = Math.floor((performance.now()-DR.t0)/1000);
+  el.textContent = `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+}
+function renderDrill(){
+  const ins = S.ins, box = $('#drill'), R = VA[ins.id];
+  if(!R){ box.innerHTML = `<div class="panel"><p class="empty">${esc(ins.name)} isn't part of the All-Virginia wind audition requirements, so there's no audition drill for it. Use Scale practice instead.</p></div>`; return; }
+  if(!DR.cur) drillPick();
+  const k = DR.cur, p = progGet(ins.id), st = p[progKey(k)]||0, done = vaItems().filter(x => (p[progKey(x)]||0)===2).length;
+  const tempo = k==='chrom' ? `quarter = ${R.ct}, sixteenth notes` : 'quarter = 100: quarter-note tonic, then eighth notes';
+  box.innerHTML = `<div class="panel drill-card">
+    <div class="drill-top"><p class="eyebrow">Your scale</p><p class="drill-clock" id="dr-clock" aria-label="Time since this scale was called">0:00</p></div>
+    <p class="drill-name">${esc(vaItemName(ins, k))}</p>
+    <p class="nsub">Written key, as the judges call it${ins.tr && k!=='chrom' ? ` (sounds concert ${tonicName(...concertTonic(k[0],k[1],ins,false))} major)`:''}. ${tempo}${k==='chrom' ? '; slur up, tongue down' : '; legato tongue up and down'}.</p>
+    <div class="row"><button class="btn primary" id="dr-good">Nailed it ✓</button><button class="btn" id="dr-work">Needs work</button><button class="btn" id="dr-next">Skip → another scale</button></div>
+    <div class="row drill-foot"><span class="pill st${st}">${PROG_LBL[st]}</span><span class="fine">${done} of ${vaItems().length} mastered on ${esc(ins.name)}</span><label class="chk"><input type="checkbox" id="dr-skip" ${DR.skip?'checked':''}> Skip scales I've mastered</label></div>
+  </div>`;
+  drillClock();
+}
+function renderChecklist(){
+  const ins = S.ins, box = $('#sc-checklist'), R = VA[ins.id];
+  if(!R){ box.innerHTML = `<div class="panel"><p class="empty">${esc(ins.name)} isn't part of the All-Virginia wind audition requirements.</p></div>`; return; }
+  const p = progGet(ins.id), items = vaItems(), done = items.filter(k => (p[progKey(k)]||0)===2).length, work = items.filter(k => (p[progKey(k)]||0)===1).length;
+  box.innerHTML = `<div class="panel">
+    <div class="panel-h"><h3>All-Virginia checklist</h3><span class="ct">${esc(ins.name)} · saved in this browser</span></div>
+    <div class="prog"><div class="prog-bar"><span style="width:${done/items.length*100}%"></span><span class="w" style="width:${work/items.length*100}%"></span></div><p class="fine"><b>${done}</b> mastered · <b>${work}</b> working on · <b>${items.length-done-work}</b> not started</p></div>
+    <div class="ck-grid">${items.map(k => { const st = p[progKey(k)]||0; return `<div class="ck st${st}"><button class="ck-st" data-k="${progKey(k)}" aria-label="${esc(vaItemName(ins,k))}: ${PROG_LBL[st]}. Select to change.">${st===2?'✓':st===1?'…':''}</button><div class="ck-txt"><b>${esc(vaItemName(ins,k))}</b><span>${PROG_LBL[st]}</span></div><button class="mini ck-go" data-k="${progKey(k)}">Open</button></div>`; }).join('')}</div>
+    <div class="row"><button class="btn" onclick="window.print()">🖨 Print checklist</button><button class="btn" id="ck-reset">Reset ${esc(ins.name)} progress</button></div>
+  </div>`;
+}
+const itemFromKey = s => s==='chrom' ? 'chrom' : VA_KEYS.find(k => keyTxt(k[0],k[1])===s);
+
+/* --- play-along: listen and light up each note as it's played --- */
+const PA = { on:false, i:0, timer:null, hold:0, t0:0, seq:null };
+async function paStart(){
+  if(!SC.notes){ return; }
+  if(SC.playing) stopScale();
+  try{ await micStart(); }catch(e){ paMsg('Microphone access was blocked. Allow the microphone for this site in your browser settings, then try again.'); return; }
+  PA.on = true; PA.i = 0; PA.hold = 0; PA.seq = SC.notes.map(n=>n.m); PA.t0 = 0;
+  $('#pa-go').textContent = '■ Stop listening';
+  document.querySelectorAll('.sc-card.hit,.sn.hit').forEach(e=>e.classList.remove('hit','is-play'));
+  paMark(); paMsg(`Listening. Play ${nm(PA.seq[0])} to begin.`);
+  PA.timer = setInterval(paTick, 50);
+}
+function paStop(){
+  if(!PA.on) return;
+  clearInterval(PA.timer); PA.on = false; micStop();
+  const b = $('#pa-go'); if(b) b.textContent = '🎤 Play along';
+  document.querySelectorAll('.sc-card.is-play,.sn.is-play').forEach(e=>e.classList.remove('is-play'));
+}
+function paMsg(t){ const b = $('#pa-bar'); if(b){ b.hidden = false; b.innerHTML = t; } }
+function paMark(){
+  document.querySelectorAll('.sc-card.is-play,.sn.is-play').forEach(e=>e.classList.remove('is-play'));
+  const m = PA.seq[PA.i]; if(m==null) return;
+  document.querySelector(`.sc-card[data-n="${m}"]`)?.classList.add('is-play');
+  document.querySelector(`.sn[data-i="${PA.i}"]`)?.classList.add('is-play');
+}
+function paTick(){
+  const want = PA.seq[PA.i] + S.ins.tr, f = micPitch();
+  if(!f){ PA.hold = 0; return; }
+  const got = hzToMidi(f), diff = got - want;
+  if(Math.abs(diff) < .45){
+    if(++PA.hold >= 3){
+      if(!PA.t0) PA.t0 = performance.now();
+      document.querySelector(`.sn[data-i="${PA.i}"]`)?.classList.add('hit');
+      document.querySelector(`.sc-card[data-n="${PA.seq[PA.i]}"]`)?.classList.add('hit');
+      PA.i++; PA.hold = 0;
+      if(PA.i >= PA.seq.length){
+        const s = ((performance.now()-PA.t0)/1000).toFixed(1);
+        paStop(); paMsg(`<b>Scale complete!</b> Every note in ${s} seconds. <button class="mini" id="pa-again">Try again</button>`);
+        return;
+      }
+      paMark();
+      paMsg(`<b>${PA.i}</b> of ${PA.seq.length} · next: <b>${nm(PA.seq[PA.i])}</b>`);
+    }
+  } else {
+    PA.hold = 0;
+    const near = Math.round(got) - S.ins.tr;
+    if(Math.abs(diff) < 1.5) paMsg(`<b>${PA.i}</b> of ${PA.seq.length} · next: <b>${nm(PA.seq[PA.i])}</b> · you're ${diff>0?'sharp':'flat'} (${Math.round(Math.abs(diff)*100)} cents)`);
+    else paMsg(`<b>${PA.i}</b> of ${PA.seq.length} · next: <b>${nm(PA.seq[PA.i])}</b> · hearing ${nm(near)}`);
+  }
+}
+
+/* --- shareable scale links --- */
+const keyCode = (L,a) => LETTERS[L] + (a===1?'s':a===-1?'b':'');
+function parseKeyCode(s){ const m = /^([A-G])(s|b)?$/.exec(s||''); return m ? [LETTERS.indexOf(m[1]), m[2]==='s'?1:m[2]==='b'?-1:0] : null; }
+function scaleHash(){
+  const id = S.ins.id;
+  if(SC.sub==='list') return id+'-scales-checklist';
+  if(SC.sub==='drill') return id+'-scales-drill-'+(DR.cur==null?'':DR.cur==='chrom'?'chrom':keyCode(DR.cur[0],DR.cur[1]));
+  return [id,'scales',keyCode(SC.key[0],SC.key[1]),SC.type,SC.octs,SC.basis==='written'?'w':'c'].join('-');
+}
+function applyScaleArgs(a){
+  if(!a || !a.length) return;
+  if(a[0]==='checklist'){ SC.sub = 'list'; return; }
+  if(a[0]==='drill'){ SC.sub = 'drill'; const k = a[1]==='chrom' ? 'chrom' : parseKeyCode(a[1]); if(k){ drillSet(k); DR.t0 = performance.now(); clearInterval(DR.timer); DR.timer = setInterval(drillClock, 250); } return; }
+  const k = parseKeyCode(a[0]);
+  SC.sub = 'practice';
+  if(k) SC.key = k;
+  if(SCALE_TYPES[a[1]]) SC.type = a[1];
+  if([1,2,3].includes(+a[2])) SC.octs = +a[2];
+  if(a[3]) SC.basis = a[3]==='w' ? 'written' : 'concert';
+  SC.start = null;
+}
+
+function initDrill(){
+  document.querySelectorAll('.sc-subb').forEach(b => b.onclick = () => { if(SC.sub===b.dataset.s) return; stopScale(); paStop(); SC.sub = b.dataset.s; if(SC.sub==='drill' && !DR.cur) drillPick(); markPush(); renderScale(); });
+  $('#pa-go').onclick = () => PA.on ? paStop() : paStart();
+  $('#sc-share').onclick = async () => {
+    const url = location.href.split('#')[0] + '#' + scaleHash(), b = $('#sc-share');
+    try{ await navigator.clipboard.writeText(url); b.textContent = '✓ Link copied'; }
+    catch(e){ prompt('Copy this link:', url); }
+    setTimeout(()=>{ b.textContent = '🔗 Copy link'; }, 1800);
+  };
+  $('#scales').addEventListener('click', e => {
+    const t = e.target;
+    if(t.closest('#pa-again')){ paStart(); return; }
+    if(t.closest('#dr-good')){ progSet(S.ins.id, DR.cur, 2); stopScale(); drillPick(); renderScale(); return; }
+    if(t.closest('#dr-work')){ progSet(S.ins.id, DR.cur, 1); stopScale(); drillPick(); renderScale(); return; }
+    if(t.closest('#dr-next')){ stopScale(); drillPick(); renderScale(); return; }
+    const st = t.closest('.ck-st'); if(st){ const k = itemFromKey(st.dataset.k), cur = progGet(S.ins.id)[st.dataset.k]||0; progSet(S.ins.id, k, (cur+1)%3); renderChecklist(); return; }
+    const go = t.closest('.ck-go'); if(go){ const k = itemFromKey(go.dataset.k); SC.sub = 'drill'; drillSet(k); DR.t0 = performance.now(); clearInterval(DR.timer); DR.timer = setInterval(drillClock, 250); markPush(); renderScale(); return; }
+    if(t.closest('#ck-reset')){ const all = store.get().prog||{}; delete all[S.ins.id]; store.set({prog:all}); renderChecklist(); return; }
+  });
+  $('#scales').addEventListener('change', e => { if(e.target.id==='dr-skip'){ DR.skip = e.target.checked; } });
+}
+
 initExplore();
 initTools();
+initDrill();
 if(typeof initQuiz==='function') initQuiz();
 if(typeof initLearn==='function') initLearn();
 init();
