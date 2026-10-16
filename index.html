@@ -671,6 +671,7 @@ main > .vtabs{margin-bottom:16px}
 .dg .mpc-body{fill:color-mix(in srgb, var(--tube) 60%, var(--surface)); stroke:var(--tube-line); stroke-width:1.1; stroke-linejoin:round}
 .dg .mpc-rim{fill:none; stroke:var(--tube-line); stroke-width:1}
 .dg .mpc-ring{stroke:var(--tube-line); stroke-width:1}
+.dg .on .klab.ext,.dg .tr .klab.ext{fill:var(--muted)}
 </style>
 </head>
 <body>
@@ -1363,7 +1364,7 @@ clarinet:{vb:[180,404], tube:[], joints:[],
   keys:[
   {id:'R',t:'b',x:34,y:84,w:18,h:9,lab:'R',name:'Register key (left thumb)'},
   {id:'T',t:'b',x:34,y:104,r:9,lab:'',name:'Thumb hole (left thumb)'},
-  {id:'A',t:'p',d:'M76 66 Q90 56 104 66 L104 71 Q90 62 76 71 Z',lx:90,ly:0,name:'A key (LH index, top)'},
+  {id:'A',t:'p',d:'M90 52 C94 57 98.5 62 98.5 67 C98.5 72 94.5 75 90 75 C85.5 75 81.5 72 81.5 67 C81.5 62 86 57 90 52 Z',lab:'A',lx:90,ly:70,name:'A key (LH index, top)'},
   {id:'Gs',t:'k',x:66,y:84,w:9,h:18,lab:'',name:'G♯ key (LH index, side)'},
   {id:'L1',t:'h',x:90,y:90,r:10,ring:true,name:'LH 1 (index)'},
   {id:'L2',t:'h',x:90,y:118,r:10,ring:true,name:'LH 2 (middle)'},
@@ -1496,8 +1497,9 @@ flute:{vb:[460,150], tube:[], joints:[], flute:true, cups:true,
     '<rect class="tube" x="353" y="62" width="98" height="24" rx="3"/>',
     '<line class="rod" x1="120" x2="344" y1="57" y2="57"/>',
     '<line class="rod" x1="358" x2="446" y1="57" y2="57"/>',
+    '<path class="rod" d="M386 82 L394 97 M412 82 L407 101 M438 82 L420 105"/>',
   ],
-  labels:[[43,50,'HEAD'],[98,130,'THUMB (UNDERSIDE)'],[219,30,'LH PINKY'],[298,30,'TRILL KEYS'],[398,132,'RH PINKY · FOOT']],
+  labels:[[43,50,'HEAD'],[98,130,'THUMB (UNDERSIDE)'],[219,30,'LH PINKY'],[298,30,'TRILL KEYS'],[395,146,'RH PINKY · FOOT']],
   keys:[
   {id:'Bb',t:'b',x:88,y:110,w:18,h:9,lab:'B♭',name:'Thumb B♭ lever (left thumb)'},
   {id:'T',t:'b',x:108,y:110,w:18,h:9,lab:'B',name:'Thumb B key (left thumb)'},
@@ -1511,10 +1513,10 @@ flute:{vb:[460,150], tube:[], joints:[], flute:true, cups:true,
   {id:'R2',t:'h',x:298,y:74,r:10.5,arm:57,name:'RH 2 (middle)'},
   {id:'tDs',t:'k',x:316,y:44,w:15,h:9,lab:'D♯',name:'2nd trill key (D♯)'},
   {id:'R3',t:'h',x:334,y:74,r:10.5,arm:57,name:'RH 3 (ring)'},
-  {id:'Eb',t:'k',x:362,y:104,w:24,h:10,lab:'E♭',name:'E♭ (D♯) key (right pinky)'},
-  {id:'Cs',t:'k',x:388,y:98,w:18,h:11,lab:'C♯',name:'Low C♯ roller (right pinky)'},
-  {id:'C',t:'k',x:410,y:98,w:18,h:11,lab:'C',name:'Low C roller (right pinky)'},
-  {id:'B',t:'k',x:432,y:98,w:18,h:11,lab:'B',name:'Low B roller (B-foot)'},
+  {id:'Eb',t:'p',d:'M357 95 L381 92 Q386 91.5 386 96 L386 103 Q386 107.5 381.5 108 L360 110.5 Q355.5 111 355.5 106.5 L355.5 99 Q355.5 95.3 357 95 Z',lab:'E♭',lx:371,ly:104,name:'E♭ (D♯) key (right pinky)'},
+  {id:'Cs',t:'p',d:'M378 74 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0 Z M389.5 97 a4.5 4.5 0 0 1 9 0 v14 a4.5 4.5 0 0 1 -9 0 Z',lab:'C♯',lx:394,ly:124,lout:true,name:'Low C♯ roller (right pinky) and its pad'},
+  {id:'C',t:'p',d:'M404 74 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0 Z M402.5 101 a4.5 4.5 0 0 1 9 0 v14 a4.5 4.5 0 0 1 -9 0 Z',lab:'C',lx:407,ly:128,lout:true,name:'Low C roller (right pinky) and its pad'},
+  {id:'B',t:'p',d:'M430 74 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0 Z M415.5 105 a4.5 4.5 0 0 1 9 0 v14 a4.5 4.5 0 0 1 -9 0 Z',lab:'B',lx:420,ly:132,lout:true,name:'Low B roller (B-foot) and its pad'},
   {id:'gz',t:'k',x:430,y:47,w:14,h:9,lab:'gz',name:'Gizmo key (B-foot)'},
 ]},
 };
@@ -1729,6 +1731,7 @@ function svgWW(layoutId, f, hide, mini){
     s += `<g class="key ${cls}" data-k="${k.id}"><title>${esc(k.name)}${st==='c'?' — pressed':st==='tr'?' — trill this key':st?' — partly covered':''}</title>`;
     if(k.t==='p'){
       s += `<path class="kshape" d="${k.d}"/>`;
+      if(S.labels && !mini && k.lab && k.lx!=null) s += `<text class="klab${k.lout?' ext':''}" x="${k.lx}" y="${k.ly}" text-anchor="middle">${k.lab}</text>`;
     } else if(k.t==='h' || (k.t==='b' && k.r)){
       if(k.ring) s += `<circle class="kring" cx="${k.x}" cy="${k.y}" r="${k.r+2.6}"/>`;
       s += `<circle class="kshape" cx="${k.x}" cy="${k.y}" r="${k.r}"/>`;
