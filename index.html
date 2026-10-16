@@ -875,12 +875,15 @@ const WW_DATA = {};
 WW_DATA.clarinet = `
 E3 = T L123 LE R123 ; Left pinky E. Use when the next note needs the right pinky.
 E3 + T L123 R123 RE ; Right pinky E. Use when the next note needs the left pinky.
+E3 + T LE RF L123 R123 ; Pair with F3 or C5.
 F3 = T L123 R123 RF ; Right pinky F. Use with left-pinky notes or no pinky.
 F3 + T L123 LF R123 ; Left pinky F. Use when the next note needs the right pinky.
 F#3 = T L123 LFs R123 ; Left pinky F♯.
 F#3 + T L123 R123 RFs ; Right pinky F♯, on models that have it.
+F#3 + T LFs RF L123 R123 ; Pair with F3 or C5.
 G3 = T L123 R123
 G#3 = T L123 R123 RGs
+G#3 + T LCs L123 R123 ; Left pinky C♯/G♯ key. Pair with right-pinky notes.
 A3 = T L123 R12
 Bb3 = T L123 R1
 B3 = T L123 R2
@@ -890,54 +893,153 @@ C#4 = T L123 LCs
 D4 = T L12
 Eb4 = T L12 k4 ; Lowest right-hand side key.
 Eb4 + T L12 SLe ; E♭/B♭ sliver key. Chromatic; use next to D4.
+Eb4 + T L1 R1 ; Sharp. Easy next to right-hand finger 1 notes.
+Eb4 + T L1 R2 ; Sharp. Easy next to right-hand finger 2 notes.
+Eb4 + T L13 ; Seven-ring models. Pair with C4.
 E4 = T L1
+E4 + T L1 SLe k4 R3 RF ; Rounder sound, lower pitch than basic.
+E4 + T L1 SLe k4 LCs RF R123 ; Louder, clearer sound for long notes.
 F4 = T
 F#4 = L1
+F#4 + T k3 k4 ; Chromatic. Pair with F4.
+F#4 + L1 R123 ; Right-hand fingers adjust the tuning.
+F#4 + T k3 k4 R123 ; Right-hand fingers adjust the tuning.
 G4 = - ; Open G: no keys at all.
+G4 + R123 ; Right-hand fingers adjust the tuning.
 G#4 = Gs
+G#4 + T Gs k3 k4 ; Pair with F♯4.
+G#4 + Gs k4 R1 L23 ; Flatter than basic.
+G#4 + Gs R123 ; Right-hand fingers adjust the tuning.
+G#4 + T Gs k3 k4 R123 ; Right-hand fingers adjust the tuning.
+G#4 + T L1 k2 ; Pair with E4. Runs sharp.
 A4 = A
 A4 + Gs k2 ; G♯ key plus side key 2. Clearer throat A.
+A4 + A RF R23 ; Fuller sound, less airy.
+A4 + A RF L23 R23 ; Flatter than basic.
+A4 + A R123 ; Right-hand fingers adjust the tuning.
 Bb4 = R A
 Bb4 + A k2 ; A key plus side key 2. Trill fingering with A4.
 Bb4 + Gs k1 ; G♯ key plus side key 1. Clearer, better-tuned throat B♭.
+Bb4 + R A L3 RF R13 ; More in tune and clearer than basic.
+Bb4 + R A L3 LF R13 ; More in tune and clearer than basic.
+Bb4 + R A R123 ; Right-hand fingers adjust the tuning.
+Bb4 + A k2 R123 ; Right-hand fingers adjust the tuning.
+Bb4 + R A L123 R23 ; Good intonation, smooth connections.
+Bb4 + R A RF L23 R23 ; Fuller and in tune.
+Bb4 + R A L3 R3 RF ; In tune, fuller, less airy.
 B4 = R T L123 LE R123 ; Left pinky B. Use when the next note needs the right pinky.
 B4 + R T L123 R123 RE ; Right pinky B. Use when the next note needs the left pinky.
+B4 + R T LE RF L123 R123 ; Pair with C5.
+B4 + A k1 ; Trill fingering with A4.
+B4 + R A k2 ; Trill fingering with B♭4.
+B4 + R T A LE L123 R123 ; More open sound for long notes.
+B4 + R T A RE L123 R123 ; More open sound for long notes.
+B4 + R T A LE RF L123 R123 ; More open sound for long notes.
 C5 = R T L123 R123 RF ; Right pinky C.
 C5 + R T L123 LF R123 ; Left pinky C.
+C5 + R A k1 ; Trill fingering with B♭4.
+C5 + R A k1 k2 ; Trill with B♭4, more in tune.
 C#5 = R T L123 LFs R123 ; Left pinky C♯.
 C#5 + R T L123 R123 RFs ; Right pinky C♯, on models that have it.
+C#5 + R T LFs RF L123 R123 ; Pair with C5.
 D5 = R T L123 R123
 Eb5 = R T L123 R123 RGs
+Eb5 + R T LCs L123 R123 ; Left pinky C♯/G♯ key. Pair with right-pinky notes.
 E5 = R T L123 R12
 F5 = R T L123 R1
 F#5 = R T L123 R2
 F#5 + R T L123 R1 SLb ; Chromatic: B/F♯ sliver key, use next to F5.
+F#5 + R T R3 L123 ; Pair with D5.
 G5 = R T L123
 G#5 = R T L123 LCs
+G#5 + R T L12 R12 ; Use next to right-hand fingerings.
 A5 = R T L12
 Bb5 = R T L12 k4 ; Lowest side key.
 Bb5 + R T L12 SLe ; Sliver key. Chromatic; use next to A5.
 Bb5 + R T L23 LCs ; Trill fingering with A♭5.
+Bb5 + R T L1 R1 ; Easy next to right-hand finger 1 notes.
+Bb5 + R T L1 R2 ; Sharp. Easy next to right-hand finger 2 notes.
+Bb5 + R T L13 ; Seven-ring models. Pair with G5.
+Bb5 + R T RF L13 R123 ; Very soft entrances.
 B5 = R T L1
+B5 + R T LFs L23 R123 ; Use next to low altissimo notes.
 C6 = R T
+C6 + R T L3 k4 R123 ; Soft attacks and leaps up from D5.
+C6 + R T R123 ; Wide leaps and soft playing.
+C6 + R T SLe k3 k4 L12 ; Slightly sharp. Good loud; easy from B♭5.
+C6 + R T RGs L123 R123 ; Legato slurs from D6.
+C6 + R T L23 R123 ; Good intonation, good loud.
+C6 + R T RGs L23 R123 ; Good intonation, good loud.
 C#6 = R T L23 R12
+C#6 + R T k3 k4 ; Trill fingering with C6.
+C#6 + R T L1 k4 ; Trill fingering with B5.
+C#6 + R T Gs RGs L123 R12 ; Overblown E5 fingering.
+C#6 + R RGs L123 R123 ; Full sound, responds well soft.
 D6 = R T L23 R1 RGs
 D6 + R T Gs k4 ; Less flat. Trill fingering with C6.
 D6 + R T Gs ; Trill fingering with C6.
+D6 + R T R2 ; Trill fingering with C6.
+D6 + R T RGs ; Overblown G4 fingering.
+D6 + R T Gs RGs L23 R12 ; Full tone, good pitch, soft response.
+D6 + R RGs L123 R13 ; Secure soft playing for wide leaps.
+D6 + R T RGs L23 R23 ; Good pitch, works loud.
 Eb6 = R T L23 R1 SLb RGs
 Eb6 + R T L23 R3 RGs ; Use next to lower clarion notes.
 Eb6 + R T L23 R2 RGs ; Flat, but easy in fast passages.
+Eb6 + R T A RGs ; Overblown A4 fingering; flat.
+Eb6 + R R2 RGs L123 ; Dark, covered tone for soft passages.
 E6 = R T L23 RGs
+E6 + R T Gs L23
+E6 + R RGs L123
 F6 = R T L23 LCs RGs
 F6 + R T L123 LCs R123 ; For slurs from the lower registers and for pp.
+F6 + R T k2 LCs RGs L123 ; Wide leaps, quick response.
+F6 + R T A LCs L123 ; Left hand only. Good loud.
+F6 + R T Gs LCs RGs L23
 F#6 = R T L2 RGs
 F#6 + R T L12 k4 RGs ; Accurate pitch; speaks easily; good for wide skips.
 F#6 + R T L12 R123 RGs ; For slurs from below; stable at pp and ff.
+F#6 + R T L2 R2 RFs
+F#6 + R T L2 SLb RGs ; Stable when loud.
+F#6 + R T k1 RGs L12 ; Stable slurs from below, soft.
+F#6 + R T RGs L23 R123
+F#6 + R T L1 RF R23
+F#6 + R T RGs L123 R23
+F#6 + R T k3 LCs RGs L23 ; Fast chromatic runs, E6–G♯6.
 G6 = R T L2 R12 RGs
 G6 + R T L1 R12 RGs ; For slurs from clarion notes.
+G6 + R T L1 R1 RGs
+G6 + R T L1 R1 RFs ; Sharper than basic.
+G6 + R T L1 RGs ; Quick slurs with D6.
+G6 + R T L3 LCs RFs ; Trill fingering with F6.
+G6 + R T RGs L23 R12
+G6 + R T LCs RGs L23 R12 ; More secure with the left C♯ key.
+G6 + R T RF L23 R123
+G6 + R T L2 RGs R13
+G6 + R T L2 SLe RGs
+G6 + R T L2 k4 RGs ; Trill fingering with F♯6.
+G6 + R T L2 k4 SLb
+G6 + R T L3 LCs RGs
+G6 + R T L1 RGs R123 ; Pair with F♯6.
+G6 + R T L2 k3 LCs RGs ; Fast chromatic runs, E6–G♯6.
 G#6 = R T L23 LFs R13
 G#6 + R T k4 RGs ; Responds well at all dynamics.
 G#6 + R T R1 RGs ; Easy to finger, good tuning.
+G#6 + R T RFs L23 R13
+G#6 + R L1 RGs R12 ; Strong loud response.
+G#6 + R T R2 RF L23
+G#6 + R T LF R2 L23
+G#6 + R T R1 SLb RGs L23
+G#6 + R T R1 RFs L23
+G#6 + R T LFs R1 L23
+G#6 + R T L2 R2 RGs
+G#6 + R T L2 k3 k4
+G#6 + R T L3 k1 k2 LCs
+G#6 + R T L3 k1 k2 LCs RGs
+G#6 + R T L3 R1 RGs
+G#6 + R T L3 R1 RFs ; Tends to play sharp.
+G#6 + R T Gs L1 R3 RGs
+G#6 + R T k3 LCs RGs ; Quick chromatic runs.
 
 E3~F3 = T L123 LE R123 ^RF ; Hold left E, trill the right F key.
 E3~F#3 = T L123 LE R123 ^RFs
@@ -1010,44 +1112,160 @@ G4 = T L123 Eb
 G#4 = T L123 Gs Eb
 A4 = T L12 Eb
 A4 + T L12 Gs R1 Eb ; More overtones; brighter.
+A4 + T L1 L2 R1 R2 R3 ; Quick slur to D, slightly flat.
+A4 + T L1 L2 R1 R2 R3 Eb ; Quick slur to E♭, slightly flat.
+A4 + T L1 L2 R1 R2 Eb ; Quick slur to E, slightly flat.
+A4 + T L1 L2 R1 Eb ; Quick slur to F or B♭, slightly flat.
+A4 + T L1 L2 R3 Eb ; Quick slur to F♯, slightly flat.
+A4 + T L1 L2 R2 Eb ; Quick slur to F♯, slightly flat.
 Bb4 = Bb L1 Eb ; Thumb B♭: left thumb on the B♭ lever. Standard in flat keys; switch for passages with B natural.
 Bb4 + T L1 R1 Eb ; "One-and-one" B♭. Use near B natural or in sharp keys.
 Bb4 + T L1 rBb Eb ; Right-hand B♭ lever. Trill fingering.
+Bb4 + T L1 R1 R2 R3 ; Quick slur fingering using D.
+Bb4 + T L1 R1 R2 R3 Eb ; Quick slur fingering using E♭.
+Bb4 + T L1 R1 R2 Eb ; Quick slur fingering using E.
+Bb4 + Bb L1 R3 Eb ; Quick slur fingering using F♯.
+Bb4 + Bb L1 R2 Eb ; Quick slur fingering using F♯.
 B4 = T L1 Eb
+B4 + T L1 R3 Eb ; Quick slur fingering using F♯.
+B4 + T L1 R2 Eb ; Quick slur fingering using F♯.
 C5 = L1 Eb
+C5 + L1 L2 L3 R1 R2 R3 C ; Sharp version, harmonic of C4.
+C5 + L1 R1 R2 R3 ; Quick slur fingering using D.
+C5 + L1 R1 R2 R3 Eb ; Quick slur fingering using E♭.
+C5 + L1 R1 R2 Eb ; Quick slur fingering using E.
+C5 + L1 R1 Eb ; Quick slur fingering using F or B♭.
+C5 + L1 R3 Eb ; Quick slur fingering using F♯.
+C5 + L1 R2 Eb ; Quick slur fingering using F♯.
 C#5 = Eb ; Nearly all open. C♯ is the flute's weakest note; check pitch.
+C#5 + L2 L3 R1 R2 R3 Cs ; Richer, more colorful timbre.
+C#5 + L2 L3 R1 R2 R3 C ; Richer timbre, but flat.
+C#5 + T L2 L3 R1 R2 R3 Cs ; Sharp pitch, quick slur to D.
+C#5 + T L2 L3 R1 R2 R3 C ; Flat pitch, quick slur to D.
+C#5 + L2 L3 R1 R2 R3 ; Flat pitch, quick slur to D.
+C#5 + R1 R2 R3 ; Quick slur fingering using D.
+C#5 + L2 L3 R1 R2 R3 Eb ; Flat pitch, quick slur to E♭.
+C#5 + R1 R2 R3 Eb ; Recommended basic fingering on bass flute.
+C#5 + R1 R2 Eb ; Quick slur fingering using E.
+C#5 + R1 Eb ; Quick slur fingering using F or B♭.
+C#5 + R3 Eb ; Quick slur fingering using F♯.
+C#5 + R2 Eb ; Quick slur fingering using F♯.
+C#5 + R2 R3 Eb ; Improves pitch accuracy.
+C#5 + L3 Gs R2 R3 Eb ; Produces a clearer tone.
 D5 = T L23 R123
 D5 + T L123 R123 ; Harmonic of D4.
 Eb5 = T L23 R123 Eb
 E5 = T L123 R12 Eb
+E5 + T L1 L2 L3 R1 R2 tDs Eb ; Helps avoid note cracking.
 F5 = T L123 R1 Eb
 F#5 = T L123 R3 Eb
 F#5 + T L123 R2 Eb ; For slurs from E.
 G5 = T L123 Eb
+G5 + T L1 L2 L3 R1 R2 R3 C ; Harmonic overblown from C4.
 G#5 = T L123 Gs Eb
+G#5 + T L1 L2 L3 Gs R1 R2 R3 Cs ; Good for pianissimo; harmonic C♯4.
 A5 = T L12 Eb
 A5 + T L12 Gs R1 Eb ; Good for ff.
+A5 + T L1 L2 R3 Eb ; Suited to bass flute.
+A5 + T L1 L2 R1 R2 R3 ; Slur with D5; harmonic D4.
 Bb5 = Bb L1 Eb ; Thumb B♭.
 Bb5 + T L1 R1 Eb ; "One-and-one" B♭. Use near B natural or in sharp keys.
 Bb5 + T L1 rBb Eb ; Right-hand lever. Trill fingering.
+Bb5 + T L1 Gs rBb R2 Eb ; No description provided on page.
+Bb5 + T L1 L3 R1 R2 R3 Eb ; Sharp; harmonic from E♭4.
 B5 = T L1 Eb
+B5 + T L1 L3 R1 R2 Eb ; Harmonic from E4; soft dynamics.
 C6 = L1 Eb
+C6 + T L2 L3 R1 R2 Eb ; Sharp; slur from D.
+C6 + T L1 L2 L3 R1 R2 R3 C ; Harmonic overblown from C4.
+C6 + L1 L2 L3 R1 R2 R3 C ; Sharp; harmonic from C4.
+C6 + T L1 L2 L3 R1 Eb ; Harmonic overblown from F4.
+C6 + L1 L3 R1 R2 R3 Eb ; Suited to bass flute.
 C#6 = Eb
+C#6 + R1 R2 R3 ; Flatter in pitch.
+C#6 + T L2 L3 R1 R2 R3 Cs ; Harmonic from C♯4; sharp.
+C#6 + T L2 L3 R2 Eb ; Harmonic from F♯4; sharp; slur from D.
+C#6 + T L2 L3 R2 R3 Eb ; Slur from D.
+C#6 + L2 L3 Gs R1 R2 R3 Eb ; Suited to bass flute.
 D6 = T L23 Eb
 D6 + T L23 Gs R1 Eb ; Very sharp; good for pp.
+D6 + T L1 L2 L3 Eb ; Harmonic fingering sounding G4.
+D6 + T L2 L3 R1 R2 R3 ; Harmonic fingering sounding D5.
 Eb6 = T L123 Gs R123 Eb
 Eb6 + T L23 tDs Eb ; For slurs from D6.
+Eb6 + T L2 L3 Gs Eb ; Slurred from D, flattened pitch.
+Eb6 + T L1 L2 L3 R1 R2 R3 Eb ; Flat harmonic fingering, E♭4.
+Eb6 + T L1 L2 L3 Gs tDs Eb ; Sharp-leaning variant of basic.
+Eb6 + T L1 L2 L3 Gs Eb ; Harmonic fingering sounding G♯4.
+Eb6 + T L2 L3 R1 R2 R3 Eb ; Flat harmonic fingering, E♭5.
+Eb6 + T L1 L2 L3 Gs R1 R2 R3 Eb Cs ; Slightly flat, strong for loud playing.
+Eb6 + T L2 L3 Gs R1 R2 R3 ; Recommended for bass flute.
 E6 = T L12 R12 Eb
 E6 + T L12 tDs Eb ; Clear and in tune; responds like D6.
+E6 + T L1 L2 R1 R2 ; Flat, suited to hard attacks.
+E6 + T L1 L2 R1 R2 tDs Eb ; Sharp, harder to overblow to A5.
+E6 + T L1 L3 R1 R2 R3 Eb ; Sharp, slurred from F or F♯.
+E6 + T L1 L2 L3 R1 R2 Eb ; Flat harmonic fingering, E4.
+E6 + T L1 L2 Eb ; Flat harmonic fingering, A4.
 F6 = T L13 R1 Eb
+F6 + T L1 L3 R1 R3 Eb ; Flat pitch variant.
+F6 + T L1 L3 R1 R2h Eb ; Suitable for loud dynamics.
+F6 + T L1 L3 R1 tDs R3 Eb ; Suitable for soft dynamics.
+F6 + T L1 L3 R1 R3 Cs ; Slurred with A6.
+F6 + T L1 L2 L3 R1 Eb ; Flat harmonic fingering, F4.
+F6 + Bb L1 Eb ; Flat harmonic fingering, B♭4.
 F#6 = T L13 R3 Eb
+F#6 + T L1 L3 R2 Eb ; Slurred with E6.
+F#6 + T L1 L3 R3 Cs ; Slurred with A6.
+F#6 + T L1 L3 R2 Cs ; Slurred with A6.
+F#6 + T L1 L3 R2 R3 ; Flat pitch variant.
+F#6 + T L1 L3 R2 R3 Eb ; Flat pitch variant.
+F#6 + T L1 L2 L3 R3 Eb ; Flat harmonic fingering, F♯4.
+F#6 + T L1 L2 L3 R2 Eb ; Flat harmonic fingering, F♯4.
+F#6 + T L1 Eb ; Flat harmonic fingering, B4.
 G6 = L123 Eb
+G6 + L1 L2 L3 Cs ; Used with C♯ foot key for F6, F♯6, A6.
+G6 + L1 L2 L3 R1 R2 R3 C ; Harmonic fingering sounding C4.
+G6 + L1 L2 L3 R1 R2 R3 Eb ; Flat harmonic fingering, E♭4.
+G6 + T L1 L2 L3 Eb ; Flat harmonic fingering, G4.
+G6 + L1 Eb ; Flat harmonic fingering, C5.
+G6 + T L2 L3 R1 R2 R3 Eb ; Sharp harmonic fingering, E♭5.
 G#6 = L23 Gs Eb
+G#6 + L2 L3 Gs R2 R3 Eb ; Flatter, good for loud playing.
+G#6 + T L2 L3 Gs R1 R2 Eb ; Sharp variant.
+G#6 + L1 L2 L3 Gs R1 R2 R3 Cs ; Harmonic fingering sounding C♯4.
+G#6 + T L1 L2 L3 Gs R1 R2 R3 Cs ; Harmonic fingering sounding C♯4.
+G#6 + Eb ; Flat harmonic fingering, C♯5.
 A6 = T L2 R1 Eb
+A6 + T L2 R1 R3 Cs ; Slurred to F or F♯.
+A6 + T L2 R1 R2h Eb ; Suitable for loud dynamics.
 Bb6 = T R1 tD
+Bb6 + T R1 tDs ; Sharp variant.
+Bb6 + T L1 R1 tD ; Slurred with F or A.
+Bb6 + Bb L1 L3 tD R3 Eb ; Sharp variant.
+Bb6 + Bb L1 L3 tD R2 R3 Eb ; Sharp variant.
+Bb6 + Bb L1 R1 tD B ; In tune.
+Bb6 + Bb ; Flat pitch variant.
+Bb6 + T L1 Gs R1 Cs ; Recommended for bass flute.
 B6 = T L13 tDs
+B6 + Bb L1 L3 tDs B ; Clearer, less shrill, more in tune.
+B6 + T L1 L3 tD tDs Eb ; Sharp variant.
+B6 + T L1 L3 tDs R3 ; Flat pitch variant.
+B6 + T R1 tD tDs ; Flat pitch variant.
+B6 + T L1 L3 tD tDs R3 Eb ; Flat pitch variant.
+B6 + T L3 Cs ; Recommended for bass flute.
 C7 = L123 Gs R1 gz ; B-foot with gizmo key.
 C7 + L123 Gs R1 ; C-foot flute.
+C7 + T L1 L2 L3 Gs R1 ; More in tune but stuffy.
+C7 + L1 L2 L3 Gs R1 R3 gz ; Use with B-foot.
+C7 + L1 L2 L3 Gs R1 R3 ; Use with C-foot for better balance.
+C7 + L1 L2 L3 Gs R1 C ; Sharp variant.
+C7 + L1 L2 L3 Gs R1 R2 gz ; Flat pitch variant.
+C7 + L1 L3 tDs ; Flat pitch variant.
+C7 + L1 L2 L3 Gs R1 R2 R3 Eb ; Flat pitch variant.
+C7 + L1 L2 L3 Gs R1 R2 R3 gz
+C7 + T L1 L2 L3 Gs R1 R2 R3 gz ; Flat pitch variant.
+C7 + L1 L2 L3 Gs R1 R2h ; In tune.
 
 C4~D4 = T L123 R123 ^C
 C#4~D4 = T L123 R123 ^Cs
@@ -1093,10 +1311,13 @@ D6~Eb6 = T L23 ^tDs Eb
 
 WW_DATA.oboe = `
 Bb3 = L123 lBb R123 rC ; Low B♭ key; some student oboes lack it.
+Bb3 + L1 L2 L3 lBb R1 R2 R3 ban ; Use with alternate C4 fingering.
 B3 = L123 lB R123 rC
+B3 + L1 L2 L3 lB R1 R2 R3 ban ; Use with alternate C4 fingering.
 C4 = L123 R123 rC
 C4 + L123 R123 ban ; Banana key, so the pinky doesn't slide.
 C#4 = L123 R123 rCs
+C#4 + L1 L2 L3 R1 R2 R3 ban rCs ; Use together with C4 fingering.
 D4 = L123 R123
 Eb4 = L123 R123 rEb ; Right pinky E♭.
 Eb4 + L123 lEb R123 ; Left pinky E♭. Use next to right-pinky notes.
@@ -1104,41 +1325,135 @@ E4 = L123 R12
 F4 = L123 R12 F ; Regular F.
 F4 + L123 R13 ; Forked F. Use around E♭ and D.
 F4 + L123 lF R12 ; Left F, on models with a left F key.
+F4 + L1 L2 L3 R1 R3 rEb ; Use with right-hand finger 3.
+F4 + L1 L2 L3 lEb R1 R3 ; Pairs with fingerings using right-hand 3.
 F#4 = L123 R1
 G4 = L123
+G4 + L1 L2 L3 lB ; Flatter, mellower, more focused tone than basic.
 G#4 = L123 lGs
 G#4 + L123 sGs ; Right-hand side G♯ key. Good for trills.
+G#4 + L1 L2 L3 sA ; Closed-hole trill fingering variant.
 A4 = L12
 Bb4 = L12 R1
+Bb4 + L1 tB L2 R1 ; Trill fingering paired with B4.
+Bb4 + L1 L3 lGs ; Fingering for closed-hole models.
+Bb4 + L1 L3 sGs ; Closed-hole fingering variant.
+Bb4 + L1 L3 sA ; Open-hole fingering variant.
+Bb4 + L1 L2 R1 R2 R3
+Bb4 + L1 L2 R1 R2 R3 rCs
+Bb4 + L1 L2 R1 R2 R3 rEb
+Bb4 + L1 L2 lEb R1 R2 R3
 B4 = L1
+B4 + L1 tB R1 ; Trill fingering paired with A♯4.
+B4 + L1 tB ; Trill fingering using A♯4.
+B4 + L1 L3 lBb R1 R2 R3 rC ; Harmonic-type fingering.
+B4 + L1 L2 lB R1 R2 R3 rC ; Harmonic-type fingering.
 C5 = L1 R1
+C5 + L2
+C5 + L1 L3 R1 R2 R3 rC ; Harmonic-type fingering.
+C5 + L1h L2 L3 R1 R2 R3 rC ; Use together with C♯5 fingering.
+C5 + L1 R1 R2 R3
+C5 + L1 R1 R2 R3 rCs
+C5 + L1 R1 R2 R3 rEb
+C5 + L1 lEb R1 R2 R3
 C#5 = L1h L23 R123 rCs ; Half-hole.
 C#5 + L23 R123 rCs ; Clearer, sharper sound. Good for ff.
+C#5 + R1
+C#5 + L1 L3 R1 R2 R3 rCs
+C#5 + L1 tCs ; Trill fingering paired with B4.
 D5 = L1h L23 R123 ; Half-hole.
 D5 + L23 R123 ; Clearer, sharper sound. Good for ff.
 D5 + L1 R1 rD ; Trill fingering with C5.
+D5 + L1 tD R1 ; Trill fingering paired with C5.
 Eb5 = L1h L23 R123 rEb ; Half-hole.
 Eb5 + L1h L23 lEb R123 ; Left E♭.
 E5 = O1 L123 R12
 F5 = O1 L123 R12 F ; Regular F.
 F5 + O1 L123 R13 ; Forked F.
 F5 + O1 L123 lF R12 ; Left F.
+F5 + O1 L1 L2 L3 R1 R3 rEb ; Combine with fingerings that use right-hand 3.
+F5 + O1 L1 L2 L3 lEb R1 R3 ; Pair with right-hand 3 fingerings.
+F5 + O1 L1 L2 L3 lBb R1 R2 R3 rC ; Harmonic overtone of B♭3.
+F5 + O1 L1 L2 L3 lBb R1 R2 R3 ban ; Harmonic overtone of B♭3.
 F#5 = O1 L123 R1
+F#5 + O1 L1 L2 L3 lB R1 R2 R3 rC ; Harmonic overtone of B3.
+F#5 + O1 L1 L2 L3 lB R1 R2 R3 ban ; Harmonic overtone of B3.
 G5 = O1 L123
+G5 + O1 L1 L2 L3 lB ; Slightly flatter, mellower, more focused tone.
+G5 + O1 L1 L2 L3 R1 R2 R3 rC ; Harmonic overtone of C4.
+G5 + O1 L1 L2 L3 R1 R2 R3 ban ; Harmonic overtone of C4.
 G#5 = O1 L123 lGs
 G#5 + O1 L123 sGs ; Side G♯. Trill fingering.
+G#5 + O1 L1 L2 L3 sA ; Closed-hole trill fingering.
+G#5 + O1 L1 L2 L3 R1 R2 R3 rCs ; Harmonic overtone of C♯4.
+G#5 + O1 L1 L2 L3 R1 R2 R3 ban rCs ; Harmonic overtone of C♯4.
 A5 = O2 L12
+A5 + O2 L1 L2 L3 R1 R2 R3 ; Harmonic overtone of D4.
+A5 + O2 L1h L2 L3 R1 R2 R3 ; Excellent for pp; harmonic of D5.
 Bb5 = O2 L12 R1
+Bb5 + O2 L1 L3
+Bb5 + O2 L1 L2 L3 R1 R2 R3 rEb ; Harmonic overtone of E♭4.
+Bb5 + O2 L1 L2 L3 lEb R1 R2 R3 ; Harmonic overtone of E♭4.
+Bb5 + O2 L1 L2 R1 R2 rC ; Intended for English horn only.
 B5 = O2 L1
 B5 + O2 L1 tB ; Trill fingering with B♭5.
+B5 + O2 L1 tB R1 ; Trill fingering paired with B♭5.
+B5 + O2 L1 L3 R1 R2 R3 ; Harmonic fingering.
+B5 + O2 L1 L3 R1 R2 R3 rEb ; Harmonic fingering.
+B5 + O2 L1 L3 lEb R1 R2 R3 ; Harmonic fingering.
+B5 + O2 L1 L2 L3 R1 R2 ; Harmonic overtone of E4.
+B5 + O2 L1 L3 lBb R1 R2 R3 rC ; Harmonic fingering.
+B5 + O2 L1 R3 ; Intended for English horn only.
 C6 = O2 L1 R1
+C6 + L2 L3 R1 R2
+C6 + O2 L2 R1
+C6 + O2 L1 L3 R1 R3 ; Harmonic overtone of F4.
+C6 + O2 L1 L2 L3 R1 R3 ; Harmonic overtone of F4.
+C6 + O2 L1 L2 L3 R1 R2 F ; Harmonic overtone of F4.
+C6 + O2 L1 L2 L3 lF R1 R2 ; Harmonic overtone of F4.
+C6 + O2 L1 L3 R1 R2 F ; Harmonic overtone of F4.
+C6 + O2 L1 L3 lF R1 R2 ; Harmonic overtone of F4.
+C6 + O2 L1 R1 R2 rC ; Intended for English horn only.
 C#6 = L23 R1 rC
+C#6 + L2 L3 R1 R2 rC ; Suited to English horn.
+C#6 + O2 R1
+C#6 + L1h L2 L3 R1
+C#6 + O2 tCs
+C#6 + O2 sGs
+C#6 + L1h L2 L3 R1 R3 rCs ; Combine with C♯5.
 D6 = L1h L23 R2 rC
+D6 + L1h L2 L3 rC ; Listed as a basic fingering.
+D6 + O2 L1 R1 rD
+D6 + O2 L1 tD R1
+D6 + L1h L2 L3 R3 rCs ; Combine with C♯5 or alternate C♯6.
+D6 + L2 L3
+D6 + L2 L3 rC
+D6 + L2 L3 R2 rC ; Slur with G5.
+D6 + L1h L2 L3 lEb R2 rC ; Smooth slur with D6, conservatory models.
 Eb6 = L1h L23 lB R23
 Eb6 + L1h L23 R23 rEb ; Use next to E♭5 or D6.
+Eb6 + L1h L2 L3 lGs rC
+Eb6 + L1h L2 L3 sGs
+Eb6 + L1h L2 L3 sGs rC
+Eb6 + L1h L2 L3 sGs R2 rC
+Eb6 + L2 L3 sGs R2 rC
+Eb6 + L1h L2 L3 sA
+Eb6 + L1h L2 L3 lGs lEb R2 rC ; Sharp but useful in high combinations.
+Eb6 + O1 L1h L2 L3
+Eb6 + O2 L1 tD tCs R1
+Eb6 + O2 tD tCs
+Eb6 + O2 tD
 E6 = O1 L1h L23 lGs R23 rEb
 E6 + O1 L1h L23 lGs lEb R23
+E6 + O1 L1h L2 L3 sGs R2 R3 rEb ; Listed as a basic fingering.
+E6 + O1 L1h L2 L3 lB sGs R2 R3 rEb
+E6 + O1 L1h L2
 F6 = O1 L1h L2 lGs R23 rEb
+F6 + O1 L1h L2 lGs lEb R2 R3 ; Listed as a basic fingering.
+F6 + O1 L1h L2 sGs R2 R3 rEb ; Listed as a basic fingering.
+F6 + O1 L1 tB L2 L3 R1 rC
+F6 + O1 L1h L2 lGs
+F6 + O1 L1h L2 sGs
 
 C4~D4 = L123 R123 ^rC
 C#4~D4 = L123 R123 ^rCs
@@ -1179,6 +1494,8 @@ E2 + W L123 lCs E R123 rF ; Lowers pitch; tone matches D2 and F2.
 F2 = W L123 R123 rF
 F#2 = W L123 Fs R123 rF ; Right-thumb F♯.
 F#2 + W L123 R123 rF rFs ; Pinky F♯. Use next to right-thumb notes.
+F#2 + W L1 L2 L3 R1 R2 R3 rFs
+F#2 + L1 L2 L3 R1 R2 R3 rF rFs
 G2 = W L123 R123
 G#2 = W L123 R123 rGs
 A2 = W L123 R12
@@ -1189,32 +1506,94 @@ C#3 = lD tCs W L123
 D3 = W L12
 Eb3 = W L13
 Eb3 + W L13 Bb R2
+Eb3 + W L1 L3 lEb Bb R2
+Eb3 + W tCs L1 L2 ; Trill fingering paired with D3.
+Eb3 + W L1 L3 lEb
 E3 = W L1
+E3 + W L1 E R3 rF ; Excellent for very soft playing.
 F3 = W
+F3 + lD lC lB lBb E R1 R3 ; Excellent for very soft playing.
 F#3 = W L1q L23 Fs R123 rF ; Leave more than half of LH 1 open.
 F#3 + W L1q L23 R123 rF rFs ; Pinky F♯. Use next to right-thumb notes.
+F#3 + W L1q L2 L3 R1 R2 R3 rFs ; Pair with right-thumb fingerings.
+F#3 + W L1q L2 L3 E Fs R1 R2 R3 rF
+F#3 + L1q L2 L3 Fs R1 R2 R3
+F#3 + L1q L2 L3 R1 R2 R3 rFs
+F#3 + L1q L2 L3 E Fs R1 R2 R3 rF
+F#3 + L1q L2 L3 R1 R2 R3 rF rFs
 G3 = W L1h L23 lEb R123 ; Cover about half of LH 1.
+G3 + W L1h L2 L3 R1 R2 R3 rGs
+G3 + L1h L2 L3 R1 R2 R3 rGs
 G#3 = W L1t L23 R123 rGs ; Cover more than half of LH 1.
+G#3 + L1t L2 L3 R1 R2 R3 rGs
 A3 = L123 R12
 A3 + fA L123 R12 ; Flick the A key for slurs.
 Bb3 = L123 Bb R12
 Bb3 + fA L123 Bb R12 ; Flick fingering for slurs.
+Bb3 + fC L1 L2 L3 Bb R1 R2 ; Flick fingering used for slurred passages.
 B3 = L123 R1
 B3 + fC L123 R1 ; Flick the C key for slurs.
 C4 = L123
 C4 + fC L123 ; Flick fingering for slurs.
 C#4 = lD tCs L123
+C#4 + tCs L1 L2 L3 R2 R3 rF ; Used for slurred passages.
+C#4 + tCs L1 L2 L3 Bb R1 R2 R3 rF
+C#4 + L1 L2 R1 ; Pair with D4 for fast alternates.
 D4 = L12
 D4 + fD L12 ; Flick the D key for slurs.
+D4 + fC L1 L2 ; Flick fingering used for slurred passages.
+D4 + L1 L2 R2 R3 rF ; Excellent for very soft dynamics.
 Eb4 = L12 R123
+Eb4 + L1 L2 R1 R3 ; Strong slurs from Ab4, responsive.
+Eb4 + L1 L2 R2 R3
+Eb4 + L1 L2 R3
+Eb4 + tCs L1 L2
+Eb4 + L1 L2 lEb R1 R2 R3
+Eb4 + L1 L3 lEb
 E4 = L13 lEb R123
+E4 + L1 L3 lEb R2 R3
+E4 + L1 lEb
+E4 + L1
 F4 = L13 lEb R12
+F4 + L1 L3 R1 R2
+F4 + L2 L3 lEb R1 R2
+F4 + L2 L3 R1 R2
+F4 + L1 R1 R2
 F#4 = L23 lEb Bb R12
 F#4 + L23 lEb R12 rF
+F#4 + W L1h L2 L3 R1
+F#4 + L1h L2 L3 lEb R1
+F#4 + W L1h L2 L3 lEb R1
+F#4 + L2 lEb Bb R1 R2
+F#4 + L1 L3 lEb Bb R1 R2
+F#4 + L1 L3 Bb R1 R2
+F#4 + L2 lEb R1 R2 rF
+F#4 + L2 R1
 G4 = W L1h L23 lEb R1 rF
+G4 + W L1h L2 L3 R1 rF
+G4 + W L1h L2 L3 lEb rGs
+G4 + W L1h L2 L3 rGs
+G4 + W L1h L2 L3 lEb
+G4 + W L1h L2 L3
 G#4 = W L1t L23 lEb R3
+G#4 + W L1h L2 L3 lEb R3
+G#4 + W L1h L2 L3 lEb Bb rF
+G#4 + W L1h L2 L3 lEb Bb R2 R3
+G#4 + W L1h L2 L3 R3
+G#4 + W L1h L2 L3 Bb rF
+G#4 + W L1h L2 L3 Bb R2 R3
 A4 = fA tCs L123 lEb R3
+A4 + fA tCs L1 L2 L3 lEb rF
+A4 + fA tCs L1 L2 L3 lEb Bb R2 R3
+A4 + fA tCs L1 L2 L3 R3
+A4 + fA tCs L1 L2 L3 rF
+A4 + fA tCs L1h L2 L3 lEb R3
 Bb4 = fA tCs L123 lEb R12 rF
+Bb4 + fA tCs L1 L2 L3 R1 R2 rF
+Bb4 + W tCs L1 L2 L3 lEb R2 rF
+Bb4 + W tCs L1 L2 L3 lEb E R1 R2 rF
+Bb4 + W tCs L1 L2 L3 lEb E R2 rF
+Bb4 + fA tCs L1h L2 L3 lEb R1 R2 rF
 
 E2~F2 = W L123 ^E R123 rF ; Trill the right-thumb E key.
 F2~F#2 = W L123 ^Fs R123 rF
@@ -1245,38 +1624,128 @@ F#4 = L123 R2
 F#4 + L123 R1 tFs ; Chromatic F♯ key. Use next to F.
 G4 = L123
 G#4 = L123 Gs
+G#4 + L1 L2 L3 Cs ; Use with C♯4.
+G#4 + L1 L2 L3 B ; Use with B3.
+G#4 + L1 L2 L3 Bb ; Use with B♭4.
 A4 = L12
 Bb4 = L12 sBb ; Side B♭.
 Bb4 + L1 bis ; Bis key. For flat keys with no B natural.
 Bb4 + L1 R1 ; "One-and-one." Use next to F.
 Bb4 + L1 R2 ; Sharp. Use next to F♯.
+Bb4 + L1 R3
+Bb4 + L1 L3 ; Fast passages with G4; dark tone.
+Bb4 + T L1 L2 L3 Bb R1 R2 R3 ; B♭4 with altissimo; dark, closed sound.
 B4 = L1
+B4 + T L1 L2 L3 B R1 R2 R3 ; B4 with altissimo; dark, closed sound.
 C5 = L2
 C5 + L1 sC ; Side C. Chromatic; use next to B.
+C5 + L2 L3 Gs ; Fast passages with Ab4 or Ab5.
+C5 + T L1 L2 L3 R1 R2 R3 C ; Easy from higher note; harmonic C4.
 C#5 = - ; Open.
+C#5 + T L1 L2 L3 Cs R1 R2 R3 C ; Harmonic C♯4.
+C#5 + T L3 R1 R2 R3 ; In tune for leading tone to D.
+C#5 + T L3 ; Sharper.
+C#5 + T pD L1 ; Sharper.
+C#5 + T L3 Gs ; Sharper than basic fingering.
+C#5 + R1 R2 R3 ; Use with D5.
+C#5 + R1 R2 R3 Eb ; Use with E♭5; flat at ff on soprano.
+C#5 + R1 R2 ; Use with E5; slightly sharp on soprano.
+C#5 + R1 ; Use with F5; flat at ff on soprano.
+C#5 + R2 ; Use with F♯5; flat at ff on soprano.
+C#5 + R1 tFs ; Use with F♯5; flat at ff on soprano.
 D5 = T L123 R123
+D5 + pD L1 L2 L3 R1 R2 R3 ; Better tone quality.
+D5 + T L1 L2 L3 B R1 R2 R3 ; Better in-tune intonation.
+D5 + T L1 L2 L3 Bb R1 R2 R3 ; Slightly flat pitch.
+D5 + pEb L2 ; Combine with C5 fingering.
+D5 + pD ; Combine with C5 fingering.
 Eb5 = T L123 R123 Eb
+Eb5 + T pD pEb L1 L2 L3 R1 R2 R3 Eb ; Bigger richer tone; awkward when fast.
+Eb5 + sE ; Useful in E and B major.
+Eb5 + pF L2 ; Matches timbre of upper first octave.
 E5 = T L123 R12
+E5 + T A L1 L2 L3 R1 R2 R3 C ; Full sound; slow response; baritone.
+E5 + pF sE ; Combine with D♯5; in tune.
 F5 = T L123 R1
 F#5 = T L123 R2
 F#5 + T L123 R1 tFs ; Chromatic F♯ key.
+F#5 + T L1 L2 L3 R3 ; Soprano, alto, tenor only.
+F#5 + L1 L2 L3 Bb R2 R3 C ; Soprano, alto, tenor only.
 G5 = T L123
 G#5 = T L123 Gs
+G#5 + T L1 L2 L3 Cs ; Combine with low C♯ key.
+G#5 + T L1 L2 L3 B ; Combine with low B key.
+G#5 + T L1 L2 L3 Bb ; Combine with low B♭ key.
 A5 = T L12
+A5 + T L1 L2 R2 ; Pitch is flatter.
 Bb5 = T L12 sBb ; Side B♭.
 Bb5 + T L1 bis ; Bis key.
 Bb5 + T L1 R1 ; One-and-one.
+Bb5 + T L1 R2 ; Sharp; pair with F♯4 or F♯5.
+Bb5 + T L1 R3
+Bb5 + T L1 L3 ; Fast passages; dark, cloudy tone.
 B5 = T L1
 C6 = T L2
 C6 + T L1 sC ; Side C.
+C6 + T L2 L3 Gs ; Fast passages with Ab4/Ab5.
 C#6 = T
+C#6 + T R1 R2 R3 ; Better tone, more stable.
 D6 = T pD
+D6 + T pEb L2 ; Combine with C6.
+D6 + T pEb L1 sC ; Combine with B5 and C6.
 Eb6 = T pD pEb
+Eb6 + T pEb ; Produces lower pitch overall.
+Eb6 + T pD pEb sC ; Intended for tenor saxophone.
+Eb6 + T L1 sE sC ; Muffled, slightly flat on tenor.
 E6 = T pD pEb sE
 E6 + T fF L23 ; Front F. Less stable; use next to C6 and C♯6.
+E6 + T pEb sE ; Produces lower pitch overall.
+E6 + T pD pF
+E6 + T fF
+E6 + T pD fF
+E6 + T fF sE ; Tenor; in tune at all dynamics.
+E6 + T fF L1 L2 L3 ; Combine with altissimo F6; baritone.
+E6 + T L1 L2 L3 Gs sE
 F6 = T pD pEb pF sE
 F6 + T fF L2 ; Front F. Less stable; use next to C6.
+F6 + T fF L2 sE ; Sounds sharper than standard.
+F6 + T fF L2 L3 Gs sBb ; Intended for tenor saxophone.
+F6 + T fF L2 R2 ; Intended for baritone saxophone.
+F6 + T L1 L2 sE
+F6 + T L1 L2 Gs sE
+F6 + T pEb pF sE ; Produces lower pitch overall.
+F6 + T pD pF sE ; Produces lower pitch overall.
+F6 + T pF sE ; Produces lower pitch overall.
+F6 + T sFs
+F6 + T pD pEb fF sE ; Tenor; in tune at all dynamics.
+F6 + T fF L1 ; Good for tenor; combine with F♯6, G6.
 F#6 = T pD pEb pF sE sFs ; High F♯ key, on models that have it.
+F#6 + T fF L2 sBb
+F#6 + T fF L2 sFs
+F#6 + T fF L2 R1
+F#6 + T fF L2 sBb R1 R2 R3
+F#6 + T fF L3 sBb R1 R2
+F#6 + T fF L2 sBb R1
+F#6 + T fF L2 Gs sBb ; Stable at mp+ on tenor/baritone, mf+ on alto.
+F#6 + T fF bis
+F#6 + T fF L1 bis sBb
+F#6 + T L1 L3 sBb R1
+F#6 + T L1 L3 R1 Eb ; Good for tenor.
+F#6 + T L1 L3 R1
+F#6 + T L1 R1 R2
+F#6 + T L1 R1 R2 Eb
+F#6 + T fF R1
+F#6 + T fF sFs R1 ; Good for alto.
+F#6 + T fF sFs ; Good for alto.
+F#6 + T fF L1 sFs ; Good for tenor; combine with F6 and G6.
+F#6 + T fF sBb ; Good for alto.
+F#6 + T pEb pF sE sFs ; Lower pitch.
+F#6 + T pD pF sE sFs ; Lower pitch.
+F#6 + T pF sE sFs ; Lower pitch.
+F#6 + T L1 bis sFs ; Use with G6 or range D5–B♭5.
+F#6 + T L1 bis Gs sE
+F#6 + T L1 L2 sFs ; In tune, easy response, useful in fast passages.
+F#6 + T L1 sBb sFs R1 Eb ; Alto only; stable but awkward when fast.
 
 B3~C4 = L123 ^B R123 C
 C4~D4 = L123 R123 ^C
